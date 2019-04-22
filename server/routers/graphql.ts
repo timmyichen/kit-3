@@ -1,23 +1,23 @@
-import * as express from "express";
-import * as graphqlHTTP from "express-graphql";
-import schema from "../graph";
+import * as express from 'express';
+import * as graphqlHTTP from 'express-graphql';
+import schema from '../graph';
 
 const router = express.Router();
 
 router.get(
-  "/graphql",
+  '/graphql',
   graphqlHTTP({
     schema,
-    graphiql: true
-  })
+    graphiql: true,
+  }),
 );
 
 router.post(
-  "/graphql",
+  '/graphql',
   graphqlHTTP({
     schema,
-    graphiql: false
-  })
+    graphiql: false,
+  }),
 );
 
 export default router;
