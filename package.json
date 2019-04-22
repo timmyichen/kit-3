@@ -44,5 +44,9 @@
       "npm run pretty",
       "git add"
     ]
+  },
+  "prettier": {
+    "trailingComma": "all",
+    "singleQuote": true
   }
 }

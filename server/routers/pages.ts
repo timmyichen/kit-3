@@ -8,8 +8,11 @@ router.get('/', (req: express.Request, res: express.Response) => {
   nextjs.render(req, res, '/');
 });
 
-router.getAsync('/home', async (req: express.Request, res: express.Response) => {
-  nextjs.render(req, res, '/home');
-});
+router.getAsync(
+  '/home',
+  async (req: express.Request, res: express.Response) => {
+    nextjs.render(req, res, '/home');
+  },
+);
 
 export default router;
