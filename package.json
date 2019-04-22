@@ -8,7 +8,8 @@
     "dev": "ts-node --files ./server/index.ts",
     "nodemon": "./node_modules/nodemon/bin/nodemon.js",
     "lint:ts": "tslint -c tslint.json 'src/**/*.ts*'",
-    "pretty": "prettier --write client/**/*.ts* server/**/*.ts"
+    "pretty": "prettier --write client/**/*.ts* server/**/*.ts",
+    "precommit": "lint-staged"
   },
   "author": "",
   "license": "ISC",
@@ -39,7 +40,7 @@
     "tslint-config-prettier": "^1.18.0"
   },
   "lint-staged": {
-    "*.ts*": [
+    "*.{ts,tsx}": [
       "npm run pretty",
       "git add"
     ]
