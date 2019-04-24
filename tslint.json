@@ -10,7 +10,9 @@
             true,
             "single",
             "jsx-double"
-        ]
+        ],
+        "object-literal-sort-keys": false,
+        "ordered-imports": false
     },
     "rulesDirectory": []
 }
