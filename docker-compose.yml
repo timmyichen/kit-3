@@ -1,0 +1,17 @@
+version: "3"
+services:
+  app:
+    build: .
+    command: npm run nodemon
+    volumes:
+      - .:/usr/ydb2/
+      - /usr/ydb2/node_modules/
+    working_dir: /usr/ydb2/
+    ports:
+    - "8000:8000"
+    depends_on:
+    - mongo
+  mongo:
+    image: mongo
+    ports:
+    - "27017:27017"
