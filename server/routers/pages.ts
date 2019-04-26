@@ -8,6 +8,10 @@ router.get('/', (req: express.Request, res: express.Response) => {
   nextjs.render(req, res, '/');
 });
 
+router.get('/login', (req: express.Request, res: express.Response) => {
+  nextjs.render(req, res, '/login');
+});
+
 router.getAsync(
   '/home',
   async (req: express.Request, res: express.Response) => {

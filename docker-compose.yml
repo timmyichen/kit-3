@@ -1,11 +1,10 @@
 version: "3"
 services:
   app:
-    build: .
+    image: node:10-alpine
     command: npm run nodemon
     volumes:
       - .:/usr/ydb2/
-      - /usr/ydb2/node_modules/
     working_dir: /usr/ydb2/
     ports:
     - "8000:8000"

@@ -1,3 +1,4 @@
 import * as React from 'react';
+import * as axios from 'axios';
 
-export default () => <h1>hi</h1>
+export default () => <h1>index</h1>;

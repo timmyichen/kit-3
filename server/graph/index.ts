@@ -1,16 +1,8 @@
-import { GraphQLSchema, GraphQLObjectType } from 'graphql';
+import { GraphQLSchema } from 'graphql';
+import query from './queries';
 
 const schema = new GraphQLSchema({
-  query: new GraphQLObjectType({
-    name: 'RootQueries',
-    description: 'Top level queries',
-    fields: () => ({}),
-  }),
-  mutation: new GraphQLObjectType({
-    name: 'RootMutations',
-    description: 'Top level mutations',
-    fields: () => ({}),
-  }),
+  query,
 });
 
 export default schema;
