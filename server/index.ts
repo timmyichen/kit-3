@@ -39,11 +39,11 @@ nextjs.nextApp.prepare().then(async () => {
     }),
   );
   app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(bodyParser.urlencoded({ extended: false }));
   app.use(
     session({
-      resave: true,
-      saveUninitialized: true,
+      resave: false,
+      saveUninitialized: false,
       secret: sessionSecret,
       store: new MongoStore({
         url: mongoUrl,
@@ -54,9 +54,9 @@ nextjs.nextApp.prepare().then(async () => {
   app.use(passport.initialize());
   app.use(passport.session());
 
+  app.use(auth());
   app.use(PagesRouter);
   app.use(GraphqlRouter);
-  app.use(auth());
 
   app.get('*', (req, res) => {
     nextjs.handle(req, res);

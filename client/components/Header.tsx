@@ -10,7 +10,9 @@ export default () => (
     <Link href="/login">
       <Button>Log in</Button>
     </Link>
-    <Button>Sign up</Button>
+    <Link href="/signup">
+      <Button>Sign up</Button>
+    </Link>
     <style jsx>{``}</style>
   </div>
 );
