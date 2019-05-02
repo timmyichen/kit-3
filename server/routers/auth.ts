@@ -15,7 +15,7 @@ function init() {
     'local-login',
     new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
       User.findOne({ email: email.toLowerCase() })
-        .then((user: UserType) => {
+        .then((user: any) => {
           if (!user) {
             return done(undefined, false, { message: 'Login failed' });
           }

@@ -11,7 +11,8 @@
           "."
         ],
         "alias": {
-          "client": "./client"
+          "client": "./client",
+          "server": "./server"
         }
       }
     ]
