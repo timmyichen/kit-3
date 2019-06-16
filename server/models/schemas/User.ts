@@ -3,9 +3,19 @@ import * as mongooseDelete from 'mongoose-delete';
 
 const schema = new mongoose.Schema(
   {
-    name: {
+    givenName: {
       type: String,
       required: true,
+    },
+    familyName: {
+      type: String,
+      required: true,
+    },
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true,
     },
     password: {
       type: String,
@@ -21,6 +31,9 @@ const schema = new mongoose.Schema(
       type: Object,
       required: true,
       default: {},
+    },
+    birthday: {
+      type: Date,
     },
   },
   {

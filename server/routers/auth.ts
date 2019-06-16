@@ -47,9 +47,9 @@ function init() {
         passReqToCallback: true,
       },
       (req: express.Request, email: string, password: string, done: any) => {
-        const { name } = req.body;
+        const { givenName, familyName, username, birthday } = req.body;
 
-        if (!email || !password || !name) {
+        if (!email || !password || !username || !givenName) {
           return done(null, false, { message: 'missing required field' });
         }
 
@@ -60,7 +60,10 @@ function init() {
           })
           .then((hash: string) => {
             const user = new User({
-              name,
+              givenName,
+              familyName,
+              username,
+              birthday,
               email,
               password: hash,
             });
