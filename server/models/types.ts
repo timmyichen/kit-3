@@ -7,20 +7,11 @@ export interface UserType extends mongoose.Document {
   password: string;
 }
 
-export interface RegularExpense {
-  label: string;
-  amount: number;
-}
+export interface RegularExpense {}
 
-export interface RegularIncome {
-  label: string;
-  amount: number;
-}
+export interface RegularIncome {}
 
-export interface BudgetCategory {
-  label: string;
-  amount: number;
-}
+export interface BudgetCategory {}
 
 export interface LineItemSchema {
   label: string;
