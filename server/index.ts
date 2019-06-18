@@ -23,7 +23,7 @@ const sessionSecret: string = process.env.SESSION_SECRET;
 const mongoUrl: string =
   process.env.NODE_ENV === 'production'
     ? process.env.MONGO_URL
-    : 'mongodb://mongo:27017/ydb';
+    : 'mongodb://localhost:27017,localhost:27018,localhost:27019/app?replicaSet=rs';
 
 const app: express.Application = express();
 

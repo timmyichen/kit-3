@@ -10,5 +10,5 @@ declare module 'express-router-async' {
 
   const router = express.IRouter;
 
-  export = router as express.IRouter;
+  export = router;
 }
