@@ -9,9 +9,12 @@ export default new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       resolve: (user: UserType) => user._id && user._id.toString(),
     },
-    name: {
+    fullName: {
       type: new GraphQLNonNull(GraphQLString),
-      resolve: (user: UserType) => user.name,
+      resolve: (user: UserType) =>
+        user.familyName
+          ? user.givenName + ' ' + user.familyName
+          : user.givenName,
     },
     email: {
       type: new GraphQLNonNull(GraphQLString),

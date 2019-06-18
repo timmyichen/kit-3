@@ -35,6 +35,21 @@ const schema = new mongoose.Schema(
     birthday: {
       type: Date,
     },
+    friends: {
+      type: [mongoose.Schema.Types.ObjectId],
+    },
+    requested: {
+      type: [mongoose.Schema.Types.ObjectId],
+    },
+    requestedBy: {
+      type: [mongoose.Schema.Types.ObjectId],
+    },
+    blocked: {
+      type: [mongoose.Schema.Types.ObjectId],
+    },
+    blockedBy: {
+      type: [mongoose.Schema.Types.ObjectId],
+    },
   },
   {
     timestamps: true,

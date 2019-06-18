@@ -8,4 +8,9 @@ export interface UserType extends mongoose.Document {
   username: string;
   email: string;
   password: string;
+  friends: Array<mongoose.Types.ObjectId>;
+  requested: Array<mongoose.Types.ObjectId>;
+  requestedBy: Array<mongoose.Types.ObjectId>;
+  blocked: Array<mongoose.Types.ObjectId>;
+  blockedBy: Array<mongoose.Types.ObjectId>;
 }
