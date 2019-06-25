@@ -1,0 +1,1 @@
+to get aliases working on vscode see: https://github.com/Microsoft/vscode/issues/50329

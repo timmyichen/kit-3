@@ -1,61 +1,62 @@
-import * as mongoose from 'mongoose';
-import * as mongooseDelete from 'mongoose-delete';
+import { Table, Column, Model } from 'sequelize-typescript';
+import { requiredString } from 'server/lib/model';
 
-const schema = new mongoose.Schema(
-  {
-    givenName: {
-      type: String,
-      required: true,
-    },
-    familyName: {
-      type: String,
-      required: true,
-    },
-    username: {
-      type: String,
-      required: true,
-      unique: true,
-      index: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-      index: true,
-      required: true,
-      unique: true,
-    },
-    settings: {
-      type: Object,
-      required: true,
-      default: {},
-    },
-    birthday: {
-      type: Date,
-    },
-    friends: {
-      type: [mongoose.Schema.Types.ObjectId],
-    },
-    requested: {
-      type: [mongoose.Schema.Types.ObjectId],
-    },
-    requestedBy: {
-      type: [mongoose.Schema.Types.ObjectId],
-    },
-    blocked: {
-      type: [mongoose.Schema.Types.ObjectId],
-    },
-    blockedBy: {
-      type: [mongoose.Schema.Types.ObjectId],
-    },
-  },
-  {
-    timestamps: true,
-  },
-);
+@Table({
+  paranoid: true,
+  timestamps: true,
+  indexes: [
+    { unique: true, fields: ['id'] },
+    { unique: true, fields: ['username'] },
+    { unique: true, fields: ['email'] },
+  ],
+})
+export default class User extends Model<User> {
+  @Column({
+    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true,
+  })
+  id: number;
 
-schema.plugin(mongooseDelete);
+  @Column({
+    ...requiredString(),
+  })
+  givenName: string;
 
-export default schema;
+  @Column({
+    ...requiredString(),
+  })
+  familyName: string;
+
+  @Column({
+    ...requiredString({
+      validate: {
+        len: [4, 24],
+      },
+    }),
+  })
+  username: string;
+
+  @Column({
+    ...requiredString(),
+  })
+  password: string;
+
+  @Column({
+    ...requiredString({
+      validate: {
+        isEmail: true,
+      },
+    }),
+  })
+  email: string;
+
+  @Column({
+    allowNull: false,
+    defaultValue: {},
+  })
+  settings: Object;
+
+  @Column
+  birthday: Date;
+}

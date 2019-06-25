@@ -2,15 +2,15 @@ version: "3"
 services:
   app:
     image: node:10-alpine
-    command: npm run nodemon
+    command: "npm run dev:server"
     volumes:
       - .:/usr/ydb2/
     working_dir: /usr/ydb2/
     ports:
     - "8000:8000"
     depends_on:
-    - mongo
-  mongo:
-    image: mongo
+    - postgres
+  postgres:
+    image: "postgres:11"
     ports:
-    - "27017:27017"
+    - "54320:5432"

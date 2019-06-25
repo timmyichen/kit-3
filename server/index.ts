@@ -10,7 +10,6 @@ import nextjs from './lib/next';
 import PagesRouter from './routers/pages';
 import GraphqlRouter from './routers/graphql';
 import auth from './routers/auth';
-// import { User } from './models';
 
 dotenv.config();
 const MongoStore = mongo(session);
@@ -20,10 +19,6 @@ if (!process.env.SESSION_SECRET || !process.env.MONGO_URL) {
 }
 
 const sessionSecret: string = process.env.SESSION_SECRET;
-const mongoUrl: string =
-  process.env.NODE_ENV === 'production'
-    ? process.env.MONGO_URL
-    : 'mongodb://localhost:27017,localhost:27018,localhost:27019/app?replicaSet=rs';
 
 const app: express.Application = express();
 
