@@ -3,11 +3,19 @@ import { Button, Checkbox, Form } from 'semantic-ui-react';
 import * as axios from 'axios';
 
 export default () => (
-  <div>
+  <div className="signup-wrapper">
     <Form action="/signup" method="POST">
       <Form.Field>
-        <label>Name</label>
-        <input name="name" placeholder="Name" required />
+        <label>First Name (Given Name)</label>
+        <input name="givenName" placeholder="Name" required />
+      </Form.Field>
+      <Form.Field>
+        <label>Last Name (Family Name)</label>
+        <input name="familyName" placeholder="Name" required />
+      </Form.Field>
+      <Form.Field>
+        <label>Username</label>
+        <input name="username" placeholder="Name" required />
       </Form.Field>
       <Form.Field>
         <label>Email</label>
@@ -27,6 +35,11 @@ export default () => (
       </Form.Field>
       <Button type="submit">Submit</Button>
     </Form>
-    <style jsx>{``}</style>
+    <style jsx>{`
+      .signup-wrapper :global(.ui.form) {
+        max-width: 400px;
+        margin: 0 auto;
+      }
+    `}</style>
   </div>
 );

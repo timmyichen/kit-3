@@ -87,7 +87,7 @@ function init() {
   );
 
   passport.serializeUser<any, any>((user, cb) => {
-    cb(undefined, user._id);
+    cb(undefined, user.id);
   });
 
   passport.deserializeUser((id: number, done) => {

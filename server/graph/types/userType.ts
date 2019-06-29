@@ -6,7 +6,7 @@ export default new GraphQLObjectType({
   fields: () => ({
     id: {
       type: new GraphQLNonNull(GraphQLString),
-      resolve: (user: any) => user._id && user._id.toString(),
+      resolve: (user: any) => user.id,
     },
     fullName: {
       type: new GraphQLNonNull(GraphQLString),
