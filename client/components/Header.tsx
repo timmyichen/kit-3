@@ -13,6 +13,10 @@ export default () => (
     <Link href="/signup">
       <Button>Sign up</Button>
     </Link>
-    <style jsx>{``}</style>
+    <style jsx>{`
+      .test {
+        color: red;
+      }
+    `}</style>
   </div>
 );

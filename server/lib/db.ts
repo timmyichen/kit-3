@@ -1,10 +1,22 @@
 import { Sequelize } from 'sequelize-typescript';
-import path from 'path';
+import * as path from 'path';
 
+if (
+  !process.env.DB_DATABASE ||
+  !process.env.DB_USER ||
+  !process.env.DB_PASSWORD ||
+  !process.env.DB_HOST
+) {
+  throw new Error('expected env var');
+}
+
+// @ts-ignore
 export const sequelize = new Sequelize({
-  database: process.env.PSQL_URL,
-  username: process.env.PSQL_USER,
-  password: process.env.PSQL_PASS,
+  database: process.env.DB_DATABASE,
+  username: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
   dialect: 'postgres',
-  modelPaths: [path.resolve(__dirname, 'server/models/')],
+  modelPaths: [path.resolve(__dirname, 'server/models')],
 });

@@ -3,9 +3,7 @@ import * as bluebird from 'bluebird';
 import * as asyncRouter from 'express-router-async';
 import * as passport from 'passport';
 import * as passportLocal from 'passport-local';
-import { User } from '../models';
-import { UserType } from '../models/types';
-
+import { Users } from '../models';
 const bcrypt = bluebird.promisifyAll(require('bcrypt-nodejs'));
 
 function init() {
@@ -14,7 +12,11 @@ function init() {
   passport.use(
     'local-login',
     new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
-      User.findOne({ email: email.toLowerCase() })
+      Users.findOne({
+        where: {
+          email: email.toLowerCase(),
+        },
+      })
         .then((user: any) => {
           if (!user) {
             return done(undefined, false, { message: 'Login failed' });
@@ -59,7 +61,7 @@ function init() {
             return bcrypt.hashAsync(password, salt, null);
           })
           .then((hash: string) => {
-            const user = new User({
+            return Users.create({
               givenName,
               familyName,
               username,
@@ -67,10 +69,8 @@ function init() {
               email,
               password: hash,
             });
-
-            return user.save();
           })
-          .then((user: UserType) => {
+          .then((user: any) => {
             return done(null, user);
           })
           .catch((e: any) => {
@@ -90,14 +90,14 @@ function init() {
     cb(undefined, user._id);
   });
 
-  passport.deserializeUser((id, done) => {
-    User.findById(id, (err, user: any) => {
-      if (err) {
+  passport.deserializeUser((id: number, done) => {
+    Users.findOne({ where: { id } })
+      .then((user: any) => {
+        done(null, user);
+      })
+      .catch((err: Error) => {
         return done(err);
-      }
-
-      done(null, user);
-    });
+      });
   });
 
   const router = asyncRouter();

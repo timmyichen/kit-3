@@ -1,7 +1,8 @@
-import { Table, Column, Model } from 'sequelize-typescript';
-import { requiredString } from 'server/lib/model';
+import { Table, Column, Model, DataType } from 'sequelize-typescript';
+import { requiredString } from '../../lib/model';
 
 @Table({
+  tableName: 'users',
   paranoid: true,
   timestamps: true,
   indexes: [
@@ -10,7 +11,7 @@ import { requiredString } from 'server/lib/model';
     { unique: true, fields: ['email'] },
   ],
 })
-export default class User extends Model<User> {
+export default class Users extends Model<Users> {
   @Column({
     allowNull: false,
     autoIncrement: true,
@@ -52,6 +53,7 @@ export default class User extends Model<User> {
   email: string;
 
   @Column({
+    type: DataType.JSON,
     allowNull: false,
     defaultValue: {},
   })

@@ -1,29 +1,34 @@
 import * as dotenv from 'dotenv';
 import * as express from 'express';
 import * as morgan from 'morgan';
-import * as mongoose from 'mongoose';
 import * as passport from 'passport';
 import * as bodyParser from 'body-parser';
 import * as session from 'express-session';
-import * as mongo from 'connect-mongo';
 import nextjs from './lib/next';
 import PagesRouter from './routers/pages';
 import GraphqlRouter from './routers/graphql';
 import auth from './routers/auth';
 
 dotenv.config();
-const MongoStore = mongo(session);
 
-if (!process.env.SESSION_SECRET || !process.env.MONGO_URL) {
-  throw new Error('expected env var');
+import { sequelize } from './lib/db';
+
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
+
+if (!process.env.SESSION_SECRET) {
+  throw new Error('expected secret');
 }
 
 const sessionSecret: string = process.env.SESSION_SECRET;
 
+const store = new SequelizeStore({
+  db: sequelize,
+});
+
 const app: express.Application = express();
 
 nextjs.nextApp.prepare().then(async () => {
-  mongoose.connect(mongoUrl, { useNewUrlParser: true });
+  await sequelize.authenticate();
   console.log('connected to db'); // tslint:disable-line no-console
 
   const port = process.env.SERVER_PORT || 8000;
@@ -40,10 +45,7 @@ nextjs.nextApp.prepare().then(async () => {
       resave: false,
       saveUninitialized: false,
       secret: sessionSecret,
-      store: new MongoStore({
-        url: mongoUrl,
-        autoReconnect: true,
-      }),
+      store,
     }),
   );
   app.use(passport.initialize());
@@ -52,6 +54,8 @@ nextjs.nextApp.prepare().then(async () => {
   app.use(auth());
   app.use(PagesRouter);
   app.use(GraphqlRouter);
+
+  store.sync();
 
   app.get('*', (req, res) => {
     nextjs.handle(req, res);
