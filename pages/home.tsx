@@ -12,7 +12,7 @@ const query = gqlTag`query currentUser {
 export default () => (
   <Query query={query}>
     {data => {
-      console.log(data);
+      // console.log(data);
       return <h1>i home!</h1>;
     }}
   </Query>
