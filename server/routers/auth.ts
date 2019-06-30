@@ -3,6 +3,7 @@ import * as bluebird from 'bluebird';
 import * as asyncRouter from 'express-router-async';
 import * as passport from 'passport';
 import * as passportLocal from 'passport-local';
+import * as validator from 'validator';
 import { Users } from '../models';
 const bcrypt = bluebird.promisifyAll(require('bcrypt-nodejs'));
 
@@ -12,11 +13,22 @@ function init() {
   passport.use(
     'local-login',
     new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
-      Users.findOne({
-        where: {
-          email: email.toLowerCase(),
-        },
-      })
+      let promise: Promise<Users>;
+      if (validator.isEmail(email)) {
+        promise = Users.findOne({
+          where: {
+            email: email.toLowerCase(),
+          },
+        });
+      } else {
+        promise = Users.findOne({
+          where: {
+            username: email.toLowerCase(),
+          },
+        });
+      }
+
+      promise
         .then((user: any) => {
           if (!user) {
             return done(undefined, false, { message: 'Login failed' });
@@ -64,9 +76,9 @@ function init() {
             return Users.create({
               given_name: givenName,
               family_name: familyName,
-              username,
+              username: username.toLowerCase(),
               birthday,
-              email,
+              email: email.toLowerCase(),
               password: hash,
             });
           })
