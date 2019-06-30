@@ -1,7 +1,7 @@
 import * as express from 'express';
 import { GraphQLBoolean, GraphQLNonNull, GraphQLInt } from 'graphql';
 import { AuthenticationError, UserInputError } from 'apollo-server';
-import { Friendships, Users } from '../../models';
+import { Friendships, Users } from 'server/models';
 
 export default {
   description: 'Remove a friend',

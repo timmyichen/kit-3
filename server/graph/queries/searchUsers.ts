@@ -7,8 +7,8 @@ import {
   GraphQLBoolean,
 } from 'graphql';
 import { AuthenticationError } from 'apollo-server';
-import { Users, Friendships } from '../../models';
-import userType from '../types/userType';
+import { Users, Friendships } from 'server/models';
+import userType from 'server/graph/types/userType';
 import { Op } from 'sequelize';
 
 interface Args {

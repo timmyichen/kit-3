@@ -7,7 +7,7 @@ import {
   UpdatedAt,
   DeletedAt,
 } from 'sequelize-typescript';
-import { requiredString } from '../../lib/model';
+import { requiredString } from 'server/lib/model';
 
 @Table({
   tableName: 'users',

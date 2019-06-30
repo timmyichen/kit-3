@@ -1,3 +1,4 @@
+import 'module-alias/register';
 import * as dotenv from 'dotenv';
 import * as express from 'express';
 import * as morgan from 'morgan';

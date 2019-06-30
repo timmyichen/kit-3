@@ -1,6 +1,6 @@
 import * as express from 'express';
 import * as asyncRouter from 'express-router-async';
-import nextjs from '../lib/next';
+import nextjs from 'server/lib/next';
 
 const router = asyncRouter();
 

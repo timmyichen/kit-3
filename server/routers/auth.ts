@@ -4,7 +4,7 @@ import * as asyncRouter from 'express-router-async';
 import * as passport from 'passport';
 import * as passportLocal from 'passport-local';
 import * as validator from 'validator';
-import { Users } from '../models';
+import { Users } from 'server/models';
 const bcrypt = bluebird.promisifyAll(require('bcrypt-nodejs'));
 
 function init() {

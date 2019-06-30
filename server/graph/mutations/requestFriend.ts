@@ -1,8 +1,13 @@
 import * as express from 'express';
 import { GraphQLBoolean, GraphQLNonNull, GraphQLInt } from 'graphql';
 import { AuthenticationError, UserInputError } from 'apollo-server';
-import { FriendRequests, BlockedUsers, Friendships, Users } from '../../models';
-import { db } from '../../lib/db';
+import {
+  FriendRequests,
+  BlockedUsers,
+  Friendships,
+  Users,
+} from 'server/models';
+import { db } from 'server/lib/db';
 
 export default {
   description: 'Request a user to be your friend',

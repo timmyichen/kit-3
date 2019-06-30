@@ -1,5 +1,5 @@
 import * as express from 'express';
-import userType from '../types/userType';
+import userType from 'server/graph/types/userType';
 
 export default {
   description: 'The currently authed user',

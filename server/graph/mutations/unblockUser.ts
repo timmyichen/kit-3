@@ -1,7 +1,7 @@
 import * as express from 'express';
 import { GraphQLBoolean, GraphQLNonNull, GraphQLInt } from 'graphql';
 import { AuthenticationError, UserInputError } from 'apollo-server';
-import { BlockedUsers, Users } from '../../models';
+import { BlockedUsers, Users } from 'server/models';
 
 export default {
   description: 'Unblock a user',

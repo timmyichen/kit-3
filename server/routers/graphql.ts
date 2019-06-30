@@ -1,6 +1,6 @@
 import * as express from 'express';
 import * as graphqlHTTP from 'express-graphql';
-import schema from '../graph';
+import schema from 'server/graph';
 
 const router = express.Router();
 
