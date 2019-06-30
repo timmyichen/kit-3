@@ -9,16 +9,16 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true,
       },
-      givenName: {
+      given_name: {
         type: Sequelize.STRING,
         allowNull: false,
         validate: {
           notEmpty: true,
         },
       },
-      familyName: {
+      family_name: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
         validate: {
           notEmpty: true,
         },
@@ -54,13 +54,31 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: true,
       },
-      createdAt: Sequelize.DATE,
-      updatedAt: Sequelize.DATE,
-      deletedAt: Sequelize.DATE,
-    });
+      created_at: Sequelize.DATE,
+      updated_at: Sequelize.DATE,
+      deleted_at: Sequelize.DATE,
+    })
+    .then(() => queryInterface.sequelize.query(`
+      CREATE UNIQUE INDEX user_username ON users (username) WHERE deleted_at IS NOT NULL;
+    `))
+    .then(() => queryInterface.sequelize.query(`
+      CREATE UNIQUE INDEX user_email ON users (email) WHERE deleted_at IS NOT NULL;
+    `))
+    .then(() => queryInterface.sequelize.query(`
+      CREATE INDEX user_birthday ON users (birthday);
+    `));
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('users');
+    return queryInterface.sequelize.query(`
+      DROP INDEX IF EXISTS user_username
+    `)
+    .then(() => queryInterface.sequelize.query(`
+      DROP INDEX IF EXISTS user_email
+    `))
+    .then(() => queryInterface.sequelize.query(`
+      DROP INDEX IF EXISTS user_birthday
+    `))
+    .then(() => queryInterface.dropTable('users'))
   }
 };

@@ -62,8 +62,8 @@ function init() {
           })
           .then((hash: string) => {
             return Users.create({
-              givenName,
-              familyName,
+              given_name: givenName,
+              family_name: familyName,
               username,
               birthday,
               email,
