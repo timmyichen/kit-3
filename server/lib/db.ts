@@ -1,5 +1,8 @@
 import { Sequelize } from 'sequelize-typescript';
 import * as path from 'path';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 if (
   !process.env.DB_DATABASE ||
@@ -11,7 +14,7 @@ if (
 }
 
 // @ts-ignore
-export const sequelize = new Sequelize({
+export const db = new Sequelize({
   database: process.env.DB_DATABASE,
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,

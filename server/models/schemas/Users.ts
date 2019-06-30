@@ -1,4 +1,12 @@
-import { Table, Column, Model, DataType } from 'sequelize-typescript';
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  CreatedAt,
+  UpdatedAt,
+  DeletedAt,
+} from 'sequelize-typescript';
 import { requiredString } from '../../lib/model';
 
 @Table({
@@ -22,12 +30,12 @@ export default class Users extends Model<Users> {
   @Column({
     ...requiredString(),
   })
-  givenName: string;
+  given_name: string;
 
   @Column({
     ...requiredString(),
   })
-  familyName: string;
+  family_name: string;
 
   @Column({
     ...requiredString({
@@ -61,4 +69,13 @@ export default class Users extends Model<Users> {
 
   @Column
   birthday: Date;
+
+  @CreatedAt
+  created_at: Date;
+
+  @UpdatedAt
+  updated_at: Date;
+
+  @DeletedAt
+  deleted_at: Date;
 }

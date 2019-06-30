@@ -1,10 +1,11 @@
-import { Table, Column, Model } from 'sequelize-typescript';
+import { Table, Column, Model, PrimaryKey } from 'sequelize-typescript';
 
 @Table({
   tableName: 'friend_requests',
-  indexes: [{ fields: ['target_user', 'requested_by'] }],
+  timestamps: false,
 })
 export default class FriendRequests extends Model<FriendRequests> {
+  @PrimaryKey
   @Column({
     allowNull: false,
     references: {
@@ -14,6 +15,7 @@ export default class FriendRequests extends Model<FriendRequests> {
   })
   target_user: number;
 
+  @PrimaryKey
   @Column({
     allowNull: false,
     references: {

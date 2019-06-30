@@ -1,10 +1,11 @@
-import { Table, Column, Model } from 'sequelize-typescript';
+import { Table, Column, Model, PrimaryKey } from 'sequelize-typescript';
 
 @Table({
   tableName: 'blocked_users',
-  indexes: [{ fields: ['blocked_by', 'target_user'] }],
+  timestamps: false,
 })
 export default class BlockedUsers extends Model<BlockedUsers> {
+  @PrimaryKey
   @Column({
     allowNull: false,
     references: {
@@ -14,6 +15,7 @@ export default class BlockedUsers extends Model<BlockedUsers> {
   })
   target_user: number;
 
+  @PrimaryKey
   @Column({
     allowNull: false,
     references: {

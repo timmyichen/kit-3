@@ -11,7 +11,7 @@ import auth from './routers/auth';
 
 dotenv.config();
 
-import { sequelize } from './lib/db';
+import { db } from './lib/db';
 
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
@@ -22,13 +22,13 @@ if (!process.env.SESSION_SECRET) {
 const sessionSecret: string = process.env.SESSION_SECRET;
 
 const store = new SequelizeStore({
-  db: sequelize,
+  db,
 });
 
 const app: express.Application = express();
 
 nextjs.nextApp.prepare().then(async () => {
-  await sequelize.authenticate();
+  await db.authenticate();
   console.log('connected to db'); // tslint:disable-line no-console
 
   const port = process.env.SERVER_PORT || 8000;
