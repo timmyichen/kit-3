@@ -26,10 +26,6 @@ export default {
     if (targetUserId === user.id) {
       throw new UserInputError('Cant add yourself you cray');
     }
-
-    const ids = [user.id, targetUserId];
-    ids.sort();
-
     const [
       isRequested,
       reverseRequest,
@@ -56,8 +52,8 @@ export default {
       }),
       Friendships.findOne({
         where: {
-          first_user: ids[0],
-          second_user: ids[1],
+          first_user: user.id,
+          second_user: targetUserId,
         },
       }),
     ]);
@@ -79,8 +75,17 @@ export default {
         await Promise.all([
           Friendships.create(
             {
-              first_user: ids[0],
-              second_user: ids[1],
+              first_user: user.id,
+              second_user: targetUserId,
+            },
+            {
+              transaction,
+            },
+          ),
+          Friendships.create(
+            {
+              first_user: targetUserId,
+              second_user: user.id,
             },
             {
               transaction,

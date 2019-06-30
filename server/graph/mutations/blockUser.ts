@@ -23,15 +23,19 @@ export default {
       throw new UserInputError('User not found');
     }
 
-    const ids = [user.id, targetUserId];
-    ids.sort();
-
     await db.transaction(async (transaction: any) =>
       Promise.all([
         Friendships.destroy({
           where: {
-            first_user: ids[0],
-            second_user: ids[1],
+            first_user: user.id,
+            second_user: targetUserId,
+          },
+          transaction,
+        }),
+        Friendships.destroy({
+          where: {
+            first_user: targetUserId,
+            second_user: user.id,
           },
           transaction,
         }),

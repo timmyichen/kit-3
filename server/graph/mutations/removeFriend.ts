@@ -22,13 +22,10 @@ export default {
       throw new UserInputError('User not found');
     }
 
-    const ids = [user.id, targetUserId];
-    ids.sort();
-
     const existingFriendship = await Friendships.findOne({
       where: {
-        first_user: ids[0],
-        second_user: ids[1],
+        first_user: user.id,
+        second_user: targetUserId,
       },
     });
 
@@ -36,7 +33,14 @@ export default {
       throw new UserInputError('Friendship not found');
     }
 
-    await existingFriendship.destroy();
+    await Friendships.destroy({
+      where: {
+        $or: [
+          { first_user: user.id, second_user: targetUserId },
+          { second_user: user.id, first_user: targetUserId },
+        ],
+      },
+    });
 
     return true;
   },

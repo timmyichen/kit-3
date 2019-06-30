@@ -34,16 +34,20 @@ export default {
       throw new UserInputError('Request not found');
     }
 
-    const ids = [user.id, requesterId];
-    ids.sort();
-
     await db.transaction((transaction: any) =>
       Promise.all([
         existingRequest.destroy({ transaction }),
         Friendships.create(
           {
-            first_user: ids[0],
-            second_user: ids[1],
+            first_user: user.id,
+            second_user: requesterId,
+          },
+          { transaction },
+        ),
+        Friendships.create(
+          {
+            first_user: requesterId,
+            second_user: user.id,
           },
           { transaction },
         ),
