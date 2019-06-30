@@ -11,7 +11,7 @@ export default {
     requesterId: { type: new GraphQLNonNull(GraphQLInt) },
   },
   async resolve(
-    _1: any,
+    _: any,
     { requesterId }: { requesterId: number },
     { user }: express.Request,
   ) {
