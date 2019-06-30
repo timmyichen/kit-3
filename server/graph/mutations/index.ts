@@ -2,6 +2,8 @@ import { GraphQLObjectType } from 'graphql';
 import requestFriend from './requestFriend';
 import acceptFriendRequest from './acceptFriendRequest';
 import removeFriend from './removeFriend';
+import blockUser from './blockUser';
+import unblockUser from './unblockUser';
 
 export default new GraphQLObjectType({
   name: 'RootMutation',
@@ -10,5 +12,7 @@ export default new GraphQLObjectType({
     requestFriend,
     acceptFriendRequest,
     removeFriend,
+    blockUser,
+    unblockUser,
   }),
 });
