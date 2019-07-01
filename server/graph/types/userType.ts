@@ -15,9 +15,9 @@ export default new GraphQLObjectType({
           ? user.given_name + ' ' + user.family_name
           : user.given_name,
     },
-    email: {
+    username: {
       type: new GraphQLNonNull(GraphQLString),
-      resolve: (user: any) => user.email,
+      resolve: (user: any) => user.username,
     },
   }),
 });

@@ -19,4 +19,11 @@ router.getAsync(
   },
 );
 
+router.getAsync(
+  '/friends',
+  async (req: express.Request, res: express.Response) => {
+    nextjs.render(req, res, '/friends');
+  },
+);
+
 export default router;

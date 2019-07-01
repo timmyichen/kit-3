@@ -1,6 +1,7 @@
 import * as React from 'react';
 import App, { Container } from 'next/app';
 import { ApolloProvider } from 'react-apollo';
+import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
 import Head from 'next/head';
 import Header from 'client/components/Header';
 import client from 'client/lib/apollo';
@@ -28,8 +29,12 @@ class MyApp extends App {
           />
         </Head>
         <ApolloProvider client={client}>
-          <Header />
-          <Component {...pageProps} />
+          <ApolloHooksProvider client={client}>
+            <>
+              <Header />
+              <Component {...pageProps} />
+            </>
+          </ApolloHooksProvider>
         </ApolloProvider>
       </Container>
     );
