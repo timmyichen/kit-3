@@ -2,7 +2,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "server/*": ["server/*"]
+      "server/*": ["server/*"],
+      "client/*": ["client/*"]
     },
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
@@ -29,6 +30,7 @@
   "include": [
     "client",
     "server",
+    "pages",
     "./types/**/*"
   ]
 }

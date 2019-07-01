@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Button, Checkbox, Form } from 'semantic-ui-react';
-import * as axios from 'axios';
 
 export default () => (
   <div className="signup-wrapper">

@@ -3,8 +3,9 @@ import debounce from 'lodash/debounce';
 import { useApolloClient } from 'react-apollo-hooks';
 import { Search } from 'semantic-ui-react';
 import { searchUsers as searchUsersQuery } from 'client/graph/queries';
+import { User } from 'client/types';
 
-const FriendsPage = props => {
+const FriendsPage = () => {
   const [loading, setLoading] = React.useState<boolean>(false);
   const [results, setResults] = React.useState<Array<any>>([]);
   const [query, setQuery] = React.useState<string>('');
@@ -19,7 +20,7 @@ const FriendsPage = props => {
     setLoading(false);
     if (res.data && res.data.searchUsers) {
       setResults(
-        res.data.searchUsers.map(u => ({
+        res.data.searchUsers.map((u: User) => ({
           title: `${u.username} (${u.fullName})`,
         })),
       );
@@ -30,7 +31,7 @@ const FriendsPage = props => {
     <div className="profile-page-wrapper">
       <Search
         loading={loading}
-        onSearchChange={(e, { value }: { value: string }) => {
+        onSearchChange={(_, { value }: { value?: any }) => {
           setLoading(true);
           setQuery(value);
           search(value);

@@ -9,3 +9,12 @@ export const searchUsers = gqlTag`
     }
   }
 `;
+
+export const currentUser = gqlTag`
+  query currentUser {
+    currentUser {
+      email
+      name
+    }
+  }
+`;

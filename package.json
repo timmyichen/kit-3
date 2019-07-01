@@ -74,6 +74,7 @@
     "@types/express-session": "^1.15.12",
     "@types/graphql": "^14.2.0",
     "@types/isomorphic-fetch": "0.0.35",
+    "@types/module-alias": "^2.0.0",
     "@types/morgan": "^1.7.35",
     "@types/next": "^8.0.3",
     "@types/passport": "^1.0.0",

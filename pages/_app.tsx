@@ -7,7 +7,7 @@ import Header from 'client/components/Header';
 import client from 'client/lib/apollo';
 
 class MyApp extends App {
-  static async getInitialProps({ Component, ctx }) {
+  static async getInitialProps({ Component, ctx }: any) {
     let pageProps = {};
 
     if (Component.getInitialProps) {
