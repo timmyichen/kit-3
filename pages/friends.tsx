@@ -1,13 +1,21 @@
 import * as React from 'react';
 import debounce from 'lodash/debounce';
-import { useApolloClient } from 'react-apollo-hooks';
-import { Search } from 'semantic-ui-react';
-import { searchUsers as searchUsersQuery } from 'client/graph/queries';
-import { User } from 'client/types';
+import { useApolloClient, useMutation } from 'react-apollo-hooks';
+import { Input, Card, Image, Button } from 'semantic-ui-react';
+import { searchUsersQuery } from 'client/graph/queries';
+import {
+  REQUEST_FRIEND_MUTATION,
+  REMOVE_FRIEND_MUTATION,
+  BLOCK_USER_MUTATION,
+  UNBLOCK_USER_MUTATION,
+  RESCIND_REQUEST_MUTATION,
+  ACCEPT_REQUEST_MUTATION,
+} from 'client/graph/mutations';
+import { UserSearch } from 'client/types';
 
 const FriendsPage = () => {
   const [loading, setLoading] = React.useState<boolean>(false);
-  const [results, setResults] = React.useState<Array<any>>([]);
+  const [results, setResults] = React.useState<Array<UserSearch>>([]);
   const [query, setQuery] = React.useState<string>('');
 
   const client = useApolloClient();
@@ -15,30 +23,88 @@ const FriendsPage = () => {
   const search = debounce(async (value: string) => {
     const res = await client.query({
       query: searchUsersQuery,
-      variables: { searchQuery: value, excludeFriends: true },
+      variables: { searchQuery: value, excludeFriends: false },
     });
     setLoading(false);
     if (res.data && res.data.searchUsers) {
-      setResults(
-        res.data.searchUsers.map((u: User) => ({
-          title: `${u.username} (${u.fullName})`,
-        })),
-      );
+      setResults(res.data.searchUsers);
     }
   }, 1000);
 
+  const requestFriend = useMutation(REQUEST_FRIEND_MUTATION);
+  const removeFriend = useMutation(REMOVE_FRIEND_MUTATION);
+  const blockUser = useMutation(BLOCK_USER_MUTATION);
+  const unblockUser = useMutation(UNBLOCK_USER_MUTATION);
+  const rescindRequest = useMutation(RESCIND_REQUEST_MUTATION);
+  const acceptRequest = useMutation(ACCEPT_REQUEST_MUTATION);
+
+  const getCtas = (u: UserSearch) => {
+    const variables = { targetUserId: u.id };
+
+    if (u.isBlocked) {
+      return (
+        <Button basic color="black" onClick={() => unblockUser({ variables })}>
+          Unblock
+        </Button>
+      );
+    }
+
+    let action: (o: Object) => void;
+    let label = '';
+
+    if (u.hasRequestedUser) {
+      label = 'Accept Request';
+      action = acceptRequest;
+    } else if (u.isFriend) {
+      label = 'Remove Friend';
+      action = removeFriend;
+    } else if (u.isRequested) {
+      label = 'Rescind Request';
+      action = rescindRequest;
+    } else {
+      label = 'Add Friend';
+      action = requestFriend;
+    }
+
+    return [
+      <Button basic color="green" onClick={() => action({ variables })}>
+        {label}
+      </Button>,
+      <Button basic color="black" onClick={() => blockUser({ variables })}>
+        Block
+      </Button>,
+    ];
+  };
+
   return (
     <div className="profile-page-wrapper">
-      <Search
+      <Input
         loading={loading}
-        onSearchChange={(_, { value }: { value?: any }) => {
+        value={query}
+        onChange={(_, { value }) => {
           setLoading(true);
+          console.log(value);
           setQuery(value);
           search(value);
         }}
-        results={results}
-        value={query}
       />
+      <div className="search-results">
+        {results.map((result: UserSearch) => (
+          <Card>
+            <Card.Content>
+              <Image floated="right" size="mini" />
+              <Card.Header>{result.fullName}</Card.Header>
+              <Card.Meta>{result.username}</Card.Meta>
+            </Card.Content>
+            <Card.Content extra>
+              <div className="ctas">{getCtas(result)}</div>
+            </Card.Content>
+          </Card>
+        ))}
+      </div>
+      <style jsx>{`
+        .ctas display flex justify-content space-between;
+      `}</style>
     </div>
   );
 };

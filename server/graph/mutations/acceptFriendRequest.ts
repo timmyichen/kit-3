@@ -8,25 +8,25 @@ export default {
   description: 'Accept a friend request',
   type: GraphQLBoolean,
   args: {
-    requesterId: { type: new GraphQLNonNull(GraphQLInt) },
+    targetUserId: { type: new GraphQLNonNull(GraphQLInt) },
   },
   async resolve(
     _: any,
-    { requesterId }: { requesterId: number },
+    { targetUserId }: { targetUserId: number },
     { user }: express.Request,
   ) {
     if (!user) {
       throw new AuthenticationError('Must be logged in');
     }
 
-    if (!requesterId) {
+    if (!targetUserId) {
       throw new UserInputError('Missing requester ID');
     }
 
     const existingRequest = await FriendRequests.findOne({
       where: {
         target_user: user.id,
-        requested_by: requesterId,
+        requested_by: targetUserId,
       },
     });
 
@@ -40,13 +40,13 @@ export default {
         Friendships.create(
           {
             first_user: user.id,
-            second_user: requesterId,
+            second_user: targetUserId,
           },
           { transaction },
         ),
         Friendships.create(
           {
-            first_user: requesterId,
+            first_user: targetUserId,
             second_user: user.id,
           },
           { transaction },

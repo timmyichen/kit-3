@@ -4,6 +4,7 @@ import {
   GraphQLString,
   GraphQLNonNull,
   GraphQLBoolean,
+  GraphQLInt,
 } from 'graphql';
 import { Friendships, BlockedUsers, FriendRequests } from 'server/models';
 
@@ -12,7 +13,7 @@ export default new GraphQLObjectType({
   description: 'A user of the platform',
   fields: () => ({
     id: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: new GraphQLNonNull(GraphQLInt),
       resolve: (user: any) => user.id,
     },
     fullName: {
