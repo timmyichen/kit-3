@@ -25,7 +25,8 @@
     "target": "es6",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "strictFunctionTypes": false,
   },
   "include": [
     "client",
