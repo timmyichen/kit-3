@@ -7,9 +7,9 @@ import {
   GraphQLBoolean,
 } from 'graphql';
 import { AuthenticationError } from 'apollo-server';
+import { Op } from 'sequelize';
 import { Users, Friendships } from 'server/models';
 import userType from 'server/graph/types/userType';
-import { Op } from 'sequelize';
 
 interface Args {
   searchQuery: string;

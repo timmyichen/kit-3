@@ -103,7 +103,10 @@ const FriendsPage = () => {
         ))}
       </div>
       <style jsx>{`
-        .ctas display flex justify-content space-between;
+        .ctas {
+          display: flex;
+          justify-content: space-between;
+        }
       `}</style>
     </div>
   );

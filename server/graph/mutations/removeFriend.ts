@@ -1,5 +1,6 @@
 import * as express from 'express';
 import { GraphQLBoolean, GraphQLNonNull, GraphQLInt } from 'graphql';
+import { Op } from 'sequelize';
 import { AuthenticationError, UserInputError } from 'apollo-server';
 import { Friendships, Users } from 'server/models';
 
@@ -35,7 +36,7 @@ export default {
 
     await Friendships.destroy({
       where: {
-        $or: [
+        [Op.or]: [
           { first_user: user.id, second_user: targetUserId },
           { second_user: user.id, first_user: targetUserId },
         ],
