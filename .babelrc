@@ -1,6 +1,11 @@
 {
   "presets": [
-    "next/babel",
+    [
+      "next/babel",
+      {
+        "styled-jsx": { "plugins": ["styled-jsx-plugin-stylus"] }
+      }
+    ],
     "@zeit/next-typescript/babel"
   ],
   "plugins": [
@@ -15,6 +20,6 @@
           "server": "./server"
         }
       }
-    ]
+    ],
   ]
 }
