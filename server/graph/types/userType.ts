@@ -5,7 +5,6 @@ import {
   GraphQLNonNull,
   GraphQLBoolean,
 } from 'graphql';
-import { resolve } from 'bluebird';
 import { Friendships, BlockedUsers, FriendRequests } from 'server/models';
 
 export default new GraphQLObjectType({
@@ -57,7 +56,7 @@ export default new GraphQLObjectType({
         }));
       },
     },
-    hasRequestedYou: {
+    hasRequestedUser: {
       type: new GraphQLNonNull(GraphQLBoolean),
       async resolve(u: any, _: any, { user }: express.Request) {
         if (!user) {
