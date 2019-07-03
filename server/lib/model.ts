@@ -5,3 +5,8 @@ export const requiredString = ({ validate }: { [s: string]: any } = {}) => ({
     ...validate,
   },
 });
+
+export const emptyOptionalString = {
+  allowNull: false,
+  defaultValue: '',
+};
