@@ -6,6 +6,7 @@ import Addresses from './schemas/Addresses';
 import EmailAddresses from './schemas/EmailAddresses';
 import PhoneNumbers from './schemas/PhoneNumbers';
 import ContactInfos from './schemas/ContactInfos';
+import SharedContactInfos from './schemas/SharedContactInfos';
 
 export {
   Users,
@@ -16,4 +17,5 @@ export {
   EmailAddresses,
   PhoneNumbers,
   ContactInfos,
+  SharedContactInfos,
 };
