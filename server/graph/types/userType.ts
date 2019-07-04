@@ -7,6 +7,7 @@ import {
   GraphQLInt,
 } from 'graphql';
 import { Friendships, BlockedUsers, FriendRequests } from 'server/models';
+import { timestamps } from './common';
 
 export default new GraphQLObjectType({
   name: 'User',
@@ -87,5 +88,6 @@ export default new GraphQLObjectType({
         }));
       },
     },
+    ...timestamps(),
   }),
 });
