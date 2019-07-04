@@ -5,6 +5,7 @@ import BlockedUsers from './schemas/BlockedUsers';
 import Addresses from './schemas/Addresses';
 import EmailAddresses from './schemas/EmailAddresses';
 import PhoneNumbers from './schemas/PhoneNumbers';
+import ContactInfos from './schemas/ContactInfos';
 
 export {
   Users,
@@ -14,4 +15,5 @@ export {
   Addresses,
   EmailAddresses,
   PhoneNumbers,
+  ContactInfos,
 };

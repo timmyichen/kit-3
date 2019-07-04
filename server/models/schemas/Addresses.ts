@@ -5,8 +5,11 @@ import {
   PrimaryKey,
   CreatedAt,
   UpdatedAt,
+  BelongsTo,
+  ForeignKey,
 } from 'sequelize-typescript';
 import { requiredString, emptyOptionalString } from 'server/lib/model';
+import ContactInfos from './ContactInfos';
 
 @Table({
   tableName: 'addresses',
@@ -53,6 +56,13 @@ export default class Addresses extends Model<Addresses> {
 
   @Column(requiredString())
   label: string;
+
+  @ForeignKey(() => ContactInfos)
+  @Column
+  info_id: number;
+
+  @BelongsTo(() => ContactInfos)
+  info: ContactInfos;
 
   @CreatedAt
   created_at: Date;

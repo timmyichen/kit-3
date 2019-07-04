@@ -5,8 +5,9 @@ import {
   UserInputError,
   ApolloError,
 } from 'apollo-server';
-import { Addresses } from 'server/models';
+import { Addresses, ContactInfos } from 'server/models';
 import addressType from '../types/addressType';
+import { db } from 'server/lib/db';
 
 interface Args {
   id?: number;
@@ -71,25 +72,38 @@ export default {
       return result;
     }
 
-    try {
-      result = await Addresses.create({
-        owner_id: user.id,
-        notes,
-        label,
-        city,
-        state,
-        address_line_1: args.addressLine1,
-        address_line_2: args.addressLine2,
-        postal_code: args.postalCode,
-        country_code: args.countryCode,
-      });
-    } catch (e) {
-      if (e.message.toLowerCase().includes('validation')) {
-        throw new UserInputError(e.message);
-      } else {
-        throw new ApolloError(e.message);
+    await db.transaction(async (transaction: any) => {
+      const contactInfo = await ContactInfos.create(
+        {
+          type: 'address',
+        },
+        { transaction },
+      );
+
+      try {
+        result = await Addresses.create(
+          {
+            owner_id: user.id,
+            notes,
+            label,
+            city,
+            state,
+            address_line_1: args.addressLine1,
+            address_line_2: args.addressLine2,
+            postal_code: args.postalCode,
+            country_code: args.countryCode,
+            info_id: contactInfo.id,
+          },
+          { transaction },
+        );
+      } catch (e) {
+        if (e.message.toLowerCase().includes('validation')) {
+          throw new UserInputError(e.message);
+        } else {
+          throw new ApolloError(e.message);
+        }
       }
-    }
+    });
 
     return result;
   },

@@ -19,6 +19,7 @@ interface CommonContactInfoFields {
   label: string;
   created_at: Date;
   updated_at: Date;
+  info_id: number;
 }
 
 export interface Address extends CommonContactInfoFields {
@@ -40,3 +41,5 @@ export interface EmailAddress extends CommonContactInfoFields {
 }
 
 export type ContactInfoTypes = 'address' | 'phone_number' | 'email_address';
+
+export type ContactInfo = Address | PhoneNumber | EmailAddress;

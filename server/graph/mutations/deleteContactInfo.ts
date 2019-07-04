@@ -1,37 +1,52 @@
 import * as express from 'express';
-import { GraphQLNonNull, GraphQLInt, GraphQLString } from 'graphql';
+import { GraphQLNonNull, GraphQLInt } from 'graphql';
 import { AuthenticationError, UserInputError } from 'apollo-server';
-import { EmailAddresses, Addresses, PhoneNumbers } from 'server/models';
-import { ContactInfoTypes } from 'server/models/types';
+import {
+  EmailAddresses,
+  Addresses,
+  PhoneNumbers,
+  ContactInfos,
+} from 'server/models';
 import contactInfoType from '../types/contactInfoType';
+import { db } from 'server/lib/db';
 
 interface Args {
-  id: number;
-  type: ContactInfoTypes;
+  infoId: number;
 }
+
+type AnyContactInfo = EmailAddresses | Addresses | PhoneNumbers;
 
 export default {
   description: 'Upsert a phone number record',
   type: contactInfoType,
   args: {
-    id: { type: new GraphQLNonNull(GraphQLInt) },
-    type: { type: new GraphQLNonNull(GraphQLString) },
+    infoId: { type: new GraphQLNonNull(GraphQLInt) },
   },
-  async resolve(_: any, { id, type }: Args, { user }: express.Request) {
+  async resolve(_: any, { infoId }: Args, { user }: express.Request) {
     if (!user) {
       throw new AuthenticationError('Must be logged in');
     }
 
-    let entry;
-    switch (type) {
+    const contactInfo = await ContactInfos.findByPk(infoId);
+
+    if (!contactInfo) {
+      throw new UserInputError('Info not found');
+    }
+
+    let entry: AnyContactInfo | null;
+    switch (contactInfo.type) {
       case 'address':
-        entry = await Addresses.findByPk(id);
+        entry = await Addresses.findOne({ where: { info_id: contactInfo.id } });
         break;
       case 'phone_number':
-        entry = await PhoneNumbers.findByPk(id);
+        entry = await PhoneNumbers.findOne({
+          where: { info_id: contactInfo.id },
+        });
         break;
       case 'email_address':
-        entry = await EmailAddresses.findByPk(id);
+        entry = await EmailAddresses.findOne({
+          where: { info_id: contactInfo.id },
+        });
         break;
       default:
         throw new UserInputError('Invalid type');
@@ -41,7 +56,10 @@ export default {
       throw new UserInputError('Contact info not found');
     }
 
-    await entry.destroy();
+    await db.transaction(async (transaction: any) => {
+      await entry!.destroy({ transaction });
+      await contactInfo.destroy({ transaction });
+    });
 
     return entry;
   },

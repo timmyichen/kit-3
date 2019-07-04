@@ -5,8 +5,9 @@ import {
   UserInputError,
   ApolloError,
 } from 'apollo-server';
-import { PhoneNumbers } from 'server/models';
+import { PhoneNumbers, ContactInfos } from 'server/models';
 import phoneNumberType from '../types/phoneNumberType';
+import { db } from 'server/lib/db';
 
 interface Args {
   id?: number;
@@ -59,21 +60,34 @@ export default {
       return result;
     }
 
-    try {
-      result = await PhoneNumbers.create({
-        owner_id: user.id,
-        notes,
-        label,
-        phone_number: args.phoneNumber,
-        country_code: args.countryCode,
-      });
-    } catch (e) {
-      if (e.message.toLowerCase().includes('validation')) {
-        throw new UserInputError(e.message);
-      } else {
-        throw new ApolloError(e.message);
+    await db.transaction(async (transaction: any) => {
+      const contactInfo = await ContactInfos.create(
+        {
+          type: 'address',
+        },
+        { transaction },
+      );
+
+      try {
+        result = await PhoneNumbers.create(
+          {
+            owner_id: user.id,
+            notes,
+            label,
+            phone_number: args.phoneNumber,
+            country_code: args.countryCode,
+            info_id: contactInfo.id,
+          },
+          { transaction },
+        );
+      } catch (e) {
+        if (e.message.toLowerCase().includes('validation')) {
+          throw new UserInputError(e.message);
+        } else {
+          throw new ApolloError(e.message);
+        }
       }
-    }
+    });
 
     return result;
   },
