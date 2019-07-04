@@ -13,7 +13,7 @@ import { requiredString, emptyOptionalString } from 'server/lib/model';
   timestamps: true,
   indexes: [{ unique: false, fields: ['owner_id'] }],
 })
-export default class BlockedUsers extends Model<BlockedUsers> {
+export default class PhoneNumbers extends Model<PhoneNumbers> {
   @PrimaryKey
   @Column({
     allowNull: false,

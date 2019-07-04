@@ -5,6 +5,10 @@ import removeFriend from './removeFriend';
 import blockUser from './blockUser';
 import unblockUser from './unblockUser';
 import rescindFriendRequest from './rescindFriendRequest';
+import upsertAddress from './upsertAddress';
+import upsertEmailAddress from './upsertEmailAddress';
+import upsertPhoneNumber from './upsertPhoneNumber';
+import deleteContactInfo from './deleteContactInfo';
 
 export default new GraphQLObjectType({
   name: 'RootMutation',
@@ -16,5 +20,9 @@ export default new GraphQLObjectType({
     blockUser,
     unblockUser,
     rescindFriendRequest,
+    upsertAddress,
+    upsertEmailAddress,
+    upsertPhoneNumber,
+    deleteContactInfo,
   }),
 });
