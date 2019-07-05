@@ -2,7 +2,8 @@ import * as express from 'express';
 import { GraphQLBoolean, GraphQLNonNull, GraphQLInt } from 'graphql';
 import { Op } from 'sequelize';
 import { AuthenticationError, UserInputError } from 'apollo-server';
-import { Friendships, Users } from 'server/models';
+import { Friendships, Users, ContactInfos } from 'server/models';
+import { db } from 'server/lib/db';
 
 export default {
   description: 'Remove a friend',
@@ -34,13 +35,16 @@ export default {
       throw new UserInputError('Friendship not found');
     }
 
-    await Friendships.destroy({
-      where: {
-        [Op.or]: [
-          { first_user: user.id, second_user: targetUserId },
-          { second_user: user.id, first_user: targetUserId },
-        ],
-      },
+    await db.transaction(async (transaction: any) => {
+      await Friendships.destroy({
+        where: {
+          [Op.or]: [
+            { first_user: user.id, second_user: targetUserId },
+            { second_user: user.id, first_user: targetUserId },
+          ],
+        },
+        transaction,
+      });
     });
 
     return true;

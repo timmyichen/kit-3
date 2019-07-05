@@ -10,7 +10,7 @@ import emailAddressType from '../types/emailAddressType';
 import { db } from 'server/lib/db';
 
 interface Args {
-  id?: number;
+  infoId?: number;
   notes?: string;
   label: string;
   emailAddress: string;
@@ -20,7 +20,7 @@ export default {
   description: 'Upsert a phone number record',
   type: emailAddressType,
   args: {
-    id: { type: GraphQLInt },
+    infoId: { type: GraphQLInt },
     notes: { type: GraphQLString },
     label: { type: new GraphQLNonNull(GraphQLString) },
     emailAddress: { type: new GraphQLNonNull(GraphQLString) },
@@ -33,11 +33,17 @@ export default {
     let result;
     const { notes, label } = args;
 
-    if (args.id) {
-      const entry = await EmailAddresses.findByPk(args.id);
+    if (args.infoId) {
+      const info = await ContactInfos.findByPk(args.infoId);
 
-      if (!entry || entry.owner_id !== user.id) {
+      if (!info || info.owner_id !== user.id) {
         throw new UserInputError('Email address not found');
+      }
+
+      const entry = await info.getInfo({ where: { info_id: info.id } });
+
+      if (!entry) {
+        throw new ApolloError(`Matching info entry not found for ${info.id}`);
       }
 
       try {
@@ -60,7 +66,8 @@ export default {
     await db.transaction(async (transaction: any) => {
       const contactInfo = await ContactInfos.create(
         {
-          type: 'address',
+          type: 'email_address',
+          owner_id: user.id,
         },
         { transaction },
       );
@@ -68,7 +75,6 @@ export default {
       try {
         result = await EmailAddresses.create(
           {
-            owner_id: user.id,
             notes,
             label,
             email_address: args.emailAddress,

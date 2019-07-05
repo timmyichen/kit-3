@@ -14,7 +14,7 @@ import ContactInfos from './ContactInfos';
 @Table({
   tableName: 'email_addresses',
   timestamps: true,
-  indexes: [{ unique: false, fields: ['owner_id'] }],
+  indexes: [{ unique: false, fields: ['info_id'] }],
 })
 export default class EmailAddresses extends Model<EmailAddresses> {
   @PrimaryKey
@@ -23,15 +23,6 @@ export default class EmailAddresses extends Model<EmailAddresses> {
     autoIncrement: true,
   })
   id: number;
-
-  @Column({
-    allowNull: false,
-    references: {
-      model: 'users',
-      key: 'id',
-    },
-  })
-  owner_id: number;
 
   @Column(requiredString())
   email_address: string;

@@ -9,14 +9,6 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
       },
-      owner_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'users',
-          key: 'id',
-        },
-      },
       address_line_1: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -64,14 +56,6 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
       },
-      owner_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'users',
-          key: 'id',
-        },
-      },
       email_address: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -95,14 +79,6 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
       },
-      owner_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'users',
-          key: 'id',
-        },
-      },
       country_code: {
         type: Sequelize.STRING,
         allowNull: true,
@@ -124,29 +100,11 @@ module.exports = {
       created_at: Sequelize.DATE,
       updated_at: Sequelize.DATE,
     }))
-    .then(() => queryInterface.sequelize.query(`
-      CREATE INDEX addresses_owner_id_idx ON addresses (owner_id)
-    `))
-    .then(() => queryInterface.sequelize.query(`
-      CREATE INDEX email_addresses_owner_id_idx ON email_addresses (owner_id)
-    `))
-    .then(() => queryInterface.sequelize.query(`
-      CREATE INDEX phone_numbers_owner_id_idx ON phone_numbers (owner_id)
-    `))
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.sequelize.query(`
-        DROP INDEX IF EXISTS addresses_owner_id_idx
-      `)
-      .then(() => queryInterface.sequelize.query(`
-        DROP INDEX IF EXISTS email_addresses_owner_id_idx
-      `))
-      .then(() => queryInterface.sequelize.query(`
-        DROP INDEX IF EXISTS phone_numbers_owner_id_idx
-      `))
-      .then(() => queryInterface.dropTable('email_addresses'))
-      .then(() => queryInterface.dropTable('email_addresses'))
+    return () => queryInterface.dropTable('email_addresses')
+      .then(() => queryInterface.dropTable('phone_numbers'))
       .then(() => queryInterface.dropTable('addresses'));
   }
 };

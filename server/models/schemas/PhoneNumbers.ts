@@ -14,7 +14,7 @@ import ContactInfos from './ContactInfos';
 @Table({
   tableName: 'phone_numbers',
   timestamps: true,
-  indexes: [{ unique: false, fields: ['owner_id'] }],
+  indexes: [{ unique: false, fields: ['info_id'] }],
 })
 export default class PhoneNumbers extends Model<PhoneNumbers> {
   @PrimaryKey
@@ -23,15 +23,6 @@ export default class PhoneNumbers extends Model<PhoneNumbers> {
     autoIncrement: true,
   })
   id: number;
-
-  @Column({
-    allowNull: false,
-    references: {
-      model: 'users',
-      key: 'id',
-    },
-  })
-  owner_id: number;
 
   @Column(emptyOptionalString)
   country_code: string;

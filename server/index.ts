@@ -63,6 +63,6 @@ nextjs.nextApp.prepare().then(async () => {
   });
 
   app.listen(port, () => {
-    console.log(`started on port ${port}`); // tslint:disable-line no-console
+    console.log(`\n\nstarted on port ${port}\n\n`); // tslint:disable-line no-console
   });
 });
