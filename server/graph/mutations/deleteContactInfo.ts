@@ -1,7 +1,7 @@
 import * as express from 'express';
 import { GraphQLNonNull, GraphQLInt } from 'graphql';
 import { AuthenticationError, UserInputError } from 'apollo-server';
-import { ContactInfos } from 'server/models';
+import { ContactInfos, SharedContactInfos } from 'server/models';
 import contactInfoType from '../types/contactInfoType';
 import { db } from 'server/lib/db';
 
@@ -33,7 +33,13 @@ export default {
     }
 
     await db.transaction(async (transaction: any) => {
-      await entry!.destroy({ transaction });
+      await Promise.all([
+        entry!.destroy({ transaction }),
+        SharedContactInfos.destroy({
+          where: { info_id: info.id },
+          transaction,
+        }),
+      ]);
       await info.destroy({ transaction });
     });
 

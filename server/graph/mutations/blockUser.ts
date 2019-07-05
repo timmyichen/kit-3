@@ -6,8 +6,11 @@ import {
   FriendRequests,
   BlockedUsers,
   Users,
+  SharedContactInfos,
+  ContactInfos,
 } from 'server/models';
 import { db } from 'server/lib/db';
+import { Op } from 'sequelize';
 
 export default {
   description: 'Block a user',
@@ -28,8 +31,21 @@ export default {
       throw new UserInputError('User not found');
     }
 
-    await db.transaction(async (transaction: any) =>
-      Promise.all([
+    let sharedInfos = await SharedContactInfos.findAll({
+      where: {
+        [Op.or]: [{ shared_with: user.id }, { shared_with: targetUserId }],
+      },
+      include: [ContactInfos],
+    });
+
+    sharedInfos = sharedInfos.filter(
+      i =>
+        (i.info.owner_id === targetUserId && i.shared_with === user.id) ||
+        (i.info.owner_id === user.id && i.shared_with === targetUserId),
+    );
+
+    await db.transaction(async (transaction: any) => {
+      const promises: Array<Promise<any>> = [
         Friendships.destroy({
           where: {
             first_user: user.id,
@@ -65,8 +81,14 @@ export default {
           },
           { transaction },
         ),
-      ]),
-    );
+      ];
+
+      if (sharedInfos.length) {
+        promises.concat(sharedInfos.map(i => i.destroy({ transaction })));
+      }
+
+      await Promise.all([promises]);
+    });
 
     return true;
   },

@@ -5,6 +5,7 @@ import {
   PrimaryKey,
   AllowNull,
   ForeignKey,
+  BelongsTo,
 } from 'sequelize-typescript';
 import ContactInfos from './ContactInfos';
 import Users from './Users';
@@ -29,4 +30,7 @@ export default class SharedContactInfos extends Model<SharedContactInfos> {
   @ForeignKey(() => Users)
   @Column
   shared_with: number;
+
+  @BelongsTo(() => ContactInfos)
+  info: ContactInfos;
 }
