@@ -31,7 +31,7 @@ class MyApp extends App {
         <ApolloProvider client={client}>
           <ApolloHooksProvider client={client}>
             <>
-              <Header />
+              <Header isAuthed />
               <Component {...pageProps} />
             </>
           </ApolloHooksProvider>
