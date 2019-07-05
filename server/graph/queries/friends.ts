@@ -13,7 +13,6 @@ import userType from 'server/graph/types/userType';
 interface Args {
   searchQuery: string;
   count?: number;
-  excludeFriends: boolean;
 }
 
 export default {

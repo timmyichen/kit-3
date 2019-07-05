@@ -40,6 +40,13 @@ export interface EmailAddress extends CommonContactInfoFields {
   email_address: string;
 }
 
+export interface ContactInfoType {
+  id: number;
+  owner_id: number;
+  type: ContactInfo;
+  getInfo(o: Object): Promise<any>;
+}
+
 export type ContactInfoTypes = 'address' | 'phone_number' | 'email_address';
 
 export type ContactInfo = Address | PhoneNumber | EmailAddress;

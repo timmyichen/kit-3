@@ -83,7 +83,6 @@ const FriendsPage = () => {
         value={query}
         onChange={(_, { value }) => {
           setLoading(true);
-          console.log(value);
           setQuery(value);
           search(value);
         }}
