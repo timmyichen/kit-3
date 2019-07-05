@@ -2,7 +2,7 @@ import * as express from 'express';
 import { GraphQLBoolean, GraphQLNonNull, GraphQLInt } from 'graphql';
 import { Op } from 'sequelize';
 import { AuthenticationError, UserInputError } from 'apollo-server';
-import { Friendships, Users, ContactInfos } from 'server/models';
+import { Friendships, Users } from 'server/models';
 import { db } from 'server/lib/db';
 
 export default {
