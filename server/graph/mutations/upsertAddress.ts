@@ -83,6 +83,8 @@ export default {
         {
           type: 'address',
           owner_id: user.id,
+          notes,
+          label,
         },
         { transaction },
       );
@@ -90,8 +92,6 @@ export default {
       try {
         result = await Addresses.create(
           {
-            notes,
-            label,
             city,
             state,
             address_line_1: args.addressLine1,

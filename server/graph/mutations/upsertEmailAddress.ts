@@ -68,6 +68,8 @@ export default {
         {
           type: 'email_address',
           owner_id: user.id,
+          notes,
+          label,
         },
         { transaction },
       );
@@ -75,8 +77,6 @@ export default {
       try {
         result = await EmailAddresses.create(
           {
-            notes,
-            label,
             email_address: args.emailAddress,
             info_id: contactInfo.id,
           },

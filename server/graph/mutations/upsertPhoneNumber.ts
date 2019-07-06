@@ -71,6 +71,8 @@ export default {
         {
           type: 'phone_number',
           owner_id: user.id,
+          notes,
+          label,
         },
         { transaction },
       );
@@ -78,8 +80,6 @@ export default {
       try {
         result = await PhoneNumbers.create(
           {
-            notes,
-            label,
             phone_number: args.phoneNumber,
             country_code: args.countryCode,
             info_id: contactInfo.id,
