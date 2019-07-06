@@ -7,6 +7,7 @@ import {
   Unique,
   AllowNull,
   DataType,
+  Default,
 } from 'sequelize-typescript';
 import { PhoneNumbers, Addresses, EmailAddresses } from '..';
 import { ContactInfoTypes } from '../types';
@@ -38,6 +39,11 @@ export default class ContactInfos extends Model<ContactInfos> {
     type: DataType.ENUM('address', 'phone_number', 'email_address'),
   })
   type: ContactInfoTypes;
+
+  @Default(false)
+  @AllowNull(false)
+  @Column
+  primary: boolean;
 
   getInfo(opts: Object) {
     switch (this.type) {
