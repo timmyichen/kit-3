@@ -1,5 +1,6 @@
 import * as React from 'react';
 import FriendSearch from 'client/friends/FriendSearch';
+import FriendsDashboard from 'client/friends/FriendsDashboard';
 import { Menu } from 'semantic-ui-react';
 
 const FriendsPage = () => {
@@ -10,6 +11,16 @@ const FriendsPage = () => {
     { name: 'find-friends' },
     { name: 'invite-friends' },
   ];
+
+  let content;
+  switch (activeTab) {
+    case 'find-friends':
+      content = <FriendSearch />;
+      break;
+    case 'my-friends':
+      content = <FriendsDashboard />;
+      break;
+  }
 
   return (
     <div className="friends-page">
@@ -23,8 +34,7 @@ const FriendsPage = () => {
           />
         ))}
       </Menu>
-
-      {activeTab === 'find-friends' && <FriendSearch />}
+      {content}
       <style jsx>{`
         .friends-page {
           padding-top: 30px;

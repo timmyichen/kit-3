@@ -2,7 +2,7 @@ import * as React from 'react';
 import debounce from 'lodash/debounce';
 import { useApolloClient, useMutation } from 'react-apollo-hooks';
 import { Input, Card, Image, Button } from 'semantic-ui-react';
-import { searchUsersQuery } from 'client/graph/queries';
+import { SEARCH_USERS_QUERY } from 'client/graph/queries';
 import {
   REQUEST_FRIEND_MUTATION,
   REMOVE_FRIEND_MUTATION,
@@ -22,7 +22,7 @@ const FriendSearch = () => {
 
   const search = debounce(async (value: string) => {
     const res = await client.query({
-      query: searchUsersQuery,
+      query: SEARCH_USERS_QUERY,
       variables: { searchQuery: value, excludeFriends: false },
     });
     setLoading(false);
