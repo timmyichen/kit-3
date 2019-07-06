@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { Card, Image, Button } from 'semantic-ui-react';
+import { Card, Image, Dropdown } from 'semantic-ui-react';
 import { User } from 'client/types';
+import BlockUserModal from 'client/components/BlockUserModal';
+import RemoveFriendModal from 'client/components/RemoveFriendModal';
 
 interface Props {
   friend: User;
@@ -16,11 +18,31 @@ const FriendItem = ({ friend }: Props) => {
           <Card.Meta>{friend.username}</Card.Meta>
         </Card.Content>
         <Card.Content extra>
-          <div className="ctas"></div>
+          <div className="ctas">
+            <Dropdown
+              text="Actions"
+              icon="unordered list"
+              floating
+              labeled
+              button
+              className="icon"
+            >
+              <Dropdown.Menu>
+                <RemoveFriendModal user={friend}>
+                  <Dropdown.Item text="Remove Friend" icon="user x" />
+                </RemoveFriendModal>
+                <BlockUserModal user={friend}>
+                  <Dropdown.Item text="Block" icon="ban" />
+                </BlockUserModal>
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
         </Card.Content>
       </Card>
       <style jsx>{`
-        .friend-list-item {
+        .ctas {
+          display: flex;
+          justify-content: flex-end;
         }
       `}</style>
     </div>

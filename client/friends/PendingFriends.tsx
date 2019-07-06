@@ -1,11 +1,9 @@
 import * as React from 'react';
-import { Card, Image, Button, Modal, Header } from 'semantic-ui-react';
+import { Card, Image, Button } from 'semantic-ui-react';
 import { User } from 'client/types';
 import { useMutation } from 'react-apollo-hooks';
-import {
-  ACCEPT_REQUEST_MUTATION,
-  BLOCK_USER_MUTATION,
-} from 'client/graph/mutations';
+import { ACCEPT_REQUEST_MUTATION } from 'client/graph/mutations';
+import BlockUserModal from 'client/components/BlockUserModal';
 
 interface Props {
   pendingFriends: Array<User>;
@@ -34,7 +32,11 @@ const PendingFriends = (props: Props) => {
               >
                 Accept Request
               </Button>
-              <BlockModal user={user} />
+              <BlockUserModal user={user}>
+                <Button basic color="black">
+                  Block
+                </Button>
+              </BlockUserModal>
             </div>
           </Card.Content>
         </Card>
@@ -52,53 +54,5 @@ const PendingFriends = (props: Props) => {
     </div>
   );
 };
-
-interface BlockModalProps {
-  user: User;
-}
-
-function BlockModal({ user }: BlockModalProps) {
-  const blockUser = useMutation(BLOCK_USER_MUTATION);
-  const [show, setShow] = React.useState<boolean>(false);
-
-  const closeModal = () => setShow(false);
-  const showModal = () => setShow(true);
-
-  return (
-    <Modal
-      trigger={
-        <Button basic color="black" onClick={showModal}>
-          Block
-        </Button>
-      }
-      open={show}
-      onClose={closeModal}
-      size="tiny"
-    >
-      <Header icon="ban" content="Block User" />
-      <Modal.Content>
-        <h3>Are you sure you want to block {user.fullName}?</h3>
-      </Modal.Content>
-      <Modal.Actions>
-        <div className="ctas">
-          <Button onClick={closeModal}>Cancel</Button>
-          <Button
-            color="red"
-            onClick={() => blockUser({ variables: { targetUserId: user.id } })}
-          >
-            Block
-          </Button>
-        </div>
-      </Modal.Actions>
-      <style jsx>{`
-        .ctas {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        }
-      `}</style>
-    </Modal>
-  );
-}
 
 export default PendingFriends;
