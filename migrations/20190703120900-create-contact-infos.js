@@ -37,17 +37,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      notes: {
-        type: Sequelize.STRING,
-        allowNull: true,
-        defaultValue: '',
-      },
-      label: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      created_at: Sequelize.DATE,
-      updated_at: Sequelize.DATE,
     })
     .then(() => queryInterface.createTable('email_addresses', {
       id: {
@@ -60,17 +49,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      notes: {
-        type: Sequelize.STRING,
-        allowNull: true,
-        defaultValue: '',
-      },
-      label: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      created_at: Sequelize.DATE,
-      updated_at: Sequelize.DATE,
     }))
     .then(() => queryInterface.createTable('phone_numbers', {
       id: {
@@ -88,22 +66,11 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      notes: {
-        type: Sequelize.STRING,
-        allowNull: true,
-        defaultValue: '',
-      },
-      label: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      created_at: Sequelize.DATE,
-      updated_at: Sequelize.DATE,
     }))
   },
 
   down: (queryInterface, Sequelize) => {
-    return () => queryInterface.dropTable('email_addresses')
+    return queryInterface.dropTable('email_addresses')
       .then(() => queryInterface.dropTable('phone_numbers'))
       .then(() => queryInterface.dropTable('addresses'));
   }

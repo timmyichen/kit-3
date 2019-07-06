@@ -13,7 +13,7 @@ import ContactInfos from './ContactInfos';
 
 @Table({
   tableName: 'addresses',
-  timestamps: true,
+  timestamps: false,
   indexes: [{ unique: false, fields: ['info_id'] }],
 })
 export default class Addresses extends Model<Addresses> {
@@ -42,22 +42,10 @@ export default class Addresses extends Model<Addresses> {
   @Column(requiredString())
   country_code: string;
 
-  @Column(emptyOptionalString)
-  notes: string;
-
-  @Column(requiredString())
-  label: string;
-
   @ForeignKey(() => ContactInfos)
   @Column
   info_id: number;
 
   @BelongsTo(() => ContactInfos)
   info: ContactInfos;
-
-  @CreatedAt
-  created_at: Date;
-
-  @UpdatedAt
-  updated_at: Date;
 }

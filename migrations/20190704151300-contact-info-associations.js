@@ -17,6 +17,17 @@ module.exports = {
           key: 'id',
         },
       },
+      notes: {
+        type: Sequelize.STRING,
+        allowNull: true,
+        defaultValue: '',
+      },
+      label: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      created_at: Sequelize.DATE,
+      updated_at: Sequelize.DATE,
       type: {
         type: Sequelize.ENUM('address', 'phone_number', 'email_address'),
         allowNull: false,

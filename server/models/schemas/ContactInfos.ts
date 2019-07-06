@@ -8,13 +8,16 @@ import {
   AllowNull,
   DataType,
   Default,
+  CreatedAt,
+  UpdatedAt,
 } from 'sequelize-typescript';
 import { PhoneNumbers, Addresses, EmailAddresses } from '..';
 import { ContactInfoTypes } from '../types';
+import { emptyOptionalString, requiredString } from 'server/lib/model';
 
 @Table({
   tableName: 'contact_infos',
-  timestamps: false,
+  timestamps: true,
   indexes: [{ unique: false, fields: ['owner_id'] }],
 })
 export default class ContactInfos extends Model<ContactInfos> {
@@ -44,6 +47,18 @@ export default class ContactInfos extends Model<ContactInfos> {
   @AllowNull(false)
   @Column
   primary: boolean;
+
+  @Column(emptyOptionalString)
+  notes: string;
+
+  @Column(requiredString())
+  label: string;
+
+  @CreatedAt
+  created_at: Date;
+
+  @UpdatedAt
+  updated_at: Date;
 
   getInfo(opts: Object) {
     switch (this.type) {
