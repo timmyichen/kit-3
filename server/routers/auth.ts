@@ -121,7 +121,7 @@ function init() {
       failureRedirect: '/ohno',
     }),
     (_: any, res: express.Response) => {
-      return res.redirect('/home');
+      return res.redirect('/dashboard');
     },
   );
 
@@ -137,7 +137,7 @@ function init() {
           return res.status(500).send('Unknown error in auth');
         }
 
-        return res.redirect('/home');
+        return res.redirect('/dashboard');
       });
     },
   );

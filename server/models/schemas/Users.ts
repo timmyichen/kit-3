@@ -17,6 +17,7 @@ import { requiredString } from 'server/lib/model';
     { unique: true, fields: ['id'] },
     { unique: true, fields: ['username'] },
     { unique: true, fields: ['email'] },
+    { unique: false, fields: ['updatedAt'] },
   ],
 })
 export default class Users extends Model<Users> {
