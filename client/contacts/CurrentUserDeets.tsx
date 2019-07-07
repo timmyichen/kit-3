@@ -16,19 +16,32 @@ export default function CurrentUserDeets() {
     CURRENT_USER_DEETS_QUERY,
   );
 
-  console.log(deets);
-
   return (
     <div className="current-user-deets">
       {!loadingDeets &&
         deets.userContactInfos.map((info: Deet) => {
           switch (info.__typename) {
             case 'AddressContactInfo':
-              return <AddressCard address={info as AddressDeet} />;
+              return (
+                <AddressCard
+                  key={`my-deets-${info.id}`}
+                  address={info as AddressDeet}
+                />
+              );
             case 'EmailAddressContactInfo':
-              return <EmailAddressCard email={info as EmailAddressDeet} />;
+              return (
+                <EmailAddressCard
+                  key={`my-deets-${info.id}`}
+                  email={info as EmailAddressDeet}
+                />
+              );
             case 'PhoneNumberContactInfo':
-              return <PhoneNumberCard phoneNumber={info as PhoneNumberDeet} />;
+              return (
+                <PhoneNumberCard
+                  key={`my-deets-${info.id}`}
+                  phoneNumber={info as PhoneNumberDeet}
+                />
+              );
           }
         })}
       <style jsx>{`
