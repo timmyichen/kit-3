@@ -10,3 +10,5 @@ export interface UserSearch extends User {
   hasRequestedUser: boolean;
   isBlocked: boolean;
 }
+
+export type DeetTypes = 'address' | 'email_address' | 'phone_number';

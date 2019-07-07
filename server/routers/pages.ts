@@ -26,4 +26,11 @@ router.getAsync(
   },
 );
 
+router.getAsync(
+  '/deets',
+  async (req: express.Request, res: express.Response) => {
+    nextjs.render(req, res, '/deets');
+  },
+);
+
 export default router;

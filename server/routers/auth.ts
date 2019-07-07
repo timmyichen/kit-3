@@ -150,7 +150,7 @@ function init() {
   router.get(
     '/data/user_info',
     (req: express.Request, res: express.Response) => {
-      res.json(req.user);
+      res.json(req.user || { error: 'not logged in' });
     },
   );
 

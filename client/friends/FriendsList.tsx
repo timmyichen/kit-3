@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Card, Image, Button } from 'semantic-ui-react';
 import { User } from 'client/types';
 import FriendItem from './FriendItem';
 

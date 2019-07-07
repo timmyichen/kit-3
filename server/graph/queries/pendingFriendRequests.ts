@@ -1,10 +1,5 @@
 import * as express from 'express';
-import {
-  GraphQLList,
-  GraphQLNonNull,
-  GraphQLString,
-  GraphQLInt,
-} from 'graphql';
+import { GraphQLList, GraphQLInt } from 'graphql';
 import { AuthenticationError } from 'apollo-server';
 import { Op } from 'sequelize';
 import { Users, FriendRequests } from 'server/models';

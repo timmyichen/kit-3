@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Menu } from 'semantic-ui-react';
 import {
   PENDING_FRIEND_REQUESTS_QUERY,
   FRIENDS_QUERY,

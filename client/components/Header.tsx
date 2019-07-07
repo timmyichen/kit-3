@@ -6,7 +6,6 @@ import colors from 'client/styles/colors';
 
 interface Props {
   isAuthed: boolean;
-  router: Object;
 }
 
 function Header(props: Props) {
@@ -19,29 +18,72 @@ function Header(props: Props) {
   if (props.isAuthed) {
     navLinks = [
       <HeaderNavLink
+        key="header-nav-dashboard"
         currentPath={pathname}
         href="/dashboard"
         label="Dashboard"
       />,
-      <HeaderNavLink currentPath={pathname} href="/friends" label="Friends" />,
       <HeaderNavLink
+        key="header-nav-friends"
         currentPath={pathname}
-        href="/contact-info"
-        label="Contact Info"
+        href="/friends"
+        label="Friends"
+      />,
+      <HeaderNavLink
+        key="header-nav-deets"
+        currentPath={pathname}
+        href="/deets"
+        label="Deets"
       />,
     ];
     authLinks = [
-      <HeaderNavLink currentPath={pathname} href="/account" label="Account" />,
+      <HeaderNavLink
+        key="header-nav-account"
+        currentPath={pathname}
+        href="/account"
+        label="Account"
+      />,
+      <HeaderNavLink
+        key="header-nav-logout"
+        currentPath={pathname}
+        href="/logout"
+        label="Log out"
+      />,
     ];
   } else {
     navLinks = [
-      <HeaderNavLink currentPath={pathname} href="/" label="Home" />,
-      <HeaderNavLink currentPath={pathname} href="/about" label="About" />,
-      <HeaderNavLink currentPath={pathname} href="/contact" label="Contact" />,
+      <HeaderNavLink
+        key="header-nav-home"
+        currentPath={pathname}
+        href="/"
+        label="Home"
+      />,
+      <HeaderNavLink
+        key="header-nav-about"
+        currentPath={pathname}
+        href="/about"
+        label="About"
+      />,
+      <HeaderNavLink
+        key="header-nav-contact"
+        currentPath={pathname}
+        href="/contact"
+        label="Contact"
+      />,
     ];
     authLinks = [
-      <HeaderNavLink currentPath={pathname} href="/login" label="Log in" />,
-      <HeaderNavLink currentPath={pathname} href="/signup" label="Sign up" />,
+      <HeaderNavLink
+        key="header-nav-login"
+        currentPath={pathname}
+        href="/login"
+        label="Log in"
+      />,
+      <HeaderNavLink
+        key="header-nav-signup"
+        currentPath={pathname}
+        href="/signup"
+        label="Sign up"
+      />,
     ];
   }
 
