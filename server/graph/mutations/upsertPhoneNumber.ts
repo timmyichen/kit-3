@@ -32,10 +32,10 @@ export default {
       throw new AuthenticationError('Must be logged in');
     }
 
-    let result;
     const { notes, label } = args;
 
     if (args.infoId) {
+      let result;
       const info = await ContactInfos.findByPk(args.infoId);
 
       if (!info || info.owner_id !== user.id) {
@@ -63,11 +63,19 @@ export default {
         }
       }
 
-      return result;
+      return {
+        ...info.get({ plain: true }),
+        phone_number: {
+          ...result.get({ plain: true }),
+        },
+      };
     }
 
+    let info: { [s: string]: any } = {};
+    let result: { get?: any } = {};
+
     await db.transaction(async (transaction: any) => {
-      const contactInfo = await ContactInfos.create(
+      info = await ContactInfos.create(
         {
           type: 'phone_number',
           owner_id: user.id,
@@ -82,7 +90,7 @@ export default {
           {
             phone_number: args.phoneNumber,
             country_code: args.countryCode,
-            info_id: contactInfo.id,
+            info_id: info.id,
           },
           { transaction },
         );
@@ -95,6 +103,11 @@ export default {
       }
     });
 
-    return result;
+    return {
+      ...info.get({ plain: true }),
+      phone_number: {
+        ...result.get({ plain: true }),
+      },
+    };
   },
 };

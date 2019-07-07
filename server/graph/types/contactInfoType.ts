@@ -7,7 +7,7 @@ export default new GraphQLUnionType({
   name: 'ContactInfo',
   types: [emailAddressType, phoneNumberType, addressType],
   resolveType(obj) {
-    if (obj.address_line_1) {
+    if (obj.address) {
       return addressType;
     } else if (obj.email_address) {
       return emailAddressType;

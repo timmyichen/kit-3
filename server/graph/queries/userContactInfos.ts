@@ -1,8 +1,13 @@
 import * as express from 'express';
 import { GraphQLList } from 'graphql';
-import { Addresses, EmailAddresses, PhoneNumbers } from 'server/models';
-import contactInfoType from '../types/contactInfoType';
+import {
+  Addresses,
+  EmailAddresses,
+  PhoneNumbers,
+  ContactInfos,
+} from 'server/models';
 import { AuthenticationError } from 'apollo-server';
+import contactInfoType from '../types/contactInfoType';
 
 export default {
   description: 'The currently authed user',
@@ -11,18 +16,16 @@ export default {
     if (!user) {
       throw new AuthenticationError('Must be logged in');
     }
-    const [addresses, emails, phoneNumbers] = await Promise.all([
-      Addresses.findAll({
-        where: { owner_id: user.id },
-      }),
-      EmailAddresses.findAll({
-        where: { owner_id: user.id },
-      }),
-      PhoneNumbers.findAll({
-        where: { owner_id: user.id },
-      }),
-    ]);
 
-    return [...addresses, ...emails, ...phoneNumbers];
+    const infos = await ContactInfos.findAll({
+      where: { owner_id: user.id },
+      include: [
+        { model: Addresses },
+        { model: EmailAddresses },
+        { model: PhoneNumbers },
+      ],
+    });
+
+    return infos.map(info => info.get({ plain: true }));
   },
 };

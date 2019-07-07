@@ -22,27 +22,27 @@ export default new GraphQLObjectType({
     },
     addressLine1: {
       type: new GraphQLNonNull(GraphQLString),
-      resolve: (address: any) => address.address_line_1,
+      resolve: (address: any) => address.address.address_line_1,
     },
     addressLine2: {
       type: GraphQLString,
-      resolve: (address: any) => address.address_line_2,
+      resolve: (address: any) => address.address.address_line_2,
     },
     city: {
       type: GraphQLString,
-      resolve: (address: any) => address.city,
+      resolve: (address: any) => address.address.city,
     },
     state: {
       type: GraphQLString,
-      resolve: (address: any) => address.state,
+      resolve: (address: any) => address.address.state,
     },
     postalCode: {
       type: GraphQLString,
-      resolve: (address: any) => address.postal_code,
+      resolve: (address: any) => address.address.postal_code,
     },
-    countryCode: {
+    country: {
       type: new GraphQLNonNull(GraphQLString),
-      resolve: (address: any) => address.country_code,
+      resolve: (address: any) => address.address.country_code,
     },
     ...commonInfoFields(),
     ...timestamps(),

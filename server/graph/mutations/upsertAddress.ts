@@ -40,10 +40,10 @@ export default {
       throw new AuthenticationError('Must be logged in');
     }
 
-    let result;
     const { notes, label, city, state } = args;
 
     if (args.infoId) {
+      let result;
       const info = await ContactInfos.findByPk(args.infoId);
 
       if (!info || info.owner_id !== user.id) {
@@ -75,11 +75,19 @@ export default {
         }
       }
 
-      return result;
+      return {
+        ...info.get({ plain: true }),
+        address: {
+          ...result.get({ plain: true }),
+        },
+      };
     }
 
+    let info: { [s: string]: any } = {};
+    let result: { get?: any } = {};
+
     await db.transaction(async (transaction: any) => {
-      const contactInfo = await ContactInfos.create(
+      info = await ContactInfos.create(
         {
           type: 'address',
           owner_id: user.id,
@@ -98,7 +106,7 @@ export default {
             address_line_2: args.addressLine2,
             postal_code: args.postalCode,
             country_code: args.countryCode,
-            info_id: contactInfo.id,
+            info_id: info.id,
           },
           { transaction },
         );
@@ -111,6 +119,11 @@ export default {
       }
     });
 
-    return result;
+    return {
+      ...info.get({ plain: true }),
+      address: {
+        ...result.get({ plain: true }),
+      },
+    };
   },
 };

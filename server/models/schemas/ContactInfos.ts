@@ -10,10 +10,12 @@ import {
   Default,
   CreatedAt,
   UpdatedAt,
+  HasOne,
 } from 'sequelize-typescript';
 import { PhoneNumbers, Addresses, EmailAddresses } from '..';
 import { ContactInfoTypes } from '../types';
 import { emptyOptionalString, requiredString } from 'server/lib/model';
+import addressType from 'server/graph/types/addressType';
 
 @Table({
   tableName: 'contact_infos',
@@ -59,6 +61,15 @@ export default class ContactInfos extends Model<ContactInfos> {
 
   @UpdatedAt
   updated_at: Date;
+
+  @HasOne(() => Addresses, 'info_id')
+  address: Addresses;
+
+  @HasOne(() => EmailAddresses, 'info_id')
+  email_address: EmailAddresses;
+
+  @HasOne(() => PhoneNumbers, 'info_id')
+  phone_number: PhoneNumbers;
 
   getInfo(opts: Object) {
     switch (this.type) {

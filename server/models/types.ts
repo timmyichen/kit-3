@@ -14,11 +14,6 @@ export interface User {
 
 interface CommonContactInfoFields {
   id: number;
-  owner_id: number;
-  notes?: string;
-  label: string;
-  created_at: Date;
-  updated_at: Date;
   info_id: number;
 }
 
@@ -44,6 +39,10 @@ export interface ContactInfoType {
   id: number;
   owner_id: number;
   type: ContactInfo;
+  notes?: string;
+  label: string;
+  created_at: Date;
+  updated_at: Date;
   getInfo(o: Object): Promise<any>;
 }
 

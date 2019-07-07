@@ -22,7 +22,7 @@ export default new GraphQLObjectType({
     },
     emailAddress: {
       type: new GraphQLNonNull(GraphQLString),
-      resolve: (email: any) => email.email_address,
+      resolve: (email: any) => email.email_address.email_address,
     },
     ...commonInfoFields(),
     ...timestamps(),

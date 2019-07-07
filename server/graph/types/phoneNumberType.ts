@@ -14,7 +14,10 @@ export default new GraphQLObjectType({
   fields: () => ({
     id: {
       type: new GraphQLNonNull(GraphQLInt),
-      resolve: (num: any) => num.id,
+      resolve: (num: any) => {
+        console.log(num);
+        return num.id;
+      },
     },
     owner: {
       type: new GraphQLNonNull(userType),
@@ -22,11 +25,11 @@ export default new GraphQLObjectType({
     },
     countryCode: {
       type: GraphQLString,
-      resolve: (num: any) => num.country_code,
+      resolve: (num: any) => num.phone_number.country_code,
     },
     number: {
       type: new GraphQLNonNull(GraphQLString),
-      resolve: (num: any) => num.phone_number,
+      resolve: (num: any) => num.phone_number.phone_number,
     },
     ...commonInfoFields(),
     ...timestamps(),
