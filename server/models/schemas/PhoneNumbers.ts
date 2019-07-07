@@ -3,8 +3,6 @@ import {
   Column,
   Model,
   PrimaryKey,
-  CreatedAt,
-  UpdatedAt,
   ForeignKey,
   BelongsTo,
 } from 'sequelize-typescript';

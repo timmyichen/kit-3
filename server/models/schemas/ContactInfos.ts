@@ -15,7 +15,6 @@ import {
 import { PhoneNumbers, Addresses, EmailAddresses } from '..';
 import { ContactInfoTypes } from '../types';
 import { emptyOptionalString, requiredString } from 'server/lib/model';
-import addressType from 'server/graph/types/addressType';
 
 @Table({
   tableName: 'contact_infos',

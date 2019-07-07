@@ -27,6 +27,7 @@
     "emitDecoratorMetadata": true,
     "strictPropertyInitialization": false,
     "strictFunctionTypes": false,
+    "resolveJsonModule": true
   },
   "include": [
     "client",

@@ -50,3 +50,49 @@ export const PENDING_FRIEND_REQUESTS_QUERY = gql`
     }
   }
 `;
+
+export const CURRENT_USER_DEETS_QUERY = gql`
+  query currentUserDeets {
+    userContactInfos {
+      ... on EmailAddressContactInfo {
+        id
+        notes
+        label
+        owner {
+          fullName
+          username
+        }
+        emailAddress
+        updatedAt
+      }
+      ... on PhoneNumberContactInfo {
+        id
+        notes
+        label
+        owner {
+          fullName
+          username
+        }
+        number
+        countryCode
+        updatedAt
+      }
+      ... on AddressContactInfo {
+        id
+        notes
+        label
+        owner {
+          fullName
+          username
+        }
+        addressLine1
+        addressLine2
+        city
+        state
+        postalCode
+        country
+        updatedAt
+      }
+    }
+  }
+`;

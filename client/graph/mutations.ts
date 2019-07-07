@@ -116,7 +116,7 @@ export const UPSERT_EMAIL_ADDRESS = gql`
       id
       notes
       label
-      email
+      emailAddress
       createdAt
       updatedAt
     }

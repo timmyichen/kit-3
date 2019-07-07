@@ -3,12 +3,10 @@ import {
   Column,
   Model,
   PrimaryKey,
-  CreatedAt,
-  UpdatedAt,
   ForeignKey,
   BelongsTo,
 } from 'sequelize-typescript';
-import { requiredString, emptyOptionalString } from 'server/lib/model';
+import { requiredString } from 'server/lib/model';
 import ContactInfos from './ContactInfos';
 
 @Table({

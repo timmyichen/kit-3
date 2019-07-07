@@ -14,10 +14,7 @@ export default new GraphQLObjectType({
   fields: () => ({
     id: {
       type: new GraphQLNonNull(GraphQLInt),
-      resolve: (num: any) => {
-        console.log(num);
-        return num.id;
-      },
+      resolve: (num: any) => num.id,
     },
     owner: {
       type: new GraphQLNonNull(userType),
