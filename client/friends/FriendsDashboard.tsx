@@ -22,7 +22,7 @@ const FriendsDashboard = () => {
           pendingFriends={pendingFriendsData.pendingFriendRequests || []}
         />
       )}
-      {!friendsLoading && <FriendsList friends={friendsData.friends || []} />}
+      {!friendsLoading && <FriendsList friends={friendsData.friends.items} />}
       <style jsx>{`
         .friends-page {
           padding-top: 30px;

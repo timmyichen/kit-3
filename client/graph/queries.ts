@@ -34,9 +34,15 @@ export const CURRENT_USER_QUERY = gql`
 export const FRIENDS_QUERY = gql`
   query friends($searchQuery: String, $count: Int) {
     friends(searchQuery: $searchQuery, count: $count) {
-      id
-      fullName
-      username
+      items {
+        id
+        fullName
+        username
+      }
+      pageInfo {
+        hasNext
+        nextCursor
+      }
     }
   }
 `;

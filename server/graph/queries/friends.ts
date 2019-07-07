@@ -1,19 +1,22 @@
 import * as express from 'express';
-import { GraphQLList, GraphQLString, GraphQLInt } from 'graphql';
+import { GraphQLString, GraphQLInt } from 'graphql';
 import { AuthenticationError } from 'apollo-server';
 import { Op } from 'sequelize';
 import { Users, Friendships } from 'server/models';
 import userType from 'server/graph/types/userType';
+import paginationType from './lib/paginationType';
 
 interface Args {
+  after?: string;
   searchQuery?: string;
   count?: number;
 }
 
 export default {
   description: 'A users friends',
-  type: new GraphQLList(userType),
+  type: paginationType('Friends', userType),
   args: {
+    after: { type: GraphQLString },
     searchQuery: { type: GraphQLString },
     count: { type: GraphQLInt },
   },
@@ -21,6 +24,8 @@ export default {
     if (!user) {
       throw new AuthenticationError('Must be logged in');
     }
+
+    const count = Math.min(args.count || 10, 30);
 
     const friends = await Friendships.findAll({
       where: { first_user: user.id },
@@ -30,23 +35,40 @@ export default {
       f.first_user === user.id ? f.second_user : f.first_user,
     );
 
-    const users = await Users.findAll({
-      where: {
-        id: { [Op.in]: friendIds },
-      },
-    });
+    const where: any = {
+      id: { [Op.in]: friendIds },
+    };
 
-    if (!args.searchQuery) {
-      return users.slice(0, args.count || 10);
+    if (args.after) {
+      where.updated_at = {
+        [Op.lte]: new Date(parseInt(args.after, 10)).toISOString(),
+      };
     }
 
-    const searchQuery = args.searchQuery || '';
+    if (args.searchQuery) {
+      const searchQuery = args.searchQuery.toLowerCase().replace(/%/, '');
+      where[Op.or] = [
+        { given_name: { [Op.iLike]: `${searchQuery}%` } },
+        { family_name: { [Op.iLike]: `${searchQuery}%` } },
+        { username: { [Op.iLike]: `${searchQuery}%` } },
+      ];
+    }
 
-    return users.filter(
-      u =>
-        u.given_name.includes(searchQuery) ||
-        u.family_name.includes(searchQuery) ||
-        u.username.includes(searchQuery),
-    );
+    const users = await Users.findAll({
+      where,
+      order: [['updated_at', 'desc']],
+      limit: count + 1,
+    });
+
+    const hasNext = users.length === count + 1;
+    const nextCursor = hasNext ? users[users.length - 1].updated_at : null;
+
+    return {
+      items: users.slice(0, count),
+      pageInfo: {
+        hasNext,
+        nextCursor,
+      },
+    };
   },
 };
