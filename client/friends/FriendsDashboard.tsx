@@ -23,8 +23,6 @@ const FriendsDashboard = () => {
     variables: { count: PAGE_COUNT, after: null },
   });
 
-  console.log(fetchMoreFriends);
-
   return (
     <div className="friends-page">
       {!pendingFriendsLoading && (

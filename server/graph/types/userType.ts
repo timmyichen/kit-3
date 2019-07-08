@@ -6,8 +6,16 @@ import {
   GraphQLBoolean,
   GraphQLInt,
 } from 'graphql';
-import { Friendships, BlockedUsers, FriendRequests } from 'server/models';
+import {
+  Friendships,
+  BlockedUsers,
+  FriendRequests,
+  ContactInfos,
+  SharedContactInfos,
+} from 'server/models';
 import { timestamps } from './common';
+import { User } from 'server/models/types';
+import { AuthenticationError, UserInputError } from 'apollo-server';
 
 export default new GraphQLObjectType({
   name: 'User',
@@ -19,18 +27,18 @@ export default new GraphQLObjectType({
     },
     fullName: {
       type: new GraphQLNonNull(GraphQLString),
-      resolve: (user: any) =>
+      resolve: (user: User) =>
         user.family_name
           ? user.given_name + ' ' + user.family_name
           : user.given_name,
     },
     username: {
       type: new GraphQLNonNull(GraphQLString),
-      resolve: (user: any) => user.username,
+      resolve: (user: User) => user.username,
     },
     isFriend: {
       type: new GraphQLNonNull(GraphQLBoolean),
-      async resolve(u: any, _: any, { user }: express.Request) {
+      async resolve(u: User, _: any, { user }: express.Request) {
         if (!user) {
           return false;
         }
@@ -45,7 +53,7 @@ export default new GraphQLObjectType({
     },
     isRequested: {
       type: new GraphQLNonNull(GraphQLBoolean),
-      async resolve(u: any, _: any, { user }: express.Request) {
+      async resolve(u: User, _: any, { user }: express.Request) {
         if (!user) {
           return false;
         }
@@ -60,7 +68,7 @@ export default new GraphQLObjectType({
     },
     hasRequestedUser: {
       type: new GraphQLNonNull(GraphQLBoolean),
-      async resolve(u: any, _: any, { user }: express.Request) {
+      async resolve(u: User, _: any, { user }: express.Request) {
         if (!user) {
           return false;
         }
@@ -75,7 +83,7 @@ export default new GraphQLObjectType({
     },
     isBlocked: {
       type: new GraphQLNonNull(GraphQLBoolean),
-      async resolve(u: any, _: any, { user }: express.Request) {
+      async resolve(u: User, _: any, { user }: express.Request) {
         if (!user) {
           return false;
         }
@@ -85,6 +93,35 @@ export default new GraphQLObjectType({
             target_user: u.id,
             blocked_by: user.id,
           },
+        }));
+      },
+    },
+    hasAccessToDeet: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      args: {
+        deetId: { type: new GraphQLNonNull(GraphQLInt) },
+      },
+      async resolve(
+        u: User,
+        { deetId }: { deetId: number },
+        { user }: express.Request,
+      ) {
+        if (!user) {
+          throw new AuthenticationError('Must be logged in');
+        }
+
+        if (!deetId) {
+          throw new UserInputError('Missing id');
+        }
+
+        const deet = await ContactInfos.findByPk(deetId);
+
+        if (!deet || deet.owner_id !== user.id) {
+          throw new UserInputError('Deet not found');
+        }
+
+        return !!(await SharedContactInfos.findOne({
+          where: { info_id: deet.id, shared_with: u.id },
         }));
       },
     },
