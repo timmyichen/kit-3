@@ -5,6 +5,7 @@ import { Op } from 'sequelize';
 import { Users, Friendships } from 'server/models';
 import userType from 'server/graph/types/userType';
 import paginationType from './lib/paginationType';
+import paginate from './lib/paginate';
 
 interface Args {
   after?: string;
@@ -54,21 +55,10 @@ export default {
       ];
     }
 
-    const users = await Users.findAll({
+    return await paginate({
+      model: Users,
       where,
-      order: [['updated_at', 'desc']],
-      limit: count + 1,
+      count,
     });
-
-    const hasNext = users.length === count + 1;
-    const nextCursor = hasNext ? users[users.length - 1].updated_at : null;
-
-    return {
-      items: users.slice(0, count),
-      pageInfo: {
-        hasNext,
-        nextCursor,
-      },
-    };
   },
 };

@@ -32,8 +32,8 @@ export const CURRENT_USER_QUERY = gql`
 `;
 
 export const FRIENDS_QUERY = gql`
-  query friends($searchQuery: String, $count: Int) {
-    friends(searchQuery: $searchQuery, count: $count) {
+  query friends($searchQuery: String, $count: Int, $after: String) {
+    friends(searchQuery: $searchQuery, count: $count, after: $after) {
       items {
         id
         fullName
