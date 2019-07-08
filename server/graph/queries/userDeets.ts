@@ -1,23 +1,18 @@
 import * as express from 'express';
 import { GraphQLList } from 'graphql';
-import {
-  Addresses,
-  EmailAddresses,
-  PhoneNumbers,
-  ContactInfos,
-} from 'server/models';
+import { Addresses, EmailAddresses, PhoneNumbers, Deets } from 'server/models';
 import { AuthenticationError } from 'apollo-server';
-import contactInfoType from '../types/contactInfoType';
+import deetType from '../types/deetType';
 
 export default {
-  description: 'The currently authed user',
-  type: new GraphQLList(contactInfoType),
+  description: 'Get all deets owned by a user',
+  type: new GraphQLList(deetType),
   async resolve(_1: any, _2: any, { user }: express.Request) {
     if (!user) {
       throw new AuthenticationError('Must be logged in');
     }
 
-    const infos = await ContactInfos.findAll({
+    const deets = await Deets.findAll({
       where: { owner_id: user.id },
       include: [
         { model: Addresses },
@@ -26,6 +21,6 @@ export default {
       ],
     });
 
-    return infos.map(info => info.get({ plain: true }));
+    return deets.map(deet => deet.get({ plain: true }));
   },
 };

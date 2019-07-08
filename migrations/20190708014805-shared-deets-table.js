@@ -2,13 +2,13 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('shared_contact_infos', {
-      info_id: {
+    return queryInterface.createTable('shared_deets', {
+      deet_id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         allowNull: false,
         references: {
-          model: 'contact_infos',
+          model: 'deets',
           key: 'id',
         },
       },
@@ -23,20 +23,20 @@ module.exports = {
       },
     })
     .then(() => queryInterface.sequelize.query(`
-      CREATE INDEX shared_contact_infos_shared_with_id_idx ON shared_contact_infos (shared_with)
+      CREATE INDEX shared_deets_shared_with_id_idx ON shared_deets (shared_with)
     `))
     .then(() => queryInterface.sequelize.query(`
-      CREATE INDEX shared_contact_infos_info_id_idx ON shared_contact_infos (info_id)
+      CREATE INDEX shared_deets_deet_id_idx ON shared_deets (deet_id)
     `))
   },
 
   down: (queryInterface, Sequelize) => {
     return queryInterface.sequelize.query(`
-      DROP INDEX IF EXISTS shared_contact_infos_shared_with_id_idx;
+      DROP INDEX IF EXISTS shared_deets_shared_with_id_idx;
     `)
       .then(() => queryInterface.sequelize.query(`
-      DROP INDEX IF EXISTS shared_contact_infos_info_id_idx;
+      DROP INDEX IF EXISTS shared_deets_deet_id_idx;
     `))
-      .then(() => queryInterface.dropTable('shared_contact_infos'))
+      .then(() => queryInterface.dropTable('shared_deets'))
   }
 };

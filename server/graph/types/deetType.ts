@@ -4,7 +4,7 @@ import phoneNumberType from './phoneNumberType';
 import addressType from './addressType';
 
 export default new GraphQLUnionType({
-  name: 'ContactInfo',
+  name: 'Deet',
   types: [emailAddressType, phoneNumberType, addressType],
   resolveType(obj) {
     if (obj.address) {

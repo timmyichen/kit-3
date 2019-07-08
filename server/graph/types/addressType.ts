@@ -6,11 +6,11 @@ import {
 } from 'graphql';
 import { Users } from 'server/models';
 import userType from './userType';
-import { commonInfoFields, timestamps } from './common';
+import { commonDeetFields, timestamps } from './common';
 
 export default new GraphQLObjectType({
-  name: 'AddressContactInfo',
-  description: 'A physical address contact info',
+  name: 'AddressDeet',
+  description: 'A physical address deet',
   fields: () => ({
     id: {
       type: new GraphQLNonNull(GraphQLInt),
@@ -44,7 +44,7 @@ export default new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       resolve: (address: any) => address.address.country_code,
     },
-    ...commonInfoFields(),
+    ...commonDeetFields(),
     ...timestamps(),
   }),
 });

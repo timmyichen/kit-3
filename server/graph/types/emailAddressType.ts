@@ -6,11 +6,11 @@ import {
 } from 'graphql';
 import { Users } from 'server/models';
 import userType from './userType';
-import { commonInfoFields, timestamps } from './common';
+import { commonDeetFields, timestamps } from './common';
 
 export default new GraphQLObjectType({
-  name: 'EmailAddressContactInfo',
-  description: 'An email address contact info',
+  name: 'EmailAddressDeet',
+  description: 'An email addressdeet',
   fields: () => ({
     id: {
       type: new GraphQLNonNull(GraphQLInt),
@@ -24,7 +24,7 @@ export default new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       resolve: (email: any) => email.email_address.email_address,
     },
-    ...commonInfoFields(),
+    ...commonDeetFields(),
     ...timestamps(),
   }),
 });

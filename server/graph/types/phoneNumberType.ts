@@ -6,11 +6,11 @@ import {
 } from 'graphql';
 import { Users } from 'server/models';
 import userType from './userType';
-import { commonInfoFields, timestamps } from './common';
+import { commonDeetFields, timestamps } from './common';
 
 export default new GraphQLObjectType({
-  name: 'PhoneNumberContactInfo',
-  description: 'A phone number contact info',
+  name: 'PhoneNumberDeet',
+  description: 'A phone number deet',
   fields: () => ({
     id: {
       type: new GraphQLNonNull(GraphQLInt),
@@ -28,7 +28,7 @@ export default new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       resolve: (num: any) => num.phone_number.phone_number,
     },
-    ...commonInfoFields(),
+    ...commonDeetFields(),
     ...timestamps(),
   }),
 });

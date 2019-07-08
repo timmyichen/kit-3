@@ -15,16 +15,16 @@ const result: IntrospectionResultData = {
     types: [
       {
         kind: 'UNION',
-        name: 'ContactInfo',
+        name: 'Deet',
         possibleTypes: [
           {
-            name: 'EmailAddressContactInfo',
+            name: 'EmailAddressDeet',
           },
           {
-            name: 'PhoneNumberContactInfo',
+            name: 'PhoneNumberDeet',
           },
           {
-            name: 'AddressContactInfo',
+            name: 'AddressDeet',
           },
         ],
       },

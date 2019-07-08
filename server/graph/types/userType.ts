@@ -10,8 +10,8 @@ import {
   Friendships,
   BlockedUsers,
   FriendRequests,
-  ContactInfos,
-  SharedContactInfos,
+  Deets,
+  SharedDeets,
 } from 'server/models';
 import { timestamps } from './common';
 import { User } from 'server/models/types';
@@ -114,14 +114,14 @@ export default new GraphQLObjectType({
           throw new UserInputError('Missing id');
         }
 
-        const deet = await ContactInfos.findByPk(deetId);
+        const deet = await Deets.findByPk(deetId);
 
         if (!deet || deet.owner_id !== user.id) {
           throw new UserInputError('Deet not found');
         }
 
-        return !!(await SharedContactInfos.findOne({
-          where: { info_id: deet.id, shared_with: u.id },
+        return !!(await SharedDeets.findOne({
+          where: { deet_id: deet.id, shared_with: u.id },
         }));
       },
     },

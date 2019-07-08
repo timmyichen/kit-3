@@ -5,12 +5,12 @@ import {
   UserInputError,
   ApolloError,
 } from 'apollo-server';
-import { Addresses, ContactInfos } from 'server/models';
+import { Addresses, Deets } from 'server/models';
 import addressType from '../types/addressType';
 import { db } from 'server/lib/db';
 
 interface Args {
-  infoId?: number;
+  deetId?: number;
   notes?: string;
   label: string;
   addressLine1: string;
@@ -25,7 +25,7 @@ export default {
   description: 'Upsert an address record',
   type: addressType,
   args: {
-    infoId: { type: GraphQLInt },
+    deetId: { type: GraphQLInt },
     notes: { type: GraphQLString },
     label: { type: new GraphQLNonNull(GraphQLString) },
     addressLine1: { type: new GraphQLNonNull(GraphQLString) },
@@ -42,18 +42,18 @@ export default {
 
     const { notes, label, city, state } = args;
 
-    if (args.infoId) {
+    if (args.deetId) {
       let result;
-      const info = await ContactInfos.findByPk(args.infoId);
+      const deet = await Deets.findByPk(args.deetId);
 
-      if (!info || info.owner_id !== user.id) {
+      if (!deet || deet.owner_id !== user.id) {
         throw new UserInputError('Email address not found');
       }
 
-      const entry = await info.getInfo({ where: { info_id: info.id } });
+      const entry = await deet.getDeet({ where: { deet_id: deet.id } });
 
       if (!entry) {
-        throw new ApolloError(`Matching info entry not found for ${info.id}`);
+        throw new ApolloError(`Matching deet entry not found for ${deet.id}`);
       }
 
       try {
@@ -76,18 +76,18 @@ export default {
       }
 
       return {
-        ...info.get({ plain: true }),
+        ...deet.get({ plain: true }),
         address: {
           ...result.get({ plain: true }),
         },
       };
     }
 
-    let info: { [s: string]: any } = {};
+    let deet: { [s: string]: any } = {};
     let result: { get?: any } = {};
 
     await db.transaction(async (transaction: any) => {
-      info = await ContactInfos.create(
+      deet = await Deets.create(
         {
           type: 'address',
           owner_id: user.id,
@@ -106,7 +106,7 @@ export default {
             address_line_2: args.addressLine2,
             postal_code: args.postalCode,
             country_code: args.countryCode,
-            info_id: info.id,
+            deet_id: deet.id,
           },
           { transaction },
         );
@@ -120,7 +120,7 @@ export default {
     });
 
     return {
-      ...info.get({ plain: true }),
+      ...deet.get({ plain: true }),
       address: {
         ...result.get({ plain: true }),
       },

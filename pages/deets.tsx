@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Menu } from 'semantic-ui-react';
-import ContactInfoDashboard from 'client/deets/ContactInfoDashboard';
+import DeetDashboard from 'client/deets/DeetDashboard';
 
 const Deets = () => {
   const [activeTab, setActiveTab] = React.useState<string>('my-deets');
@@ -10,7 +10,7 @@ const Deets = () => {
   let content;
   switch (activeTab) {
     case 'my-deets':
-      content = <ContactInfoDashboard />;
+      content = <DeetDashboard />;
       break;
   }
 

@@ -7,12 +7,12 @@ import {
   BelongsTo,
 } from 'sequelize-typescript';
 import { requiredString } from 'server/lib/model';
-import ContactInfos from './ContactInfos';
+import Deets from './Deets';
 
 @Table({
   tableName: 'email_addresses',
   timestamps: false,
-  indexes: [{ unique: false, fields: ['info_id'] }],
+  indexes: [{ unique: false, fields: ['deet_id'] }],
 })
 export default class EmailAddresses extends Model<EmailAddresses> {
   @PrimaryKey
@@ -25,10 +25,10 @@ export default class EmailAddresses extends Model<EmailAddresses> {
   @Column(requiredString())
   email_address: string;
 
-  @ForeignKey(() => ContactInfos)
+  @ForeignKey(() => Deets)
   @Column
-  info_id: number;
+  deet_id: number;
 
-  @BelongsTo(() => ContactInfos)
-  info: ContactInfos;
+  @BelongsTo(() => Deets)
+  deet: Deets;
 }

@@ -29,7 +29,7 @@ const DEET_TYPES = [
   },
 ];
 
-export default function ContactInfoCreator() {
+export default function DeetCreator() {
   const [showCreation, setShowCreation] = React.useState<boolean>(false);
   const [creatingType, setCreatingType] = React.useState<DeetTypes>('address');
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -72,7 +72,7 @@ export default function ContactInfoCreator() {
   };
 
   return (
-    <div className="contact-info-creator">
+    <div className="deet-creator">
       <div className="controls">
         <Button
           disabled={loading}
@@ -105,7 +105,7 @@ export default function ContactInfoCreator() {
         </div>
       )}
       <style jsx>{`
-        .contact-info-creator {
+        .deet-creator {
         }
       `}</style>
     </div>

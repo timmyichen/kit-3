@@ -38,7 +38,7 @@ export const ACCEPT_REQUEST_MUTATION = gql`
 
 export const UPSERT_ADDRESS_MUTATION = gql`
   mutation upsertAddress(
-    $infoId: Int
+    $deetId: Int
     $notes: String
     $label: String!
     $addressLine1: String!
@@ -49,7 +49,7 @@ export const UPSERT_ADDRESS_MUTATION = gql`
     $countryCode: String!
   ) {
     upsertAddress(
-      infoId: $infoId
+      deetId: $deetId
       notes: $notes
       label: $label
       addressLine1: $addressLine1
@@ -67,7 +67,7 @@ export const UPSERT_ADDRESS_MUTATION = gql`
       city
       state
       postalCode
-      countryCode
+      country
       createdAt
       updatedAt
     }
@@ -76,14 +76,14 @@ export const UPSERT_ADDRESS_MUTATION = gql`
 
 export const UPSERT_PHONE_NUMBER_MUTATION = gql`
   mutation upsertPhoneNumber(
-    $infoId: Int
+    $deetId: Int
     $notes: String
     $label: String!
     $phoneNumber: String!
     $countryCode: String
   ) {
     upsertPhoneNumber(
-      infoId: $infoId
+      deetId: $deetId
       notes: $notes
       label: $label
       phoneNumber: $phoneNumber
@@ -102,13 +102,13 @@ export const UPSERT_PHONE_NUMBER_MUTATION = gql`
 
 export const UPSERT_EMAIL_ADDRESS_MUTATION = gql`
   mutation upsertEmailAddress(
-    $infoId: Int
+    $deetId: Int
     $notes: String
     $label: String!
     $emailAddress: String!
   ) {
     upsertEmailAddress(
-      infoId: $infoId
+      deetId: $deetId
       notes: $notes
       label: $label
       emailAddress: $emailAddress
@@ -125,12 +125,12 @@ export const UPSERT_EMAIL_ADDRESS_MUTATION = gql`
 
 export const UPDATE_SHARED_PERMISSIONS_MUTATION = gql`
   mutation updateSharedPermissions(
-    $infoId: Int!
+    $deetId: Int!
     $userIdsToAdd: [Int]!
     $userIdsToRemove: [Int]!
   ) {
     updateSharedPermissions(
-      infoId: $infoId
+      deetId: $deetId
       userIdsToAdd: $userIdsToAdd
       userIdsToRemove: $userIdsToRemove
     )

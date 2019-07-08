@@ -5,8 +5,8 @@ import BlockedUsers from './schemas/BlockedUsers';
 import Addresses from './schemas/Addresses';
 import EmailAddresses from './schemas/EmailAddresses';
 import PhoneNumbers from './schemas/PhoneNumbers';
-import ContactInfos from './schemas/ContactInfos';
-import SharedContactInfos from './schemas/SharedContactInfos';
+import Deets from './schemas/Deets';
+import SharedDeets from './schemas/SharedDeets';
 
 export {
   Users,
@@ -16,6 +16,6 @@ export {
   Addresses,
   EmailAddresses,
   PhoneNumbers,
-  ContactInfos,
-  SharedContactInfos,
+  Deets,
+  SharedDeets,
 };

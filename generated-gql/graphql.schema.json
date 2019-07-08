@@ -111,24 +111,20 @@
             "deprecationReason": null
           },
           {
-            "name": "userContactInfos",
-            "description": "The currently authed user",
+            "name": "userDeets",
+            "description": "Get all deets owned by a user",
             "args": [],
             "type": {
               "kind": "LIST",
               "name": null,
-              "ofType": {
-                "kind": "UNION",
-                "name": "ContactInfo",
-                "ofType": null
-              }
+              "ofType": { "kind": "UNION", "name": "Deet", "ofType": null }
             },
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "accessibleContactInfo",
-            "description": "The currently authed user",
+            "name": "accessibleDeet",
+            "description": "Deets accessible to the currently authed user",
             "args": [
               {
                 "name": "type",
@@ -140,11 +136,7 @@
             "type": {
               "kind": "LIST",
               "name": null,
-              "ofType": {
-                "kind": "UNION",
-                "name": "ContactInfo",
-                "ofType": null
-              }
+              "ofType": { "kind": "UNION", "name": "Deet", "ofType": null }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -270,7 +262,11 @@
               {
                 "name": "deetId",
                 "description": null,
-                "type": { "kind": "SCALAR", "name": "Int", "ofType": null },
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "SCALAR", "name": "Int", "ofType": null }
+                },
                 "defaultValue": null
               }
             ],
@@ -414,30 +410,22 @@
       },
       {
         "kind": "UNION",
-        "name": "ContactInfo",
+        "name": "Deet",
         "description": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
         "enumValues": null,
         "possibleTypes": [
-          {
-            "kind": "OBJECT",
-            "name": "EmailAddressContactInfo",
-            "ofType": null
-          },
-          {
-            "kind": "OBJECT",
-            "name": "PhoneNumberContactInfo",
-            "ofType": null
-          },
-          { "kind": "OBJECT", "name": "AddressContactInfo", "ofType": null }
+          { "kind": "OBJECT", "name": "EmailAddressDeet", "ofType": null },
+          { "kind": "OBJECT", "name": "PhoneNumberDeet", "ofType": null },
+          { "kind": "OBJECT", "name": "AddressDeet", "ofType": null }
         ]
       },
       {
         "kind": "OBJECT",
-        "name": "EmailAddressContactInfo",
-        "description": "An email address contact info",
+        "name": "EmailAddressDeet",
+        "description": "An email addressdeet",
         "fields": [
           {
             "name": "id",
@@ -527,8 +515,8 @@
       },
       {
         "kind": "OBJECT",
-        "name": "PhoneNumberContactInfo",
-        "description": "A phone number contact info",
+        "name": "PhoneNumberDeet",
+        "description": "A phone number deet",
         "fields": [
           {
             "name": "id",
@@ -626,8 +614,8 @@
       },
       {
         "kind": "OBJECT",
-        "name": "AddressContactInfo",
-        "description": "A physical address contact info",
+        "name": "AddressDeet",
+        "description": "A physical address deet",
         "fields": [
           {
             "name": "id",
@@ -883,7 +871,7 @@
             "description": "Upsert an address record",
             "args": [
               {
-                "name": "infoId",
+                "name": "deetId",
                 "description": null,
                 "type": { "kind": "SCALAR", "name": "Int", "ofType": null },
                 "defaultValue": null
@@ -961,11 +949,7 @@
                 "defaultValue": null
               }
             ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "AddressContactInfo",
-              "ofType": null
-            },
+            "type": { "kind": "OBJECT", "name": "AddressDeet", "ofType": null },
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -974,7 +958,7 @@
             "description": "Upsert a phone number record",
             "args": [
               {
-                "name": "infoId",
+                "name": "deetId",
                 "description": null,
                 "type": { "kind": "SCALAR", "name": "Int", "ofType": null },
                 "defaultValue": null
@@ -1016,7 +1000,7 @@
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "EmailAddressContactInfo",
+              "name": "EmailAddressDeet",
               "ofType": null
             },
             "isDeprecated": false,
@@ -1027,7 +1011,7 @@
             "description": "Upsert a phone number record",
             "args": [
               {
-                "name": "infoId",
+                "name": "deetId",
                 "description": null,
                 "type": { "kind": "SCALAR", "name": "Int", "ofType": null },
                 "defaultValue": null
@@ -1075,18 +1059,18 @@
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "PhoneNumberContactInfo",
+              "name": "PhoneNumberDeet",
               "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "deleteContactInfo",
+            "name": "deleteDeet",
             "description": "Upsert a phone number record",
             "args": [
               {
-                "name": "infoId",
+                "name": "deetId",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
@@ -1096,7 +1080,7 @@
                 "defaultValue": null
               }
             ],
-            "type": { "kind": "UNION", "name": "ContactInfo", "ofType": null },
+            "type": { "kind": "UNION", "name": "Deet", "ofType": null },
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -1105,7 +1089,7 @@
             "description": "Update permissions for shared",
             "args": [
               {
-                "name": "infoId",
+                "name": "deetId",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",

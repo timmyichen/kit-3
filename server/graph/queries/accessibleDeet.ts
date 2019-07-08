@@ -1,18 +1,18 @@
 import * as express from 'express';
 import { GraphQLList, GraphQLString } from 'graphql';
-import contactInfoType from '../types/contactInfoType';
-import { ContactInfoTypes } from 'server/models/types';
+import deetType from '../types/deetType';
+import { DeetTypes } from 'server/models/types';
 import { AuthenticationError } from 'apollo-server';
-import { ContactInfos, SharedContactInfos } from 'server/models';
+import { Deets, SharedDeets } from 'server/models';
 import { Op, Filterable } from 'sequelize';
 
 interface Args {
-  type: ContactInfoTypes;
+  type: DeetTypes;
 }
 
 export default {
-  description: 'The currently authed user',
-  type: new GraphQLList(contactInfoType),
+  description: 'Deets accessible to the currently authed user',
+  type: new GraphQLList(deetType),
   args: {
     type: { type: GraphQLString },
   },
@@ -21,22 +21,22 @@ export default {
       throw new AuthenticationError('Must be logged in');
     }
 
-    const sharedWithUser = await SharedContactInfos.findAll({
+    const sharedWithUser = await SharedDeets.findAll({
       where: { shared_with: user.id },
     });
 
     const where: Filterable['where'] = {
-      id: { [Op.in]: sharedWithUser.map(i => i.info_id) },
+      id: { [Op.in]: sharedWithUser.map(i => i.deet_id) },
     };
 
     if (args.type) {
       where.type = args.type;
     }
 
-    const infos = await ContactInfos.findAll({ where });
+    const deets = await Deets.findAll({ where });
 
-    const promises: Array<Promise<any>> = infos.map(info =>
-      info.getInfo({ where: { info_id: info.id } }),
+    const promises: Array<Promise<any> | undefined> = deets.map((deet: Deets) =>
+      deet.getDeet({ where: { deet_id: deet.id } }),
     );
 
     const result = await Promise.all(promises);

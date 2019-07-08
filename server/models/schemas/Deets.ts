@@ -13,15 +13,15 @@ import {
   HasOne,
 } from 'sequelize-typescript';
 import { PhoneNumbers, Addresses, EmailAddresses } from '..';
-import { ContactInfoTypes } from '../types';
+import { DeetTypes } from '../types';
 import { emptyOptionalString, requiredString } from 'server/lib/model';
 
 @Table({
-  tableName: 'contact_infos',
+  tableName: 'deets',
   timestamps: true,
   indexes: [{ unique: false, fields: ['owner_id'] }],
 })
-export default class ContactInfos extends Model<ContactInfos> {
+export default class Deets extends Model<Deets> {
   @PrimaryKey
   @AutoIncrement
   @Unique
@@ -42,7 +42,7 @@ export default class ContactInfos extends Model<ContactInfos> {
   @Column({
     type: DataType.ENUM('address', 'phone_number', 'email_address'),
   })
-  type: ContactInfoTypes;
+  type: DeetTypes;
 
   @Default(false)
   @AllowNull(false)
@@ -61,16 +61,16 @@ export default class ContactInfos extends Model<ContactInfos> {
   @UpdatedAt
   updated_at: Date;
 
-  @HasOne(() => Addresses, 'info_id')
+  @HasOne(() => Addresses, 'deet_id')
   address: Addresses;
 
-  @HasOne(() => EmailAddresses, 'info_id')
+  @HasOne(() => EmailAddresses, 'deet_id')
   email_address: EmailAddresses;
 
-  @HasOne(() => PhoneNumbers, 'info_id')
+  @HasOne(() => PhoneNumbers, 'deet_id')
   phone_number: PhoneNumbers;
 
-  getInfo(opts: Object) {
+  getDeet(opts: Object) {
     switch (this.type) {
       case 'phone_number':
         return PhoneNumbers.findOne(opts);

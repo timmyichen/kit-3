@@ -5,12 +5,12 @@ import {
   UserInputError,
   ApolloError,
 } from 'apollo-server';
-import { PhoneNumbers, ContactInfos } from 'server/models';
+import { PhoneNumbers, Deets } from 'server/models';
 import phoneNumberType from '../types/phoneNumberType';
 import { db } from 'server/lib/db';
 
 interface Args {
-  infoId?: number;
+  deetId?: number;
   notes?: string;
   label: string;
   countryCode?: string;
@@ -21,7 +21,7 @@ export default {
   description: 'Upsert a phone number record',
   type: phoneNumberType,
   args: {
-    infoId: { type: GraphQLInt },
+    deetId: { type: GraphQLInt },
     notes: { type: GraphQLString },
     label: { type: new GraphQLNonNull(GraphQLString) },
     phoneNumber: { type: new GraphQLNonNull(GraphQLString) },
@@ -34,18 +34,18 @@ export default {
 
     const { notes, label } = args;
 
-    if (args.infoId) {
+    if (args.deetId) {
       let result;
-      const info = await ContactInfos.findByPk(args.infoId);
+      const deet = await Deets.findByPk(args.deetId);
 
-      if (!info || info.owner_id !== user.id) {
+      if (!deet || deet.owner_id !== user.id) {
         throw new UserInputError('Email address not found');
       }
 
-      const entry = await info.getInfo({ where: { info_id: info.id } });
+      const entry = await deet.getDeet({ where: { deet_id: deet.id } });
 
       if (!entry) {
-        throw new ApolloError(`Matching info entry not found for ${info.id}`);
+        throw new ApolloError(`Matching deet entry not found for ${deet.id}`);
       }
 
       try {
@@ -64,18 +64,18 @@ export default {
       }
 
       return {
-        ...info.get({ plain: true }),
+        ...deet.get({ plain: true }),
         phone_number: {
           ...result.get({ plain: true }),
         },
       };
     }
 
-    let info: { [s: string]: any } = {};
+    let deet: { [s: string]: any } = {};
     let result: { get?: any } = {};
 
     await db.transaction(async (transaction: any) => {
-      info = await ContactInfos.create(
+      deet = await Deets.create(
         {
           type: 'phone_number',
           owner_id: user.id,
@@ -90,7 +90,7 @@ export default {
           {
             phone_number: args.phoneNumber,
             country_code: args.countryCode,
-            info_id: info.id,
+            deet_id: deet.id,
           },
           { transaction },
         );
@@ -104,7 +104,7 @@ export default {
     });
 
     return {
-      ...info.get({ plain: true }),
+      ...deet.get({ plain: true }),
       phone_number: {
         ...result.get({ plain: true }),
       },

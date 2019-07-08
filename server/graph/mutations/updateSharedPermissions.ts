@@ -11,11 +11,11 @@ import {
   UserInputError,
   ApolloError,
 } from 'apollo-server';
-import { Friendships, ContactInfos, SharedContactInfos } from 'server/models';
+import { Friendships, Deets, SharedDeets } from 'server/models';
 import { db } from 'server/lib/db';
 
 type Args = {
-  infoId: number;
+  deetId: number;
   userIdsToAdd: Array<number>;
   userIdsToRemove: Array<number>;
 };
@@ -24,7 +24,7 @@ export default {
   description: 'Update permissions for shared',
   type: new GraphQLNonNull(GraphQLBoolean),
   args: {
-    infoId: { type: new GraphQLNonNull(GraphQLInt) },
+    deetId: { type: new GraphQLNonNull(GraphQLInt) },
     userIdsToAdd: { type: new GraphQLList(GraphQLInt) },
     userIdsToRemove: { type: new GraphQLList(GraphQLInt) },
   },
@@ -33,9 +33,9 @@ export default {
       throw new AuthenticationError('Must be logged in');
     }
 
-    const info = await ContactInfos.findByPk(args.infoId);
+    const deet = await Deets.findByPk(args.deetId);
 
-    if (!info || info.owner_id !== user.id) {
+    if (!deet || deet.owner_id !== user.id) {
       throw new UserInputError('Email address not found');
     }
 
@@ -54,10 +54,10 @@ export default {
       );
     }
 
-    const entry = await info.getInfo({ where: { info_id: info.id } });
+    const entry = await deet.getDeet({ where: { deet_id: deet.id } });
 
     if (!entry) {
-      throw new ApolloError(`Matching info entry not found for ${info.id}`);
+      throw new ApolloError(`Matching deet entry not found for ${deet.id}`);
     }
 
     const usersToAdd = await Friendships.findAll({
@@ -73,16 +73,16 @@ export default {
 
     const dataToUpsert = args.userIdsToAdd.map(shared_with => ({
       shared_with,
-      info_id: args.infoId,
+      deet_id: args.deetId,
     }));
 
     await db.transaction((transaction: any) =>
       Promise.all([
-        SharedContactInfos.bulkCreate(dataToUpsert, {
+        SharedDeets.bulkCreate(dataToUpsert, {
           ignoreDuplicates: true,
           transaction,
         }),
-        SharedContactInfos.destroy({
+        SharedDeets.destroy({
           where: { shared_with: { [Op.in]: args.userIdsToRemove } },
         }),
       ]),

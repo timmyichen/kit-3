@@ -81,8 +81,8 @@ export const PENDING_FRIEND_REQUESTS_QUERY = gql`
 
 export const CURRENT_USER_DEETS_QUERY = gql`
   query currentUserDeets {
-    userContactInfos {
-      ... on EmailAddressContactInfo {
+    userDeets {
+      ... on EmailAddressDeet {
         id
         notes
         label
@@ -93,7 +93,7 @@ export const CURRENT_USER_DEETS_QUERY = gql`
         emailAddress
         updatedAt
       }
-      ... on PhoneNumberContactInfo {
+      ... on PhoneNumberDeet {
         id
         notes
         label
@@ -105,7 +105,7 @@ export const CURRENT_USER_DEETS_QUERY = gql`
         countryCode
         updatedAt
       }
-      ... on AddressContactInfo {
+      ... on AddressDeet {
         id
         notes
         label

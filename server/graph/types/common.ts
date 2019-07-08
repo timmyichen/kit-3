@@ -1,6 +1,6 @@
 import { GraphQLNonNull, GraphQLString } from 'graphql';
 
-export const commonInfoFields = () => ({
+export const commonDeetFields = () => ({
   label: {
     type: new GraphQLNonNull(GraphQLString),
     resolve: (obj: any) => obj.label,

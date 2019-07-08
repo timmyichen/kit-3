@@ -12,12 +12,12 @@ export interface User {
   deleted_at?: Date;
 }
 
-interface CommonContactInfoFields {
+interface CommonDeetFields {
   id: number;
-  info_id: number;
+  deet_id: number;
 }
 
-export interface Address extends CommonContactInfoFields {
+export interface Address extends CommonDeetFields {
   address_line_1: string;
   address_line_2?: string;
   city?: string;
@@ -26,26 +26,26 @@ export interface Address extends CommonContactInfoFields {
   country_code: string;
 }
 
-export interface PhoneNumber extends CommonContactInfoFields {
+export interface PhoneNumber extends CommonDeetFields {
   country_code?: string;
   phone_number: string;
 }
 
-export interface EmailAddress extends CommonContactInfoFields {
+export interface EmailAddress extends CommonDeetFields {
   email_address: string;
 }
 
-export interface ContactInfoType {
+export interface DeetType {
   id: number;
   owner_id: number;
-  type: ContactInfo;
+  type: Deet;
   notes?: string;
   label: string;
   created_at: Date;
   updated_at: Date;
-  getInfo(o: Object): Promise<any>;
+  getDeet(o: Object): Promise<any>;
 }
 
-export type ContactInfoTypes = 'address' | 'phone_number' | 'email_address';
+export type DeetTypes = 'address' | 'phone_number' | 'email_address';
 
-export type ContactInfo = Address | PhoneNumber | EmailAddress;
+export type Deet = Address | PhoneNumber | EmailAddress;

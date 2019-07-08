@@ -6,12 +6,7 @@ import {
   UserInputError,
   ApolloError,
 } from 'apollo-server';
-import {
-  Friendships,
-  Users,
-  SharedContactInfos,
-  ContactInfos,
-} from 'server/models';
+import { Friendships, Users, SharedDeets, Deets } from 'server/models';
 import { db } from 'server/lib/db';
 
 export default {
@@ -44,17 +39,17 @@ export default {
       throw new UserInputError('Friendship not found');
     }
 
-    let sharedInfos = await SharedContactInfos.findAll({
+    let sharedDeets = await SharedDeets.findAll({
       where: {
         [Op.or]: [{ shared_with: user.id }, { shared_with: targetUserId }],
       },
-      include: [ContactInfos],
+      include: [Deets],
     });
 
-    sharedInfos = sharedInfos.filter(
+    sharedDeets = sharedDeets.filter(
       i =>
-        (i.info.owner_id === targetUserId && i.shared_with === user.id) ||
-        (i.info.owner_id === user.id && i.shared_with === targetUserId),
+        (i.deet.owner_id === targetUserId && i.shared_with === user.id) ||
+        (i.deet.owner_id === user.id && i.shared_with === targetUserId),
     );
 
     try {
@@ -71,8 +66,8 @@ export default {
           }),
         ];
 
-        if (sharedInfos.length) {
-          promises.concat(sharedInfos.map(i => i.destroy({ transaction })));
+        if (sharedDeets.length) {
+          promises.concat(sharedDeets.map(i => i.destroy({ transaction })));
         }
 
         await Promise.all(promises);

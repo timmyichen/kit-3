@@ -88,7 +88,7 @@ const DeetSharingModal = ({ deet, children }: Props) => {
               try {
                 await updateSharingPermissions({
                   variables: {
-                    infoId: deet.id,
+                    deetId: deet.id,
                     userIdsToAdd: changedPerms
                       .filter(p => p.permitted)
                       .map(p => p.userId),
@@ -127,7 +127,6 @@ function FriendShareItem({
   friend: User;
   setPerm(p: Permission): void;
 }) {
-  console.log(`${friend.username} ${friend.hasAccessToDeet}`);
   return (
     <div className="friend-share-wrapper">
       <div className="user">

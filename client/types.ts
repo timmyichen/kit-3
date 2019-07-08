@@ -15,9 +15,9 @@ export interface UserSearch extends User {
 
 export type DeetTypes = 'address' | 'email_address' | 'phone_number';
 export type ApolloDeetTypes =
-  | 'PhoneNumberContactInfo'
-  | 'AddressContactInfo'
-  | 'EmailAddressContactInfo';
+  | 'PhoneNumberDeet'
+  | 'AddressDeet'
+  | 'EmailAddressDeet';
 
 interface BaseDeet {
   id: number;

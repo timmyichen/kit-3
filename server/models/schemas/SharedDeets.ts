@@ -7,23 +7,23 @@ import {
   ForeignKey,
   BelongsTo,
 } from 'sequelize-typescript';
-import ContactInfos from './ContactInfos';
+import Deets from './Deets';
 import Users from './Users';
 
 @Table({
-  tableName: 'shared_contact_infos',
+  tableName: 'shared_deets',
   timestamps: false,
   indexes: [
-    { unique: true, fields: ['info_id'] },
+    { unique: true, fields: ['deet_id'] },
     { unique: true, fields: ['shared_with'] },
   ],
 })
-export default class SharedContactInfos extends Model<SharedContactInfos> {
+export default class SharedDeets extends Model<SharedDeets> {
   @PrimaryKey
   @AllowNull(false)
-  @ForeignKey(() => ContactInfos)
+  @ForeignKey(() => Deets)
   @Column
-  info_id: number;
+  deet_id: number;
 
   @PrimaryKey
   @AllowNull(false)
@@ -31,6 +31,6 @@ export default class SharedContactInfos extends Model<SharedContactInfos> {
   @Column
   shared_with: number;
 
-  @BelongsTo(() => ContactInfos)
-  info: ContactInfos;
+  @BelongsTo(() => Deets)
+  deet: Deets;
 }

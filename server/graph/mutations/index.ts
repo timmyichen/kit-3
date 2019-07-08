@@ -8,7 +8,7 @@ import rescindFriendRequest from './rescindFriendRequest';
 import upsertAddress from './upsertAddress';
 import upsertEmailAddress from './upsertEmailAddress';
 import upsertPhoneNumber from './upsertPhoneNumber';
-import deleteContactInfo from './deleteContactInfo';
+import deleteDeet from './deleteDeet';
 import updateSharedPermissions from './updateSharedPermissions';
 
 export default new GraphQLObjectType({
@@ -24,7 +24,7 @@ export default new GraphQLObjectType({
     upsertAddress,
     upsertEmailAddress,
     upsertPhoneNumber,
-    deleteContactInfo,
+    deleteDeet,
     updateSharedPermissions,
   }),
 });

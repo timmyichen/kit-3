@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Form, Input, TextArea, Button } from 'semantic-ui-react';
 
 interface Fields {
-  email?: string;
+  emailAddress?: string;
   label?: string;
   notes?: string;
 }
@@ -36,9 +36,9 @@ export default function EmailAddressCreator({ onSubmit, loading }: Props) {
         <Form.Field>
           <label>Email</label>
           <Input
-            value={fields.email}
+            value={fields.emailAddress}
             onChange={(_, { value }: { value: any }) =>
-              setValue('email', value)
+              setValue('emailAddress', value)
             }
           />
         </Form.Field>
