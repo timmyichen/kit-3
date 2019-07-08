@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { AddressDeet } from 'client/types';
 import { Card, Icon } from 'semantic-ui-react';
+import { OwnedDeetCardActions } from './OwnedDeetCardActions';
 
 interface Props {
   address: AddressDeet;
@@ -28,6 +29,9 @@ export function AddressCard({ address }: Props) {
             <div>{address.country}</div>
             <div>{address.notes}</div>
           </Card.Description>
+        </Card.Content>
+        <Card.Content extra>
+          <OwnedDeetCardActions deet={address} />
         </Card.Content>
       </Card>
       <style jsx>{`

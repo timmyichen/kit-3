@@ -2,7 +2,8 @@ export interface User {
   id: number;
   fullName: string;
   username: string;
-  __typename: User;
+  hasAccessToDeet: boolean;
+  __typename: 'User';
 }
 
 export interface UserSearch extends User {

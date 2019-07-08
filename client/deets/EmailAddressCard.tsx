@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { EmailAddressDeet } from 'client/types';
 import { Card, Icon } from 'semantic-ui-react';
+import { OwnedDeetCardActions } from './OwnedDeetCardActions';
 
 interface Props {
   email: EmailAddressDeet;
@@ -23,6 +24,9 @@ export function EmailAddressCard({ email }: Props) {
             <div>{email.emailAddress}</div>
             <div>{email.notes}</div>
           </Card.Description>
+        </Card.Content>
+        <Card.Content extra>
+          <OwnedDeetCardActions deet={email} />
         </Card.Content>
       </Card>
       <style jsx>{`

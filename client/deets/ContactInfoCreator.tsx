@@ -5,9 +5,9 @@ import AddressCreator from './CreateAddress';
 import PhoneNumberCreator from './CreatePhoneNumber';
 import EmailAddressCreator from './CreateEmailAddress';
 import {
-  UPSERT_ADDRESS,
-  UPSERT_PHONE_NUMBER,
-  UPSERT_EMAIL_ADDRESS,
+  UPSERT_ADDRESS_MUTATION,
+  UPSERT_PHONE_NUMBER_MUTATION,
+  UPSERT_EMAIL_ADDRESS_MUTATION,
 } from 'client/graph/mutations';
 import { useMutation } from 'react-apollo-hooks';
 
@@ -39,9 +39,9 @@ export default function ContactInfoCreator() {
     setCreatingType(value);
   };
 
-  const upsertAddress = useMutation(UPSERT_ADDRESS);
-  const upsertPhoneNumber = useMutation(UPSERT_PHONE_NUMBER);
-  const upsertEmailAddress = useMutation(UPSERT_EMAIL_ADDRESS);
+  const upsertAddress = useMutation(UPSERT_ADDRESS_MUTATION);
+  const upsertPhoneNumber = useMutation(UPSERT_PHONE_NUMBER_MUTATION);
+  const upsertEmailAddress = useMutation(UPSERT_EMAIL_ADDRESS_MUTATION);
 
   const submitForm = async (variables: Object) => {
     let mutation;

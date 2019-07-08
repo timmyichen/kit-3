@@ -36,7 +36,7 @@ export const ACCEPT_REQUEST_MUTATION = gql`
   }
 `;
 
-export const UPSERT_ADDRESS = gql`
+export const UPSERT_ADDRESS_MUTATION = gql`
   mutation upsertAddress(
     $infoId: Int
     $notes: String
@@ -74,7 +74,7 @@ export const UPSERT_ADDRESS = gql`
   }
 `;
 
-export const UPSERT_PHONE_NUMBER = gql`
+export const UPSERT_PHONE_NUMBER_MUTATION = gql`
   mutation upsertPhoneNumber(
     $infoId: Int
     $notes: String
@@ -100,7 +100,7 @@ export const UPSERT_PHONE_NUMBER = gql`
   }
 `;
 
-export const UPSERT_EMAIL_ADDRESS = gql`
+export const UPSERT_EMAIL_ADDRESS_MUTATION = gql`
   mutation upsertEmailAddress(
     $infoId: Int
     $notes: String
@@ -120,5 +120,19 @@ export const UPSERT_EMAIL_ADDRESS = gql`
       createdAt
       updatedAt
     }
+  }
+`;
+
+export const UPDATE_SHARED_PERMISSIONS_MUTATION = gql`
+  mutation updateSharedPermissions(
+    $infoId: Int!
+    $userIdsToAdd: [Int]!
+    $userIdsToRemove: [Int]!
+  ) {
+    updateSharedPermissions(
+      infoId: $infoId
+      userIdsToAdd: $userIdsToAdd
+      userIdsToRemove: $userIdsToRemove
+    )
   }
 `;

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Menu } from 'semantic-ui-react';
-import ContactInfoDashboard from 'client/contacts/ContactInfoDashboard';
+import ContactInfoDashboard from 'client/deets/ContactInfoDashboard';
 
 const Deets = () => {
   const [activeTab, setActiveTab] = React.useState<string>('my-deets');

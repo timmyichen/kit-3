@@ -47,6 +47,28 @@ export const FRIENDS_QUERY = gql`
   }
 `;
 
+export const DEET_PERMISSIONS_QUERY = gql`
+  query deetPerms(
+    $searchQuery: String
+    $count: Int
+    $after: String
+    $deetId: Int!
+  ) {
+    friends(searchQuery: $searchQuery, count: $count, after: $after) {
+      items {
+        id
+        fullName
+        username
+        hasAccessToDeet(deetId: $deetId)
+      }
+      pageInfo {
+        hasNext
+        nextCursor
+      }
+    }
+  }
+`;
+
 export const PENDING_FRIEND_REQUESTS_QUERY = gql`
   query pendingFriendRequests($count: Int) {
     pendingFriendRequests(count: $count) {

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { PhoneNumberDeet } from 'client/types';
 import { Card, Icon } from 'semantic-ui-react';
+import { OwnedDeetCardActions } from './OwnedDeetCardActions';
 
 interface Props {
   phoneNumber: PhoneNumberDeet;
@@ -25,6 +26,9 @@ export function PhoneNumberCard({ phoneNumber }: Props) {
               {phoneNumber.number}
             </div>
           </Card.Description>
+        </Card.Content>
+        <Card.Content extra>
+          <OwnedDeetCardActions deet={phoneNumber} />
         </Card.Content>
       </Card>
       <style jsx>{`
