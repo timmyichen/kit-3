@@ -10,13 +10,15 @@ import {
 import { AddressCard } from './AddressCard';
 import { EmailAddressCard } from './EmailAddressCard';
 import { PhoneNumberCard } from './PhoneNumberCard';
+import { useCtxState } from 'client/components/ContextProvider';
 
 export default function CurrentUserDeets() {
   const { data: deets, loading: loadingDeets } = useQuery(
     CURRENT_USER_DEETS_QUERY,
   );
 
-  console.log(deets);
+  const state = useCtxState();
+  console.log(state);
 
   return (
     <div className="current-user-deets">

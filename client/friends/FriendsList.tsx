@@ -24,23 +24,23 @@ const FriendsList = () => {
           <FriendItem key={`friend-${friend.id}`} friend={friend} />
         ))}
       {friendsData.friends &&
-        friendsData.friends.items.length &&
-        friendsData.friends.pageInfo.hasNext && (
-          <Button
-            disabled={friendsLoading}
-            onClick={() =>
-              fetchMoreFriends({
-                variables: {
-                  after: friendsData.friends.pageInfo.nextCursor,
-                  count: PAGE_COUNT,
-                },
-                updateQuery: createUpdateQuery('friends'),
-              })
-            }
-          >
-            Load more
-          </Button>
-        )}
+      friendsData.friends.items.length &&
+      friendsData.friends.pageInfo.hasNext ? (
+        <Button
+          disabled={friendsLoading}
+          onClick={() =>
+            fetchMoreFriends({
+              variables: {
+                after: friendsData.friends.pageInfo.nextCursor,
+                count: PAGE_COUNT,
+              },
+              updateQuery: createUpdateQuery('friends'),
+            })
+          }
+        >
+          Load more
+        </Button>
+      ) : null}
       <style jsx>{`
         .friends-list {
           padding-top: 30px;

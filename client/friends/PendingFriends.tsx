@@ -4,13 +4,34 @@ import { User } from 'client/types';
 import { useMutation } from 'react-apollo-hooks';
 import { ACCEPT_REQUEST_MUTATION } from 'client/graph/mutations';
 import BlockUserModal from 'client/components/BlockUserModal';
+import { useCtxDispatch } from 'client/components/ContextProvider';
 
 interface Props {
   pendingFriends: Array<User>;
 }
 
 const PendingFriends = (props: Props) => {
+  const dispatch = useCtxDispatch();
   const acceptFriendRequest = useMutation(ACCEPT_REQUEST_MUTATION);
+  const [loading, setLoading] = React.useState<boolean>(false);
+
+  const showBlockUserModal = (user: User) => {
+    dispatch({
+      type: 'SHOW_MODAL',
+      modal: <BlockUserModal user={user} />,
+    });
+  };
+
+  const onAccept = async (user: User) => {
+    setLoading(true);
+    try {
+      acceptFriendRequest({ variables: { targetUserId: user.id } });
+    } catch (e) {
+      setLoading(false);
+      throw e;
+    }
+    setLoading(false);
+  };
 
   return (
     <div className="friends-page">
@@ -26,17 +47,19 @@ const PendingFriends = (props: Props) => {
               <Button
                 basic
                 color="green"
-                onClick={() =>
-                  acceptFriendRequest({ variables: { targetUserId: user.id } })
-                }
+                disabled={loading}
+                onClick={() => onAccept(user)}
               >
                 Accept Request
               </Button>
-              <BlockUserModal user={user}>
-                <Button basic color="black">
-                  Block
-                </Button>
-              </BlockUserModal>
+              <Button
+                basic
+                color="black"
+                disabled={loading}
+                onClick={() => showBlockUserModal(user)}
+              >
+                Block
+              </Button>
             </div>
           </Card.Content>
         </Card>

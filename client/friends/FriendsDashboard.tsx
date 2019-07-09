@@ -1,8 +1,5 @@
 import * as React from 'react';
-import {
-  PENDING_FRIEND_REQUESTS_QUERY,
-  FRIENDS_QUERY,
-} from 'client/graph/queries';
+import { PENDING_FRIEND_REQUESTS_QUERY } from 'client/graph/queries';
 import { useQuery } from 'react-apollo-hooks';
 import PendingFriends from './PendingFriends';
 import FriendsList from './FriendsList';

@@ -47,3 +47,20 @@ export interface PhoneNumberDeet extends BaseDeet {
 }
 
 export type Deet = AddressDeet | EmailAddressDeet | PhoneNumberDeet;
+
+export interface AuthedUser extends User {
+  email: string;
+}
+
+export type MessageType = 'error' | 'confirm';
+
+export interface Message {
+  type: MessageType;
+  content: React.ReactNode;
+}
+
+export interface ContextState {
+  currentUser: AuthedUser | null;
+  modal: React.ReactNode | null;
+  message: Message | null;
+}

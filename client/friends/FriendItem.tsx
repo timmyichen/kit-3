@@ -3,12 +3,29 @@ import { Card, Image, Dropdown } from 'semantic-ui-react';
 import { User } from 'client/types';
 import BlockUserModal from 'client/components/BlockUserModal';
 import RemoveFriendModal from 'client/components/RemoveFriendModal';
+import { useCtxDispatch } from 'client/components/ContextProvider';
 
 interface Props {
   friend: User;
 }
 
 const FriendItem = ({ friend }: Props) => {
+  const dispatch = useCtxDispatch();
+
+  const showBlockUserModal = () => {
+    dispatch({
+      type: 'SET_MODAL',
+      modal: <BlockUserModal user={friend} />,
+    });
+  };
+
+  const showRemoveFriendModal = () => {
+    dispatch({
+      type: 'SET_MODAL',
+      modal: <RemoveFriendModal user={friend} />,
+    });
+  };
+
   return (
     <div className="friend-list-item">
       <Card key={`friend-list-${friend.username}`}>
@@ -28,12 +45,16 @@ const FriendItem = ({ friend }: Props) => {
               className="icon"
             >
               <Dropdown.Menu>
-                <RemoveFriendModal user={friend}>
-                  <Dropdown.Item text="Remove Friend" icon="user x" />
-                </RemoveFriendModal>
-                <BlockUserModal user={friend}>
-                  <Dropdown.Item text="Block" icon="ban" />
-                </BlockUserModal>
+                <Dropdown.Item
+                  text="Remove Friend"
+                  icon="user x"
+                  onClick={() => showRemoveFriendModal()}
+                />
+                <Dropdown.Item
+                  text="Block"
+                  icon="ban"
+                  onClick={() => showBlockUserModal()}
+                />
               </Dropdown.Menu>
             </Dropdown>
           </div>

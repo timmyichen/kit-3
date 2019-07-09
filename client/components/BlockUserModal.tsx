@@ -3,34 +3,39 @@ import { User } from 'client/types';
 import { useMutation } from 'react-apollo-hooks';
 import { BLOCK_USER_MUTATION } from 'client/graph/mutations';
 import { Modal, Button, Header } from 'semantic-ui-react';
+import CtxModal, { closeModal } from './Modal';
+import { useCtxDispatch } from './ContextProvider';
 
 interface BlockModalProps {
   user: User;
-  children: React.ReactElement<any>;
 }
 
-export default function BlockUserModal({ user, children }: BlockModalProps) {
+export default function BlockUserModal({ user }: BlockModalProps) {
   const blockUser = useMutation(BLOCK_USER_MUTATION);
-  const [show, setShow] = React.useState<boolean>(false);
+  const [blocking, setBlocking] = React.useState<boolean>(false);
+  const dispatch = useCtxDispatch();
 
-  const closeModal = () => setShow(false);
-  const showModal = () => setShow(true);
-
-  const trigger = React.cloneElement(children, { onClick: showModal });
+  const onBlockUser = async () => {
+    setBlocking(true);
+    try {
+      await blockUser({ variables: { targetUserId: user.id } });
+    } catch (e) {
+      setBlocking(false);
+      throw e;
+    }
+    closeModal(dispatch);
+  };
 
   return (
-    <Modal trigger={trigger} open={show} onClose={closeModal} size="tiny">
+    <CtxModal size="tiny">
       <Header icon="ban" content="Block User" />
       <Modal.Content>
         <h3>Are you sure you want to block {user.fullName}?</h3>
       </Modal.Content>
       <Modal.Actions>
         <div className="ctas">
-          <Button onClick={closeModal}>Cancel</Button>
-          <Button
-            color="red"
-            onClick={() => blockUser({ variables: { targetUserId: user.id } })}
-          >
+          <Button onClick={() => closeModal(dispatch)}>Cancel</Button>
+          <Button disabled={blocking} color="red" onClick={onBlockUser}>
             Block
           </Button>
         </div>
@@ -42,6 +47,6 @@ export default function BlockUserModal({ user, children }: BlockModalProps) {
           justify-content: space-between;
         }
       `}</style>
-    </Modal>
+    </CtxModal>
   );
 }

@@ -3,36 +3,39 @@ import { User } from 'client/types';
 import { useMutation } from 'react-apollo-hooks';
 import { REMOVE_FRIEND_MUTATION } from 'client/graph/mutations';
 import { Modal, Button, Header } from 'semantic-ui-react';
+import CtxModal, { closeModal } from './Modal';
+import { useCtxDispatch } from './ContextProvider';
 
-interface BlockModalProps {
+interface RemoveModalProps {
   user: User;
-  children: React.ReactElement<any>;
 }
 
-export default function RemoveFriendModal({ user, children }: BlockModalProps) {
+export default function RemoveFriendModal({ user }: RemoveModalProps) {
   const removeFriend = useMutation(REMOVE_FRIEND_MUTATION);
-  const [show, setShow] = React.useState<boolean>(false);
+  const [removing, setRemoving] = React.useState<boolean>(false);
+  const dispatch = useCtxDispatch();
 
-  const closeModal = () => setShow(false);
-  const showModal = () => setShow(true);
-
-  const trigger = React.cloneElement(children, { onClick: showModal });
+  const onRemoveFriend = async () => {
+    setRemoving(true);
+    try {
+      await removeFriend({ variables: { targetUserId: user.id } });
+    } catch (e) {
+      setRemoving(false);
+      throw e;
+    }
+    closeModal(dispatch);
+  };
 
   return (
-    <Modal trigger={trigger} open={show} onClose={closeModal} size="tiny">
+    <CtxModal size="tiny">
       <Header icon="user x" content="Remove Friend" />
       <Modal.Content>
         <h3>Are you sure you want to unfriend {user.fullName}?</h3>
       </Modal.Content>
       <Modal.Actions>
         <div className="ctas">
-          <Button onClick={closeModal}>Cancel</Button>
-          <Button
-            color="red"
-            onClick={() =>
-              removeFriend({ variables: { targetUserId: user.id } })
-            }
-          >
+          <Button onClick={() => closeModal(dispatch)}>Cancel</Button>
+          <Button disabled={removing} color="red" onClick={onRemoveFriend}>
             Remove Friend
           </Button>
         </div>
@@ -44,6 +47,6 @@ export default function RemoveFriendModal({ user, children }: BlockModalProps) {
           justify-content: space-between;
         }
       `}</style>
-    </Modal>
+    </CtxModal>
   );
 }
