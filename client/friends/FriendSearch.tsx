@@ -1,7 +1,7 @@
 import * as React from 'react';
 import debounce from 'lodash/debounce';
 import { useApolloClient, useMutation } from 'react-apollo-hooks';
-import { Input, Card, Image, Button } from 'semantic-ui-react';
+import { Input, Card, Image, Button, Header } from 'semantic-ui-react';
 import { SEARCH_USERS_QUERY } from 'client/graph/queries';
 import {
   REQUEST_FRIEND_MUTATION,
@@ -77,7 +77,8 @@ const FriendSearch = () => {
   };
 
   return (
-    <div className="profile-page-wrapper">
+    <div className="friend-search-page">
+      <Header as="h2">Find Friends</Header>
       <Input
         loading={loading}
         value={query}

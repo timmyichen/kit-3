@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { User } from 'client/types';
 import FriendItem from './FriendItem';
-import { Button } from 'semantic-ui-react';
+import { Button, Header } from 'semantic-ui-react';
 import createUpdateQuery from 'client/lib/createUpdateQuery';
 import { useQuery } from 'react-apollo-hooks';
 import { FRIENDS_QUERY } from 'client/graph/queries';
@@ -19,6 +19,7 @@ const FriendsList = () => {
 
   return (
     <div className="friends-list">
+      <Header as="h2">Friends</Header>
       {friendsData.friends &&
         friendsData.friends.items.map((friend: User) => (
           <FriendItem key={`friend-${friend.id}`} friend={friend} />

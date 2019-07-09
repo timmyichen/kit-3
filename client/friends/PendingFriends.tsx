@@ -1,19 +1,23 @@
 import * as React from 'react';
-import { Card, Image, Button } from 'semantic-ui-react';
+import { Card, Image, Button, Header, Loader } from 'semantic-ui-react';
 import { User } from 'client/types';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 import { ACCEPT_REQUEST_MUTATION } from 'client/graph/mutations';
 import BlockUserModal from 'client/components/BlockUserModal';
 import { useCtxDispatch } from 'client/components/ContextProvider';
+import { PENDING_FRIEND_REQUESTS_QUERY } from 'client/graph/queries';
 
-interface Props {
-  pendingFriends: Array<User>;
-}
-
-const PendingFriends = (props: Props) => {
+const PendingFriends = () => {
   const dispatch = useCtxDispatch();
   const acceptFriendRequest = useMutation(ACCEPT_REQUEST_MUTATION);
   const [loading, setLoading] = React.useState<boolean>(false);
+
+  const { data, loading: loadingData } = useQuery(
+    PENDING_FRIEND_REQUESTS_QUERY,
+  );
+
+  const pendingFriends = data.pendingFriendRequests;
+  console.log(data);
 
   const showBlockUserModal = (user: User) => {
     dispatch({
@@ -33,9 +37,12 @@ const PendingFriends = (props: Props) => {
     setLoading(false);
   };
 
-  return (
-    <div className="friends-page">
-      {props.pendingFriends.map((user: User) => (
+  let content;
+  if (loadingData) {
+    content = <Loader />;
+  } else {
+    content = pendingFriends.length ? (
+      pendingFriends.map((user: User) => (
         <Card key={`pending-friend-${user.username}`}>
           <Card.Content>
             <Image floated="right" size="mini" />
@@ -63,9 +70,18 @@ const PendingFriends = (props: Props) => {
             </div>
           </Card.Content>
         </Card>
-      ))}
+      ))
+    ) : (
+      <div className="empty">No pending friend requests at this time.</div>
+    );
+  }
+
+  return (
+    <div className="pending-friends">
+      <Header as="h2">Pending Friend Requests</Header>
+      {content}
       <style jsx>{`
-        .friends-page {
+        .pending-friends {
           padding-top: 30px;
         }
         .ctas {
