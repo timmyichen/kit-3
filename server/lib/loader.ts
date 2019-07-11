@@ -51,7 +51,6 @@ export const loader = () => {
     }
 
     const loader = new DataLoader(async (keys: Array<any>) => {
-      console.log(scope);
       const where = {
         ...scope,
         [key]: { [Op.in]: keys },

@@ -3,8 +3,14 @@ import { GraphQLList, GraphQLString } from 'graphql';
 import deetType from '../types/deetType';
 import { DeetTypes } from 'server/models/types';
 import { AuthenticationError } from 'apollo-server';
-import { Deets, SharedDeets } from 'server/models';
-import { Op, Filterable } from 'sequelize';
+import {
+  Deets,
+  SharedDeets,
+  Addresses,
+  EmailAddresses,
+  PhoneNumbers,
+} from 'server/models';
+import { ReqWithLoader } from 'server/lib/loader';
 
 interface Args {
   type: DeetTypes;
@@ -16,27 +22,39 @@ export default {
   args: {
     type: { type: GraphQLString },
   },
-  async resolve(_1: any, args: Args, { user }: express.Request) {
+  async resolve(_1: any, args: Args, { user, loader }: ReqWithLoader) {
     if (!user) {
       throw new AuthenticationError('Must be logged in');
     }
 
-    const sharedWithUser = await SharedDeets.findAll({
-      where: { shared_with: user.id },
-    });
+    const sharedWithUser: Array<SharedDeets> = await loader(
+      SharedDeets,
+    ).loadManyBy('shared_with', user.id);
 
-    const where: Filterable['where'] = {
-      id: { [Op.in]: sharedWithUser.map(i => i.deet_id) },
-    };
-
+    const opts: { type?: string } = {};
     if (args.type) {
-      where.type = args.type;
+      opts.type = args.type;
     }
 
-    const deets = await Deets.findAll({ where });
+    const deets = await Promise.all(
+      sharedWithUser.map(i =>
+        loader(SharedDeets).loadManyBy('id', i.deet_id, opts),
+      ),
+    );
 
-    const promises: Array<Promise<any> | undefined> = deets.map((deet: Deets) =>
-      deet.getDeet({ where: { deet_id: deet.id } }),
+    const promises: Array<Promise<any> | undefined> = deets.map(
+      (deet: Deets) => {
+        switch (deet.type) {
+          case 'address':
+            return loader(Addresses).loadBy('deet_id', deet.id);
+          case 'email_address':
+            return loader(EmailAddresses).loadBy('deet_id', deet.id);
+          case 'phone_number':
+            return loader(PhoneNumbers).loadBy('deet_id', deet.id);
+          default:
+            throw new Error('unrecognized deet');
+        }
+      },
     );
 
     const result = await Promise.all(promises);

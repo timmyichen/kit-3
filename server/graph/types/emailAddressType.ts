@@ -18,7 +18,8 @@ export default new GraphQLObjectType({
     },
     owner: {
       type: new GraphQLNonNull(userType),
-      resolve: (email: any) => Users.findByPk(email.owner_id),
+      resolve: (email: any, _, { loader }) =>
+        loader(Users).loadBy('id', email.owner_id),
     },
     emailAddress: {
       type: new GraphQLNonNull(GraphQLString),

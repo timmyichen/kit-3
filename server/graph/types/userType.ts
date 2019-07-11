@@ -16,6 +16,7 @@ import {
 import { timestamps } from './common';
 import { User } from 'server/models/types';
 import { AuthenticationError, UserInputError } from 'apollo-server';
+import { ReqWithLoader } from 'server/lib/loader';
 
 export default new GraphQLObjectType({
   name: 'User',
@@ -38,61 +39,49 @@ export default new GraphQLObjectType({
     },
     isFriend: {
       type: new GraphQLNonNull(GraphQLBoolean),
-      async resolve(u: User, _: any, { user }: express.Request) {
+      async resolve(u: User, _: any, { user, loader }: ReqWithLoader) {
         if (!user) {
           return false;
         }
 
-        return !!(await Friendships.findOne({
-          where: {
-            first_user: u.id,
-            second_user: user.id,
-          },
+        return !!(await loader(Friendships).loadBy('first_user', u.id, {
+          second_user: user.id,
         }));
       },
     },
     isRequested: {
       type: new GraphQLNonNull(GraphQLBoolean),
-      async resolve(u: User, _: any, { user }: express.Request) {
+      async resolve(u: User, _: any, { user, loader }: ReqWithLoader) {
         if (!user) {
           return false;
         }
 
-        return !!(await FriendRequests.findOne({
-          where: {
-            target_user: u.id,
-            requested_by: user.id,
-          },
+        return !!(await loader(FriendRequests).loadBy('target_user', u.id, {
+          requested_by: user.id,
         }));
       },
     },
     hasRequestedUser: {
       type: new GraphQLNonNull(GraphQLBoolean),
-      async resolve(u: User, _: any, { user }: express.Request) {
+      async resolve(u: User, _: any, { user, loader }: ReqWithLoader) {
         if (!user) {
           return false;
         }
 
-        return !!(await FriendRequests.findOne({
-          where: {
-            requested_by: u.id,
-            target_user: user.id,
-          },
+        return !!(await loader(FriendRequests).loadBy('requested_by', u.id, {
+          target_user: user.id,
         }));
       },
     },
     isBlocked: {
       type: new GraphQLNonNull(GraphQLBoolean),
-      async resolve(u: User, _: any, { user }: express.Request) {
+      async resolve(u: User, _: any, { user, loader }: ReqWithLoader) {
         if (!user) {
           return false;
         }
 
-        return !!(await BlockedUsers.findOne({
-          where: {
-            target_user: u.id,
-            blocked_by: user.id,
-          },
+        return !!(await loader(BlockedUsers).loadBy('target_user', u.id, {
+          blocked_by: user.id,
         }));
       },
     },
@@ -104,7 +93,7 @@ export default new GraphQLObjectType({
       async resolve(
         u: User,
         { deetId }: { deetId: number },
-        { user }: express.Request,
+        { user, loader }: ReqWithLoader,
       ) {
         if (!user) {
           throw new AuthenticationError('Must be logged in');
@@ -114,14 +103,14 @@ export default new GraphQLObjectType({
           throw new UserInputError('Missing id');
         }
 
-        const deet = await Deets.findByPk(deetId);
+        const deet = await loader(Deets).loadBy('id', deetId);
 
         if (!deet || deet.owner_id !== user.id) {
           throw new UserInputError('Deet not found');
         }
 
-        return !!(await SharedDeets.findOne({
-          where: { deet_id: deet.id, shared_with: u.id },
+        return !!(await loader(SharedDeets).loadBy('deet_id', deet.id, {
+          shared_with: u.id,
         }));
       },
     },

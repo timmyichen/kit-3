@@ -15,13 +15,14 @@ router.get(
 
 router.post(
   '/graphql',
-  graphqlHTTP({
+  graphqlHTTP(({ user }) => ({
     schema,
     context: {
+      user,
       loader: loader(),
     },
     graphiql: false,
-  }),
+  })),
 );
 
 export default router;
