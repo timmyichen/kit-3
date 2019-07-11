@@ -1,4 +1,3 @@
-import * as express from 'express';
 import {
   GraphQLList,
   GraphQLNonNull,
@@ -8,13 +7,13 @@ import {
 } from 'graphql';
 import { AuthenticationError } from 'apollo-server';
 import { Op } from 'sequelize';
-import { Users, Friendships } from 'server/models';
+import { Users } from 'server/models';
 import userType from 'server/graph/types/userType';
+import { ReqWithLoader } from 'server/lib/loader';
 
 interface Args {
   searchQuery: string;
   count?: number;
-  excludeFriends: boolean;
 }
 
 export default {
@@ -23,23 +22,10 @@ export default {
   args: {
     searchQuery: { type: new GraphQLNonNull(GraphQLString) },
     count: { type: GraphQLInt },
-    excludeFriends: { type: GraphQLBoolean },
   },
-  async resolve(_: any, args: Args, { user }: express.Request) {
+  async resolve(_: any, args: Args, { user }: ReqWithLoader) {
     if (!user) {
       throw new AuthenticationError('Must be logged in');
-    }
-
-    let friendIds: Array<number> = [];
-
-    if (args.excludeFriends) {
-      const friends = await Friendships.findAll({
-        where: { first_user: user.id },
-      });
-
-      friendIds = friends.map(f =>
-        f.first_user === user.id ? f.second_user : f.first_user,
-      );
     }
 
     const users = await Users.findAll({
@@ -51,13 +37,9 @@ export default {
         ],
         id: { [Op.ne]: user.id },
       },
-      limit: (args.count || 10) + friendIds.length,
+      limit: args.count || 10,
     });
 
-    if (args.excludeFriends) {
-      return users.filter(u => !friendIds.includes(u.id));
-    } else {
-      return users;
-    }
+    return users;
   },
 };

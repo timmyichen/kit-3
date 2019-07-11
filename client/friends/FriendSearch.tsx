@@ -23,7 +23,7 @@ const FriendSearch = () => {
   const search = debounce(async (value: string) => {
     const res = await client.query({
       query: SEARCH_USERS_QUERY,
-      variables: { searchQuery: value, excludeFriends: false },
+      variables: { searchQuery: value },
     });
     setLoading(false);
     if (res.data && res.data.searchUsers) {

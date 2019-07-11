@@ -1,5 +1,15 @@
+import * as express from 'express';
 import { Op } from 'sequelize';
 const DataLoader = require('dataloader');
+
+export type ReqWithLoader = express.Request & {
+  loader(
+    m: any,
+  ): {
+    loadBy(key: string, value: any, scope?: Scope): typeof DataLoader;
+    loadManyBy(key: string, value: any, scope?: Scope): typeof DataLoader;
+  };
+};
 
 interface Scope {
   [s: string]: any;
@@ -9,7 +19,7 @@ interface Options {
   key: string;
   many?: boolean;
   model: any;
-  scope: Scope;
+  scope?: Scope;
 }
 
 const genLoaderKey = ({ key, many, model, scope }: Options) => {
@@ -74,9 +84,9 @@ export const loader = () => {
   };
 
   return (model: any) => ({
-    loadBy: (key: string, value: any, scope: Scope) =>
+    loadBy: (key: string, value: any, scope: Scope = {}) =>
       getLoader({ model, key, scope }).load(value),
-    loadManyBy: (key: string, value: any, scope: Scope) =>
+    loadManyBy: (key: string, value: any, scope: Scope = {}) =>
       getLoader({ model, key, many: true, scope }).load(value),
   });
 };

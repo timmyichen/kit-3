@@ -1,16 +1,8 @@
 import gql from 'graphql-tag';
 
 export const SEARCH_USERS_QUERY = gql`
-  query searchUsers(
-    $searchQuery: String!
-    $count: Int
-    $excludeFriends: Boolean
-  ) {
-    searchUsers(
-      searchQuery: $searchQuery
-      count: $count
-      excludeFriends: $excludeFriends
-    ) {
+  query searchUsers($searchQuery: String!, $count: Int) {
+    searchUsers(searchQuery: $searchQuery, count: $count) {
       id
       fullName
       username
