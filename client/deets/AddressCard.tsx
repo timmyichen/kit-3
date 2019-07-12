@@ -16,7 +16,7 @@ export function AddressCard({ address }: Props) {
             size="large"
             className="header-icon"
             floated="right"
-            name="envelope outline"
+            name="mail square"
           />
           <Card.Header>{address.label}</Card.Header>
           <Card.Meta>Mailing Address</Card.Meta>

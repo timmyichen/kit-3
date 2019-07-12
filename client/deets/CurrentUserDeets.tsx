@@ -1,57 +1,86 @@
 import * as React from 'react';
 import { useQuery } from 'react-apollo-hooks';
 import { CURRENT_USER_DEETS_QUERY } from 'client/graph/queries';
-import {
-  Deet,
-  AddressDeet,
-  EmailAddressDeet,
-  PhoneNumberDeet,
-} from 'client/types';
+import { AddressDeet, EmailAddressDeet, PhoneNumberDeet } from 'client/types';
 import { AddressCard } from './AddressCard';
 import { EmailAddressCard } from './EmailAddressCard';
 import { PhoneNumberCard } from './PhoneNumberCard';
-import { useCtxState } from 'client/components/ContextProvider';
+import useWindowSize from 'client/hooks/useWindowSize';
+import { isBrowser } from 'client/lib/dom';
+import { Loader } from 'semantic-ui-react';
 
-export default function CurrentUserDeets() {
+function CurrentUserDeets() {
   const { data: deets, loading: loadingDeets } = useQuery(
     CURRENT_USER_DEETS_QUERY,
   );
 
-  const state = useCtxState();
-  console.log(state);
+  const [colCount, setColCount] = React.useState<number>(3);
+
+  if (isBrowser) {
+    const size = useWindowSize();
+    React.useEffect(() => {
+      const cols = size && size.width ? Math.floor(size.width / 350) : 3;
+      setColCount(cols || 1);
+    }, [size.width]);
+  }
+
+  if (loadingDeets) {
+    return (
+      <div className="current-user-deets">
+        <Loader />
+      </div>
+    );
+  }
+
+  const columns: Array<Array<React.ReactNode>> = [];
+  for (let i = 0; i < deets.userDeets.length; i++) {
+    if (!columns[i % colCount]) {
+      columns[i % colCount] = [];
+    }
+
+    let deet: React.ReactNode | null;
+    const item = deets.userDeets[i];
+    switch (item.__typename) {
+      case 'AddressDeet':
+        deet = (
+          <div className="deet-item" key={`my-deets-${item.id}`}>
+            <AddressCard address={item as AddressDeet} />
+          </div>
+        );
+        break;
+      case 'EmailAddressDeet':
+        deet = (
+          <div className="deet-item" key={`my-deets-${item.id}`}>
+            <EmailAddressCard email={item as EmailAddressDeet} />
+          </div>
+        );
+        break;
+      case 'PhoneNumberDeet':
+        deet = (
+          <div className="deet-item" key={`my-deets-${item.id}`}>
+            <PhoneNumberCard phoneNumber={item as PhoneNumberDeet} />
+          </div>
+        );
+    }
+    columns[i % colCount].push(deet);
+  }
 
   return (
     <div className="current-user-deets">
-      {!loadingDeets &&
-        deets.userDeets.map((deet: Deet) => {
-          switch (deet.__typename) {
-            case 'AddressDeet':
-              return (
-                <AddressCard
-                  key={`my-deets-${deet.id}`}
-                  address={deet as AddressDeet}
-                />
-              );
-            case 'EmailAddressDeet':
-              return (
-                <EmailAddressCard
-                  key={`my-deets-${deet.id}`}
-                  email={deet as EmailAddressDeet}
-                />
-              );
-            case 'PhoneNumberDeet':
-              return (
-                <PhoneNumberCard
-                  key={`my-deets-${deet.id}`}
-                  phoneNumber={deet as PhoneNumberDeet}
-                />
-              );
-          }
-        })}
+      {columns.map(col => (
+        <div className="column">{col}</div>
+      ))}
       <style jsx>{`
         .current-user-deets {
+          display: flex;
+          justify-content: space-around;
+        }
+        .current-user-deets :global(.deet-item) {
+          padding: 15px;
         }
       `}</style>
     </div>
   );
 }
+
+export default CurrentUserDeets;
