@@ -9,11 +9,16 @@ interface Fields {
 }
 
 interface Props {
-  onSubmit(variables: Object): Promise<void>;
   loading: boolean;
+  onClose(): void;
+  onSubmit(variables: Object): Promise<void>;
 }
 
-export default function PhoneNumberCreator({ onSubmit, loading }: Props) {
+export default function PhoneNumberCreator({
+  onSubmit,
+  loading,
+  onClose,
+}: Props) {
   const [fields, setFields] = React.useState<Fields>({});
 
   const setValue = (field: keyof Fields, value: any) => {
@@ -25,7 +30,7 @@ export default function PhoneNumberCreator({ onSubmit, loading }: Props) {
   return (
     <div className="phone-number-creator">
       <Form>
-        <Form.Field>
+        <Form.Field required>
           <label>Label</label>
           <Input
             value={fields.label}
@@ -45,7 +50,7 @@ export default function PhoneNumberCreator({ onSubmit, loading }: Props) {
               }
             />
           </Form.Field>
-          <Form.Field width="12">
+          <Form.Field width="12" required>
             <label>Number</label>
             <Input
               value={fields.phoneNumber}
@@ -65,7 +70,10 @@ export default function PhoneNumberCreator({ onSubmit, loading }: Props) {
           />
         </Form.Field>
       </Form>
-      <div className="cta">
+      <div className="ctas">
+        <Button disabled={loading} onClick={onClose}>
+          Close
+        </Button>
         <Button
           disabled={loading}
           color="blue"
@@ -78,6 +86,11 @@ export default function PhoneNumberCreator({ onSubmit, loading }: Props) {
         .phone-number-creator {
           max-width: 300px;
           margin: 0 auto;
+        }
+        .ctas {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 20px;
         }
       `}</style>
     </div>

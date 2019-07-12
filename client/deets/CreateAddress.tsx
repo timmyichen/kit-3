@@ -13,11 +13,12 @@ interface Fields {
 }
 
 interface Props {
-  onSubmit(variables: Object): Promise<void>;
   loading: boolean;
+  onSubmit(variables: Object): Promise<void>;
+  onClose(): void;
 }
 
-export default function AddressCreator({ onSubmit, loading }: Props) {
+export default function AddressCreator({ onSubmit, loading, onClose }: Props) {
   const [fields, setFields] = React.useState<Fields>({});
 
   const setValue = (field: keyof Fields, value: any) => {
@@ -29,7 +30,7 @@ export default function AddressCreator({ onSubmit, loading }: Props) {
   return (
     <div className="address-creator">
       <Form>
-        <Form.Field>
+        <Form.Field required>
           <label>Label</label>
           <Input
             value={fields.label}
@@ -38,7 +39,7 @@ export default function AddressCreator({ onSubmit, loading }: Props) {
             }
           />
         </Form.Field>
-        <Form.Field>
+        <Form.Field required>
           <label>Address Line 1</label>
           <Input
             value={fields.addressLine1}
@@ -86,7 +87,7 @@ export default function AddressCreator({ onSubmit, loading }: Props) {
               }
             />
           </Form.Field>
-          <Form.Field>
+          <Form.Field required>
             <label>Country</label>
             <Input
               value={fields.countryCode}
@@ -106,19 +107,28 @@ export default function AddressCreator({ onSubmit, loading }: Props) {
           />
         </Form.Field>
       </Form>
-      <div className="cta">
+      <div className="ctas">
+        <Button disabled={loading} onClick={onClose}>
+          Close
+        </Button>
         <Button
           disabled={loading}
           color="blue"
           onClick={() => onSubmit(fields)}
+          type="submit"
         >
           {loading ? 'Creating' : 'Create'}
         </Button>
       </div>
       <style jsx>{`
         .address-creator {
-          max-width: 300px;
+          max-width: 400px;
           margin: 0 auto;
+        }
+        .ctas {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 20px;
         }
       `}</style>
     </div>

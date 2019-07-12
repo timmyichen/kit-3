@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Icon, Dropdown } from 'semantic-ui-react';
+import { Button, Icon, Dropdown, Header, Modal } from 'semantic-ui-react';
 import { DeetTypes } from 'client/types';
 import AddressCreator from './CreateAddress';
 import PhoneNumberCreator from './CreatePhoneNumber';
@@ -10,31 +10,81 @@ import {
   UPSERT_EMAIL_ADDRESS_MUTATION,
 } from 'client/graph/mutations';
 import { useMutation } from 'react-apollo-hooks';
+import CtxModal, { closeModal } from 'client/components/Modal';
+import { useCtxDispatch } from 'client/components/ContextProvider';
 
-const DEET_TYPES = [
-  {
+const DEET_TYPES = {
+  address: {
     key: 'address',
     text: 'Address',
     value: 'address',
   },
-  {
+  phone_number: {
     key: 'phone_number',
     text: 'Phone Number',
     value: 'phone_number',
   },
-  {
+  email_address: {
     key: 'email_address',
     text: 'Email Address',
     value: 'email_address',
   },
-];
+};
 
 export default function DeetCreator() {
-  const [showCreation, setShowCreation] = React.useState<boolean>(false);
-  const [creatingType, setCreatingType] = React.useState<DeetTypes>('address');
   const [loading, setLoading] = React.useState<boolean>(false);
+  const dispatch = useCtxDispatch();
 
-  const toggleCreationForm = () => setShowCreation(!showCreation);
+  const closeCreationModal = () => closeModal(dispatch);
+
+  const showCreationModal = () => {
+    dispatch({
+      type: 'SET_MODAL',
+      modal: (
+        <DeetCreationModal
+          closeCreationModal={closeCreationModal}
+          setLoading={setLoading}
+          loading={loading}
+        />
+      ),
+    });
+  };
+
+  return (
+    <div className="deet-creator">
+      <div className="controls">
+        <Button
+          disabled={loading}
+          positive
+          icon
+          labelPosition="left"
+          onClick={showCreationModal}
+        >
+          <Icon name="plus" />
+          Create
+        </Button>
+      </div>
+      <style jsx>{`
+        .deet-creator {
+        }
+      `}</style>
+    </div>
+  );
+}
+
+interface ModalProps {
+  closeCreationModal(): void;
+  setLoading(b: boolean): void;
+  loading: boolean;
+}
+
+function DeetCreationModal({
+  closeCreationModal,
+  setLoading,
+  loading,
+}: ModalProps) {
+  const [creatingType, setCreatingType] = React.useState<DeetTypes>('address');
+
   const changeType = (_: any, { value }: { value: DeetTypes }) => {
     setCreatingType(value);
   };
@@ -69,45 +119,54 @@ export default function DeetCreator() {
     }
 
     setLoading(false);
+    closeCreationModal();
   };
 
   return (
-    <div className="deet-creator">
-      <div className="controls">
-        <Button
-          disabled={loading}
-          positive
-          icon
-          labelPosition="left"
-          onClick={toggleCreationForm}
-        >
-          <Icon name={showCreation ? 'minus' : 'plus'} />
-          {showCreation ? 'Cancel' : 'Create'}
-        </Button>
-      </div>
-      {showCreation && (
-        <div className="creation-form-wrapper">
+    <CtxModal size="small">
+      <Header icon="plus" content={`Create ${DEET_TYPES[creatingType].text}`} />
+      <Modal.Content>
+        <div className="selector">
           <Dropdown
             value={creatingType}
             onChange={changeType}
             selection
-            options={DEET_TYPES}
+            options={Object.values(DEET_TYPES)}
           />
+        </div>
+        <div className="creation-form-wrapper">
           {creatingType === 'address' && (
-            <AddressCreator onSubmit={submitForm} loading={loading} />
+            <AddressCreator
+              onClose={closeCreationModal}
+              onSubmit={submitForm}
+              loading={loading}
+            />
           )}
           {creatingType === 'phone_number' && (
-            <PhoneNumberCreator onSubmit={submitForm} loading={loading} />
+            <PhoneNumberCreator
+              onClose={closeCreationModal}
+              onSubmit={submitForm}
+              loading={loading}
+            />
           )}
           {creatingType === 'email_address' && (
-            <EmailAddressCreator onSubmit={submitForm} loading={loading} />
+            <EmailAddressCreator
+              onClose={closeCreationModal}
+              onSubmit={submitForm}
+              loading={loading}
+            />
           )}
         </div>
-      )}
+      </Modal.Content>
       <style jsx>{`
-        .deet-creator {
+        .selector {
+          display: flex;
+          justify-content: center;
+        }
+        .creation-form-wrapper {
+          margin: 20px 0;
         }
       `}</style>
-    </div>
+    </CtxModal>
   );
 }

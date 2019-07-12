@@ -8,11 +8,16 @@ interface Fields {
 }
 
 interface Props {
-  onSubmit(variables: Object): Promise<void>;
   loading: boolean;
+  onSubmit(variables: Object): Promise<void>;
+  onClose(): void;
 }
 
-export default function EmailAddressCreator({ onSubmit, loading }: Props) {
+export default function EmailAddressCreator({
+  onSubmit,
+  loading,
+  onClose,
+}: Props) {
   const [fields, setFields] = React.useState<Fields>({});
 
   const setValue = (field: keyof Fields, value: any) => {
@@ -24,7 +29,7 @@ export default function EmailAddressCreator({ onSubmit, loading }: Props) {
   return (
     <div className="create-email-creator">
       <Form>
-        <Form.Field>
+        <Form.Field required>
           <label>Label</label>
           <Input
             value={fields.label}
@@ -33,7 +38,7 @@ export default function EmailAddressCreator({ onSubmit, loading }: Props) {
             }
           />
         </Form.Field>
-        <Form.Field>
+        <Form.Field required>
           <label>Email</label>
           <Input
             value={fields.emailAddress}
@@ -52,7 +57,10 @@ export default function EmailAddressCreator({ onSubmit, loading }: Props) {
           />
         </Form.Field>
       </Form>
-      <div className="cta">
+      <div className="ctas">
+        <Button disabled={loading} onClick={onClose}>
+          Close
+        </Button>
         <Button
           disabled={loading}
           color="blue"
@@ -65,6 +73,11 @@ export default function EmailAddressCreator({ onSubmit, loading }: Props) {
         .create-email-creator {
           max-width: 300px;
           margin: 0 auto;
+        }
+        .ctas {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 20px;
         }
       `}</style>
     </div>

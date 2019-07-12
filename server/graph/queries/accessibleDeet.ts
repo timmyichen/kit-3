@@ -1,4 +1,3 @@
-import * as express from 'express';
 import { GraphQLList, GraphQLString } from 'graphql';
 import deetType from '../types/deetType';
 import { DeetTypes } from 'server/models/types';
