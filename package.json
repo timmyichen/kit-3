@@ -5,9 +5,12 @@
   "main": "index.js",
   "scripts": {
     "tsc": "tsc",
+    "prod:server": "NODE_ENV=production ts-node --files  --transpile-only ./server/index.ts",
     "dev:server": "ts-node --files  --transpile-only ./server/index.ts",
+    "start": "npm run next:build && npm run prod:server",
     "dev": "./node_modules/nodemon/bin/nodemon.js --watch 'server/**/*.ts' --exec 'npm run dev:server'",
     "nodemon": "./node_modules/nodemon/bin/nodemon.js",
+    "next:build": "next build",
     "lint:ts": "tslint -c tslint.json '**.ts*'",
     "pretty": "prettier --write client/**/*.ts* server/**/*.ts",
     "precommit": "lint-staged",

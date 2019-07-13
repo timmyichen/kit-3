@@ -20,12 +20,13 @@ interface Permission {
 const DeetSharingModal = ({ deet }: Props) => {
   const dispatch = useCtxDispatch();
   const [saving, setSaving] = React.useState<boolean>(false);
-  const [search, setSearch] = React.useState<string>('');
+  // const [search, setSearch] = React.useState<string>('');
+  const [search] = React.useState<string>('');
   const [changedPerms, setChangedPerms] = React.useState<Array<Permission>>([]);
   const updateSharingPermissions = useMutation(
     UPDATE_SHARED_PERMISSIONS_MUTATION,
   );
-  const { data, fetchMore, loading } = useQuery(DEET_PERMISSIONS_QUERY, {
+  const { data, loading } = useQuery(DEET_PERMISSIONS_QUERY, {
     variables: {
       searchQuery: search,
       count: 20,
