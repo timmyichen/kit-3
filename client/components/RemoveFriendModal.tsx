@@ -46,6 +46,11 @@ export default function RemoveFriendModal({ user }: RemoveModalProps) {
           align-items: center;
           justify-content: space-between;
         }
+        @media only screen and (max-width: 767px) {
+          .ctas {
+            margin-bottom: 1rem;
+          }
+        }
       `}</style>
     </CtxModal>
   );

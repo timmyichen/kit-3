@@ -1,13 +1,43 @@
 import * as React from 'react';
 import { useQuery } from 'react-apollo-hooks';
 import { CURRENT_USER_DEETS_QUERY } from 'client/graph/queries';
-import { AddressDeet, EmailAddressDeet, PhoneNumberDeet } from 'client/types';
+import {
+  AddressDeet,
+  EmailAddressDeet,
+  PhoneNumberDeet,
+  Deet,
+} from 'client/types';
 import { AddressCard } from './AddressCard';
 import { EmailAddressCard } from './EmailAddressCard';
 import { PhoneNumberCard } from './PhoneNumberCard';
 import useWindowSize from 'client/hooks/useWindowSize';
-import { isBrowser } from 'client/lib/dom';
+import { isBrowser, splitColumns } from 'client/lib/dom';
 import { Loader } from 'semantic-ui-react';
+
+const getDeetCard = (item: Deet) => {
+  switch (item.__typename) {
+    case 'AddressDeet':
+      return (
+        <div className="deet-item" key={`my-deets-${item.id}`}>
+          <AddressCard address={item as AddressDeet} />
+        </div>
+      );
+      break;
+    case 'EmailAddressDeet':
+      return (
+        <div className="deet-item" key={`my-deets-${item.id}`}>
+          <EmailAddressCard email={item as EmailAddressDeet} />
+        </div>
+      );
+      break;
+    case 'PhoneNumberDeet':
+      return (
+        <div className="deet-item" key={`my-deets-${item.id}`}>
+          <PhoneNumberCard phoneNumber={item as PhoneNumberDeet} />
+        </div>
+      );
+  }
+};
 
 function CurrentUserDeets() {
   const { data: deets, loading: loadingDeets } = useQuery(
@@ -27,43 +57,14 @@ function CurrentUserDeets() {
   if (loadingDeets) {
     return (
       <div className="current-user-deets">
-        <Loader />
+        <Loader active />
       </div>
     );
   }
 
-  const columns: Array<Array<React.ReactNode>> = [];
-  for (let i = 0; i < deets.userDeets.length; i++) {
-    if (!columns[i % colCount]) {
-      columns[i % colCount] = [];
-    }
+  const deetCards = deets.userDeets.map(getDeetCard);
 
-    let deet: React.ReactNode | null;
-    const item = deets.userDeets[i];
-    switch (item.__typename) {
-      case 'AddressDeet':
-        deet = (
-          <div className="deet-item" key={`my-deets-${item.id}`}>
-            <AddressCard address={item as AddressDeet} />
-          </div>
-        );
-        break;
-      case 'EmailAddressDeet':
-        deet = (
-          <div className="deet-item" key={`my-deets-${item.id}`}>
-            <EmailAddressCard email={item as EmailAddressDeet} />
-          </div>
-        );
-        break;
-      case 'PhoneNumberDeet':
-        deet = (
-          <div className="deet-item" key={`my-deets-${item.id}`}>
-            <PhoneNumberCard phoneNumber={item as PhoneNumberDeet} />
-          </div>
-        );
-    }
-    columns[i % colCount].push(deet);
-  }
+  const columns = splitColumns(deetCards, colCount);
 
   return (
     <div className="current-user-deets">

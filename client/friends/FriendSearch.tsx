@@ -12,8 +12,21 @@ import {
   ACCEPT_REQUEST_MUTATION,
 } from 'client/graph/mutations';
 import { UserSearch } from 'client/types';
+import { isBrowser, splitColumns } from 'client/lib/dom';
+import useWindowSize from 'client/hooks/useWindowSize';
+import Loader from 'client/components/Loader';
 
 const FriendSearch = () => {
+  const [colCount, setColCount] = React.useState<number>(3);
+
+  if (isBrowser) {
+    const size = useWindowSize();
+    React.useEffect(() => {
+      const cols = size && size.width ? Math.floor(size.width / 350) : 3;
+      setColCount(cols || 1);
+    }, [size.width]);
+  }
+
   const [loading, setLoading] = React.useState<boolean>(false);
   const [results, setResults] = React.useState<Array<UserSearch>>([]);
   const [query, setQuery] = React.useState<string>('');
@@ -76,11 +89,35 @@ const FriendSearch = () => {
     ];
   };
 
+  let content;
+  if (loading) {
+    content = <Loader />;
+  } else if (results.length) {
+    const userCards = results.map((result: UserSearch) => (
+      <Card
+        key={`friend-search-${result.username}-${query}`}
+        className="user-card-item"
+      >
+        <Card.Content>
+          <Image floated="right" size="mini" />
+          <Card.Header>{result.fullName}</Card.Header>
+          <Card.Meta>{result.username}</Card.Meta>
+        </Card.Content>
+        <Card.Content extra>
+          <div className="ctas">{getCtas(result)}</div>
+        </Card.Content>
+      </Card>
+    ));
+
+    content = splitColumns(userCards, colCount);
+  } else if (query) {
+    content = <Header as="h3">No results found</Header>;
+  }
+
   return (
     <div className="friend-search-page">
       <Header as="h2">Find Friends</Header>
       <Input
-        loading={loading}
         value={query}
         onChange={(_, { value }) => {
           setLoading(true);
@@ -88,24 +125,21 @@ const FriendSearch = () => {
           search(value);
         }}
       />
-      <div className="search-results">
-        {results.map((result: UserSearch) => (
-          <Card key={`friend-search-${result.username}`}>
-            <Card.Content>
-              <Image floated="right" size="mini" />
-              <Card.Header>{result.fullName}</Card.Header>
-              <Card.Meta>{result.username}</Card.Meta>
-            </Card.Content>
-            <Card.Content extra>
-              <div className="ctas">{getCtas(result)}</div>
-            </Card.Content>
-          </Card>
-        ))}
-      </div>
+      <div className="search-results">{content}</div>
       <style jsx>{`
-        .ctas {
+        .friend-search-page {
+          padding: 30px;
+        }
+        .search-results {
+          margin-top: 30px;
+        }
+        .friend-search-page :global(.ctas) {
           display: flex;
           justify-content: space-between;
+        }
+        .friend-search-page :global(.user-card-item) {
+          display: inline-block;
+          margin: 15px;
         }
       `}</style>
     </div>

@@ -74,7 +74,7 @@ const DeetSharingModal = ({ deet }: Props) => {
       </Modal.Content>
       <Modal.Content>
         {loading ? (
-          <Loader />
+          <Loader active />
         ) : (
           <div className="friend-share-wrapper">
             {data.friends.items.map((friend: User) => {
@@ -107,6 +107,11 @@ const DeetSharingModal = ({ deet }: Props) => {
           display: flex;
           align-items: center;
           justify-content: space-between;
+        }
+        @media only screen and (max-width: 767px) {
+          .ctas {
+            margin-bottom: 1rem;
+          }
         }
       `}</style>
     </CtxModal>
