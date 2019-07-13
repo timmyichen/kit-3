@@ -10,7 +10,6 @@ interface Props {
 
 function Header(props: Props) {
   const { pathname } = useRouter();
-  console.log(pathname);
 
   let navLinks: Array<React.ReactNode>;
   let authLinks: Array<React.ReactNode>;

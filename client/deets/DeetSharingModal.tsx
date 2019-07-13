@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { Modal, Header, Button, Loader, Checkbox } from 'semantic-ui-react';
+import { Modal, Header, Button, Checkbox } from 'semantic-ui-react';
 import { Deet, User } from 'client/types';
 import { useMutation, useQuery } from 'react-apollo-hooks';
 import { UPDATE_SHARED_PERMISSIONS_MUTATION } from 'client/graph/mutations';
 import { DEET_PERMISSIONS_QUERY } from 'client/graph/queries';
 import CtxModal, { closeModal } from 'client/components/Modal';
 import { useCtxDispatch } from 'client/components/ContextProvider';
+import Loader from 'client/components/Loader';
 
 interface Props {
   deet: Deet;
@@ -74,7 +75,7 @@ const DeetSharingModal = ({ deet }: Props) => {
       </Modal.Content>
       <Modal.Content>
         {loading ? (
-          <Loader active />
+          <Loader />
         ) : (
           <div className="friend-share-wrapper">
             {data.friends.items.map((friend: User) => {
@@ -86,6 +87,7 @@ const DeetSharingModal = ({ deet }: Props) => {
 
               return (
                 <FriendShareItem
+                  key={`friend-share-item-${friend.id}`}
                   friend={{ ...friend, hasAccessToDeet }}
                   setPerm={setPerm}
                 />

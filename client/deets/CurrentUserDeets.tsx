@@ -12,7 +12,7 @@ import { EmailAddressCard } from './EmailAddressCard';
 import { PhoneNumberCard } from './PhoneNumberCard';
 import useWindowSize from 'client/hooks/useWindowSize';
 import { isBrowser, splitColumns } from 'client/lib/dom';
-import { Loader } from 'semantic-ui-react';
+import Loader from 'client/components/Loader';
 
 const getDeetCard = (item: Deet) => {
   switch (item.__typename) {
@@ -57,7 +57,7 @@ function CurrentUserDeets() {
   if (loadingDeets) {
     return (
       <div className="current-user-deets">
-        <Loader active />
+        <Loader />
       </div>
     );
   }
@@ -68,8 +68,10 @@ function CurrentUserDeets() {
 
   return (
     <div className="current-user-deets">
-      {columns.map(col => (
-        <div className="column">{col}</div>
+      {columns.map((col, i) => (
+        <div className="column" key={`col-${i}`}>
+          {col}
+        </div>
       ))}
       <style jsx>{`
         .current-user-deets {

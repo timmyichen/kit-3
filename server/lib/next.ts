@@ -9,8 +9,12 @@ const handle = nextApp.getRequestHandler();
 const nextjs = {
   nextApp,
   handle,
-  render: (req: express.Request, res: express.Response, page: string) =>
-    nextApp.render(req, res, page),
+  render: (
+    req: express.Request,
+    res: express.Response,
+    page: string,
+    query: { [s: string]: any } = {},
+  ) => nextApp.render(req, res, page, query),
 };
 
 export default nextjs;
