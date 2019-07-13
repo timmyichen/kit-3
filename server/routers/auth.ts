@@ -105,7 +105,11 @@ function init() {
   passport.deserializeUser((id: number, done) => {
     Users.findOne({ where: { id } })
       .then((user: any) => {
-        done(null, user);
+        const withoutPw = { ...user.get({ simple: true }) };
+        if (withoutPw.password) {
+          delete withoutPw.password;
+        }
+        done(null, withoutPw);
       })
       .catch((err: Error) => {
         return done(err);

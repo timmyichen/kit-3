@@ -37,7 +37,7 @@ export default () => (
     <style jsx>{`
       .signup-wrapper :global(.ui.form) {
         max-width: 400px;
-        margin: 0 auto;
+        margin: 50px auto;
       }
     `}</style>
   </div>

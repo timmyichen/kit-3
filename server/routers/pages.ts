@@ -13,15 +13,23 @@ router.get('/login', (req: express.Request, res: express.Response) => {
 });
 
 router.getAsync(
-  '/home',
+  '/dashboard',
   async (req: express.Request, res: express.Response) => {
-    nextjs.render(req, res, '/home');
+    if (!req.user) {
+      res.redirect('/login');
+      return;
+    }
+    nextjs.render(req, res, '/dashboard');
   },
 );
 
 router.getAsync(
   ['/friends', '/friends/:slug'],
   async (req: express.Request, res: express.Response) => {
+    if (!req.user) {
+      res.redirect('/login');
+      return;
+    }
     nextjs.render(req, res, '/friends', req.params);
   },
 );
@@ -29,6 +37,10 @@ router.getAsync(
 router.getAsync(
   ['/deets', '/deets/:slug'],
   async (req: express.Request, res: express.Response) => {
+    if (!req.user) {
+      res.redirect('/login');
+      return;
+    }
     nextjs.render(req, res, '/deets', req.params);
   },
 );

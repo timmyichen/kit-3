@@ -14,6 +14,11 @@ export default () => (
       </Form.Field>
       <Button type="submit">Log in</Button>
     </Form>
-    <style jsx>{``}</style>
+    <style jsx>{`
+      div {
+        max-width: 400px;
+        margin: 50px auto;
+      }
+    `}</style>
   </div>
 );

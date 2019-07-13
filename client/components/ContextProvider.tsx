@@ -19,6 +19,11 @@ function reducer(state: ContextState, action: any) {
         ...state,
         modal: action.modal,
       };
+    case 'LOAD_USER':
+      return {
+        ...state,
+        user: action.user,
+      };
     default:
       return state;
   }

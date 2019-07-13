@@ -7,16 +7,21 @@ import Header from 'client/components/Header';
 import client from 'client/lib/apollo';
 import { ContextProvider } from 'client/components/ContextProvider';
 import Page from 'client/components/Page';
+import UserLoader from 'client/components/UserLoader';
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }: any) {
+    let user;
+    if (ctx.req && ctx.req.user) {
+      user = ctx.req.user;
+    }
     let pageProps = {};
 
     if (Component.getInitialProps) {
       pageProps = await Component.getInitialProps(ctx);
     }
 
-    return { pageProps };
+    return { pageProps: { ...pageProps, user } };
   }
 
   render() {
@@ -33,8 +38,9 @@ class MyApp extends App {
         <ContextProvider>
           <ApolloProvider client={client}>
             <ApolloHooksProvider client={client}>
+              <UserLoader user={pageProps.user} />
               <Page>
-                <Header isAuthed />
+                <Header isAuthed={!!pageProps.user} />
                 <Component {...pageProps} />
               </Page>
             </ApolloHooksProvider>
