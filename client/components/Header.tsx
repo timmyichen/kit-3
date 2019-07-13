@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import classnames from 'classnames';
 import Link from 'next/link';
 import colors from 'client/styles/colors';
+import css from 'styled-jsx/css';
 
 interface Props {
   isAuthed: boolean;
@@ -47,6 +48,7 @@ function Header(props: Props) {
         currentPath={pathname}
         href="/logout"
         label="Log out"
+        noCSR
       />,
     ];
   } else {
@@ -116,31 +118,36 @@ interface NavProps {
   label: string;
   href: string;
   currentPath: string;
+  noCSR?: boolean;
 }
 
-function HeaderNavLink({ label, href, currentPath }: NavProps) {
+function HeaderNavLink({ label, href, currentPath, noCSR }: NavProps) {
   return (
-    <Link href={href}>
-      <div className={classnames('nav-link', { active: currentPath === href })}>
-        <a>{label}</a>
-        <style jsx>{`
-          .nav-link {
-            height: 100%;
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-          }
-          .nav-link a {
-            color: white;
-          }
-          .active,
-          .nav-link:hover {
-            background: rgba(0, 0, 0, 0.2);
-          }
-        `}</style>
-      </div>
-    </Link>
+    <div className={classnames('nav-link', { active: currentPath === href })}>
+      {noCSR ? (
+        <a href={href}>{label}</a>
+      ) : (
+        <Link href={href}>
+          <a>{label}</a>
+        </Link>
+      )}
+      <style jsx>{`
+        .nav-link {
+          height: 100%;
+          padding: 10px 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+        }
+        .nav-link a {
+          color: white;
+        }
+        .active,
+        .nav-link:hover {
+          background: rgba(0, 0, 0, 0.2);
+        }
+      `}</style>
+    </div>
   );
 }
