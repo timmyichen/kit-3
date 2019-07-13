@@ -32,7 +32,7 @@ nextjs.nextApp.prepare().then(async () => {
   await db.authenticate();
   console.log('connected to db'); // tslint:disable-line no-console
 
-  const port = process.env.SERVER_PORT || 8000;
+  const port = process.env.PORT || 8000;
 
   app.use(
     morgan(':method :url :status', {
