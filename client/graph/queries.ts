@@ -74,10 +74,6 @@ export const CURRENT_USER_DEETS_QUERY = gql`
         id
         notes
         label
-        owner {
-          fullName
-          username
-        }
         emailAddress
         updatedAt
       }
@@ -85,10 +81,6 @@ export const CURRENT_USER_DEETS_QUERY = gql`
         id
         notes
         label
-        owner {
-          fullName
-          username
-        }
         number
         countryCode
         updatedAt
@@ -97,10 +89,6 @@ export const CURRENT_USER_DEETS_QUERY = gql`
         id
         notes
         label
-        owner {
-          fullName
-          username
-        }
         addressLine1
         addressLine2
         city

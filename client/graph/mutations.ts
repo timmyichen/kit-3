@@ -86,7 +86,6 @@ export const UPSERT_ADDRESS_MUTATION = gql`
       state
       postalCode
       country
-      createdAt
       updatedAt
     }
   }
@@ -112,7 +111,6 @@ export const UPSERT_PHONE_NUMBER_MUTATION = gql`
       label
       number
       countryCode
-      createdAt
       updatedAt
     }
   }
@@ -135,7 +133,6 @@ export const UPSERT_EMAIL_ADDRESS_MUTATION = gql`
       notes
       label
       emailAddress
-      createdAt
       updatedAt
     }
   }

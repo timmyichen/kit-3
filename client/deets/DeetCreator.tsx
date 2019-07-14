@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Button, Icon, Dropdown, Header, Modal } from 'semantic-ui-react';
-import { DeetTypes } from 'client/types';
+import cloneDeep from 'lodash/cloneDeep';
+import { DeetTypes, Deet } from 'client/types';
 import AddressCreator from './CreateAddress';
 import PhoneNumberCreator from './CreatePhoneNumber';
 import EmailAddressCreator from './CreateEmailAddress';
@@ -12,6 +13,9 @@ import {
 import { useMutation } from 'react-apollo-hooks';
 import CtxModal, { closeModal } from 'client/components/Modal';
 import { useCtxDispatch } from 'client/components/ContextProvider';
+import { DataProxy } from 'apollo-cache';
+import { FetchResult } from 'react-apollo';
+import { CURRENT_USER_DEETS_QUERY } from 'client/graph/queries';
 
 const DEET_TYPES = {
   address: {
@@ -66,6 +70,7 @@ export default function DeetCreator() {
       </div>
       <style jsx>{`
         .deet-creator {
+          margin-right: 30px;
         }
       `}</style>
     </div>
@@ -89,9 +94,15 @@ function DeetCreationModal({
     setCreatingType(value);
   };
 
-  const upsertAddress = useMutation(UPSERT_ADDRESS_MUTATION);
-  const upsertPhoneNumber = useMutation(UPSERT_PHONE_NUMBER_MUTATION);
-  const upsertEmailAddress = useMutation(UPSERT_EMAIL_ADDRESS_MUTATION);
+  const upsertAddress = useMutation(UPSERT_ADDRESS_MUTATION, {
+    update: createUpdateQuery('upsertAddress'),
+  });
+  const upsertPhoneNumber = useMutation(UPSERT_PHONE_NUMBER_MUTATION, {
+    update: createUpdateQuery('upsertPhoneNumber'),
+  });
+  const upsertEmailAddress = useMutation(UPSERT_EMAIL_ADDRESS_MUTATION, {
+    update: createUpdateQuery('upsertEmailAddress'),
+  });
 
   const submitForm = async (variables: Object) => {
     let mutation;
@@ -111,7 +122,6 @@ function DeetCreationModal({
 
     setLoading(true);
     try {
-      console.log(variables);
       await mutation({ variables });
     } catch (e) {
       setLoading(false);
@@ -170,3 +180,24 @@ function DeetCreationModal({
     </CtxModal>
   );
 }
+
+const query = { query: CURRENT_USER_DEETS_QUERY };
+type MutationTypes =
+  | 'upsertAddress'
+  | 'upsertPhoneNumber'
+  | 'upsertEmailAddress';
+
+const createUpdateQuery = (name: MutationTypes) => (
+  cache: DataProxy,
+  { data }: FetchResult<any>,
+) => {
+  const q: { [s: string]: Array<Deet> } | null = cache.readQuery(query);
+  if (!q) {
+    return;
+  }
+
+  const deets = cloneDeep(q.userDeets);
+  deets.unshift(data[name]);
+
+  cache.writeQuery({ ...query, data: { userDeets: deets } });
+};

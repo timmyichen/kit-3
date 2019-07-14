@@ -2,6 +2,7 @@ import * as React from 'react';
 import { UserSearch } from 'client/types';
 import { useMutation } from 'react-apollo-hooks';
 import cloneDeep from 'lodash/cloneDeep';
+import omit from 'lodash/omit';
 import { Button, Card, Image } from 'semantic-ui-react';
 import { SEARCH_USERS_QUERY } from 'client/graph/queries';
 import {
@@ -13,8 +14,13 @@ import {
   ACCEPT_REQUEST_MUTATION,
 } from 'client/graph/mutations';
 import { DataProxy } from 'apollo-cache';
-import { FetchResult } from 'apollo-link';
+import { FetchResult, DocumentNode } from 'apollo-link';
 
+const searchQuery = {
+  query: SEARCH_USERS_QUERY,
+  name: 'searchUsers',
+  variables: { searchQuery: '' },
+};
 interface Props {
   user: UserSearch;
 }
@@ -24,6 +30,7 @@ function SearchUserCard({ user }: Props) {
 
   const requestFriend = useMutation(REQUEST_FRIEND_MUTATION, {
     update: createCacheUpdate({
+      query: searchQuery,
       incomingDataField: 'requestFriend',
       updateFields: { isRequested: true },
     }),
@@ -31,6 +38,7 @@ function SearchUserCard({ user }: Props) {
 
   const removeFriend = useMutation(REMOVE_FRIEND_MUTATION, {
     update: createCacheUpdate({
+      query: searchQuery,
       incomingDataField: 'removeFriend',
       updateFields: { isFriend: false },
     }),
@@ -38,6 +46,7 @@ function SearchUserCard({ user }: Props) {
 
   const blockUser = useMutation(BLOCK_USER_MUTATION, {
     update: createCacheUpdate({
+      query: searchQuery,
       incomingDataField: 'blockUser',
       updateFields: {
         isFriend: false,
@@ -50,6 +59,7 @@ function SearchUserCard({ user }: Props) {
 
   const unblockUser = useMutation(UNBLOCK_USER_MUTATION, {
     update: createCacheUpdate({
+      query: searchQuery,
       incomingDataField: 'unblockUser',
       updateFields: { isBlocked: false },
     }),
@@ -57,6 +67,7 @@ function SearchUserCard({ user }: Props) {
 
   const rescindRequest = useMutation(RESCIND_REQUEST_MUTATION, {
     update: createCacheUpdate({
+      query: searchQuery,
       incomingDataField: 'rescindFriendRequest',
       updateFields: { isRequested: false },
     }),
@@ -64,6 +75,7 @@ function SearchUserCard({ user }: Props) {
 
   const acceptRequest = useMutation(ACCEPT_REQUEST_MUTATION, {
     update: createCacheUpdate({
+      query: searchQuery,
       incomingDataField: 'acceptFriendRequest',
       updateFields: {
         isFriend: true,
@@ -164,8 +176,6 @@ function SearchUserCard({ user }: Props) {
   );
 }
 
-const query = { query: SEARCH_USERS_QUERY, variables: { searchQuery: '' } };
-
 type RelationField =
   | 'isFriend'
   | 'isRequested'
@@ -174,6 +184,11 @@ type RelationField =
 
 interface CreateCacheUpdateProps {
   incomingDataField: string;
+  query: {
+    query: DocumentNode;
+    name: string;
+    variables: any;
+  };
   updateFields: {
     [k in RelationField]?: any;
   };
@@ -182,30 +197,29 @@ interface CreateCacheUpdateProps {
 const createCacheUpdate = ({
   incomingDataField,
   updateFields,
+  query,
 }: CreateCacheUpdateProps) => (
   cache: DataProxy,
   { data }: FetchResult<any>,
 ) => {
-  const q: { searchUsers: Array<UserSearch> } | null = cache.readQuery(query);
+  const q: { [s: string]: Array<UserSearch> } | null = cache.readQuery(
+    omit(query, ['name']),
+  );
   if (!q) {
     return;
   }
 
-  console.log(data);
-
-  const updateIndex = q.searchUsers.findIndex(
+  const updateIndex = q[query.name].findIndex(
     u => u.id === data[incomingDataField].id,
   );
-  const searchUsers = cloneDeep(q.searchUsers);
+  const copy = cloneDeep(q[query.name]);
 
   for (const key of Object.keys(updateFields)) {
     const k = key as RelationField;
-    searchUsers[updateIndex][k] = updateFields[k];
+    copy[updateIndex][k] = updateFields[k];
   }
 
-  console.log(searchUsers);
-
-  cache.writeQuery({ ...query, data: { searchUsers } });
+  cache.writeQuery({ ...query, data: { [query.name]: copy } });
 };
 
 export default SearchUserCard;
