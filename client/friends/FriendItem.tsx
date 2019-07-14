@@ -1,13 +1,22 @@
 import * as React from 'react';
 import { Card, Image, Dropdown } from 'semantic-ui-react';
-import { User } from 'client/types';
+import { User, PaginationResponse } from 'client/types';
 import BlockUserModal from 'client/components/BlockUserModal';
 import RemoveFriendModal from 'client/components/RemoveFriendModal';
 import { useCtxDispatch } from 'client/components/ContextProvider';
+import { FRIENDS_QUERY } from 'client/graph/queries';
+import postMutationUpdateCache from 'client/lib/postMutationUpdateCache';
 
 interface Props {
   friend: User;
 }
+
+export const PAGE_COUNT = 20;
+
+const friendsQuery = {
+  query: FRIENDS_QUERY,
+  variables: { count: PAGE_COUNT, after: null },
+};
 
 const FriendItem = ({ friend }: Props) => {
   const dispatch = useCtxDispatch();
@@ -15,14 +24,48 @@ const FriendItem = ({ friend }: Props) => {
   const showBlockUserModal = () => {
     dispatch({
       type: 'SET_MODAL',
-      modal: <BlockUserModal user={friend} />,
+      modal: (
+        <BlockUserModal
+          user={friend}
+          update={(cache, { data }) => {
+            postMutationUpdateCache<
+              { friends: PaginationResponse<User> },
+              User
+            >({
+              cache,
+              query: friendsQuery,
+              fieldName: 'friends',
+              isPaginated: true,
+              type: 'remove',
+              targetObj: data.blockUser,
+            });
+          }}
+        />
+      ),
     });
   };
 
   const showRemoveFriendModal = () => {
     dispatch({
       type: 'SET_MODAL',
-      modal: <RemoveFriendModal user={friend} />,
+      modal: (
+        <RemoveFriendModal
+          user={friend}
+          update={(cache, { data }) => {
+            postMutationUpdateCache<
+              { friends: PaginationResponse<User> },
+              User
+            >({
+              cache,
+              query: friendsQuery,
+              fieldName: 'friends',
+              isPaginated: true,
+              type: 'remove',
+              targetObj: data.removeFriend,
+            });
+          }}
+        />
+      ),
     });
   };
 

@@ -5,13 +5,16 @@ import { BLOCK_USER_MUTATION } from 'client/graph/mutations';
 import { Modal, Button, Header } from 'semantic-ui-react';
 import CtxModal, { closeModal } from './Modal';
 import { useCtxDispatch } from './ContextProvider';
+import { DataProxy } from 'apollo-cache';
+import { FetchResult } from 'react-apollo';
 
 interface BlockModalProps {
   user: User;
+  update?: ((cache: DataProxy, data: FetchResult<any>) => void) | undefined;
 }
 
-export default function BlockUserModal({ user }: BlockModalProps) {
-  const blockUser = useMutation(BLOCK_USER_MUTATION);
+export default function BlockUserModal({ user, update }: BlockModalProps) {
+  const blockUser = useMutation(BLOCK_USER_MUTATION, { update });
   const [blocking, setBlocking] = React.useState<boolean>(false);
   const dispatch = useCtxDispatch();
 

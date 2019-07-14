@@ -1,14 +1,12 @@
 import * as React from 'react';
 import { User } from 'client/types';
-import FriendItem from './FriendItem';
+import FriendItem, { PAGE_COUNT } from './FriendItem';
 import { Button, Header } from 'semantic-ui-react';
 import createUpdateQuery from 'client/lib/createUpdateQuery';
 import { useQuery } from 'react-apollo-hooks';
 import { FRIENDS_QUERY } from 'client/graph/queries';
 import Loader from 'client/components/Loader';
 import { splitColumns } from 'client/lib/dom';
-
-const PAGE_COUNT = 20;
 
 const FriendsList = ({ colCount }: { colCount: number }) => {
   const {

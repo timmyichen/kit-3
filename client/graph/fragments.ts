@@ -9,6 +9,7 @@ export const OTHER_USER_FRAGMENT = gql`
     isRequested
     hasRequestedUser
     isBlocked
+    __typename
   }
 `;
 

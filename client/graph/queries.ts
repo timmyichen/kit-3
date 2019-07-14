@@ -68,6 +68,7 @@ export const PENDING_FRIEND_REQUESTS_QUERY = gql`
       id
       fullName
       username
+      __typename
     }
   }
 `;

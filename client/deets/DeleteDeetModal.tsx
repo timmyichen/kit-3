@@ -6,7 +6,7 @@ import { Modal, Button, Header } from 'semantic-ui-react';
 import { useCtxDispatch } from 'client/components/ContextProvider';
 import CtxModal, { closeModal } from 'client/components/Modal';
 import { CURRENT_USER_DEETS_QUERY } from 'client/graph/queries';
-import cloneDeep from 'lodash/cloneDeep';
+import postMutationUpdateCache from 'client/lib/postMutationUpdateCache';
 
 interface Props {
   deet: Deet;
@@ -15,20 +15,13 @@ interface Props {
 export default function DeleteDeetModal({ deet }: Props) {
   const deleteDeet = useMutation(DELETE_DEET_MUTATION, {
     update: (cache, { data }: { data: { deleteDeet: Deet } }) => {
-      const q: { userDeets: Array<Deet> } | null = cache.readQuery({
-        query: CURRENT_USER_DEETS_QUERY,
-      });
-      if (!q) {
-        return;
-      }
-      const deets = cloneDeep(q.userDeets);
-      const deleteIndex = deets.findIndex(
-        (d: Deet) => d.id === data.deleteDeet.id,
-      );
-      deets.splice(deleteIndex, 1);
-      cache.writeQuery({
-        query: CURRENT_USER_DEETS_QUERY,
-        data: { userDeets: deets },
+      postMutationUpdateCache<{ userDeets: Array<Deet> }, Deet>({
+        cache,
+        query: { query: CURRENT_USER_DEETS_QUERY },
+        fieldName: 'userDeets',
+        isPaginated: false,
+        type: 'remove',
+        targetObj: data.deleteDeet,
       });
     },
   });

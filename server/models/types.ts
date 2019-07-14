@@ -48,6 +48,14 @@ export interface DeetType {
   get(o: Object): Object;
 }
 
+export interface PaginationResponse<T> {
+  items: Array<T>;
+  pageInfo: {
+    hasNext: boolean;
+    nextCursor: string;
+  };
+}
+
 export type DeetTypes = 'address' | 'phone_number' | 'email_address';
 
 export type Deet = Address | PhoneNumber | EmailAddress;

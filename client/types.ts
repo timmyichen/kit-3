@@ -64,3 +64,11 @@ export interface ContextState {
   modal: React.ReactNode | null;
   message: Message | null;
 }
+
+export interface PaginationResponse<T> {
+  items: Array<T>;
+  pageInfo: {
+    hasNext: boolean;
+    nextCursor: string;
+  };
+}

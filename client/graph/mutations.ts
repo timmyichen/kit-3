@@ -54,6 +54,8 @@ export const ACCEPT_REQUEST_MUTATION = gql`
   mutation acceptFriendRequest($targetUserId: Int!) {
     acceptFriendRequest(targetUserId: $targetUserId) {
       id
+      fullName
+      username
       __typename
     }
   }
