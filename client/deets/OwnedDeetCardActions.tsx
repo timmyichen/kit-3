@@ -3,6 +3,7 @@ import { Deet } from 'client/types';
 import { Dropdown } from 'semantic-ui-react';
 import DeetSharingModal from './DeetSharingModal';
 import { useCtxDispatch } from 'client/components/ContextProvider';
+import DeleteDeetModal from './DeleteDeetModal';
 
 interface Props {
   deet: Deet;
@@ -11,10 +12,10 @@ interface Props {
 export function OwnedDeetCardActions({ deet }: Props) {
   const dispatch = useCtxDispatch();
 
-  const showDeetSharingModal = () => {
+  const showModal = (modal: React.ReactNode) => {
     dispatch({
       type: 'SET_MODAL',
-      modal: <DeetSharingModal deet={deet} />,
+      modal,
     });
   };
 
@@ -32,7 +33,12 @@ export function OwnedDeetCardActions({ deet }: Props) {
           <Dropdown.Item
             text="Share"
             icon="users"
-            onClick={showDeetSharingModal}
+            onClick={() => showModal(<DeetSharingModal deet={deet} />)}
+          />
+          <Dropdown.Item
+            text="Delete"
+            icon="trash alternate"
+            onClick={() => showModal(<DeleteDeetModal deet={deet} />)}
           />
         </Dropdown.Menu>
       </Dropdown>

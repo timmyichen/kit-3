@@ -4,6 +4,8 @@ import { AuthenticationError, UserInputError } from 'apollo-server';
 import { Deets, SharedDeets } from 'server/models';
 import deetType from '../types/deetType';
 import { db } from 'server/lib/db';
+import { getPlainDeetObject } from 'server/lib/model';
+import { DeetType, Deet } from 'server/models/types';
 
 interface Args {
   deetId: number;
@@ -43,6 +45,6 @@ export default {
       await deet.destroy({ transaction });
     });
 
-    return entry;
+    return getPlainDeetObject(deet as DeetType, entry as Deet);
   },
 };

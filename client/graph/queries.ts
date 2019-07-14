@@ -1,10 +1,15 @@
 import gql from 'graphql-tag';
-import { OTHER_USER_FRAGMENT } from './fragments';
+import {
+  OTHER_USER_FRAGMENT,
+  EMAIL_ADDRESS_FRAGMENT,
+  ADDRESS_FRAGMENT,
+  PHONE_NUMBER_FRAGMENT,
+} from './fragments';
 
 export const SEARCH_USERS_QUERY = gql`
   query searchUsers($searchQuery: String!, $count: Int) {
     searchUsers(searchQuery: $searchQuery, count: $count) {
-      ...otherUser
+      ...OtherUser
     }
   }
   ${OTHER_USER_FRAGMENT}
@@ -70,33 +75,12 @@ export const PENDING_FRIEND_REQUESTS_QUERY = gql`
 export const CURRENT_USER_DEETS_QUERY = gql`
   query currentUserDeets {
     userDeets {
-      ... on EmailAddressDeet {
-        id
-        notes
-        label
-        emailAddress
-        updatedAt
-      }
-      ... on PhoneNumberDeet {
-        id
-        notes
-        label
-        number
-        countryCode
-        updatedAt
-      }
-      ... on AddressDeet {
-        id
-        notes
-        label
-        addressLine1
-        addressLine2
-        city
-        state
-        postalCode
-        country
-        updatedAt
-      }
+      ...EmailAddressFragment
+      ...AddressFragment
+      ...PhoneNumberFragment
     }
   }
+  ${EMAIL_ADDRESS_FRAGMENT}
+  ${ADDRESS_FRAGMENT}
+  ${PHONE_NUMBER_FRAGMENT}
 `;

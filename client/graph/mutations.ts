@@ -1,4 +1,9 @@
 import gql from 'graphql-tag';
+import {
+  EMAIL_ADDRESS_FRAGMENT,
+  ADDRESS_FRAGMENT,
+  PHONE_NUMBER_FRAGMENT,
+} from './fragments';
 
 export const REQUEST_FRIEND_MUTATION = gql`
   mutation requestFriend($targetUserId: Int!) {
@@ -87,6 +92,7 @@ export const UPSERT_ADDRESS_MUTATION = gql`
       postalCode
       country
       updatedAt
+      __typename
     }
   }
 `;
@@ -112,6 +118,7 @@ export const UPSERT_PHONE_NUMBER_MUTATION = gql`
       number
       countryCode
       updatedAt
+      __typename
     }
   }
 `;
@@ -134,6 +141,7 @@ export const UPSERT_EMAIL_ADDRESS_MUTATION = gql`
       label
       emailAddress
       updatedAt
+      __typename
     }
   }
 `;
@@ -150,4 +158,17 @@ export const UPDATE_SHARED_PERMISSIONS_MUTATION = gql`
       userIdsToRemove: $userIdsToRemove
     )
   }
+`;
+
+export const DELETE_DEET_MUTATION = gql`
+  mutation deleteDeet($deetId: Int!) {
+    deleteDeet(deetId: $deetId) {
+      ...EmailAddressFragment
+      ...AddressFragment
+      ...PhoneNumberFragment
+    }
+  }
+  ${EMAIL_ADDRESS_FRAGMENT}
+  ${ADDRESS_FRAGMENT}
+  ${PHONE_NUMBER_FRAGMENT}
 `;

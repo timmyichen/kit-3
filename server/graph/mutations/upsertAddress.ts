@@ -8,6 +8,8 @@ import {
 import { Addresses, Deets } from 'server/models';
 import addressType from '../types/addressType';
 import { db } from 'server/lib/db';
+import { getPlainDeetObject } from 'server/lib/model';
+import { DeetType, Deet } from 'server/models/types';
 
 interface Args {
   deetId?: number;
@@ -119,11 +121,6 @@ export default {
       }
     });
 
-    return {
-      ...deet.get({ plain: true }),
-      address: {
-        ...result.get({ plain: true }),
-      },
-    };
+    return getPlainDeetObject(deet as DeetType, result as Deet);
   },
 };

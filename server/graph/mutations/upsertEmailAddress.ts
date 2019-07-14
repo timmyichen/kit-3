@@ -8,6 +8,8 @@ import {
 import { EmailAddresses, Deets } from 'server/models';
 import emailAddressType from '../types/emailAddressType';
 import { db } from 'server/lib/db';
+import { DeetType, Deet } from 'server/models/types';
+import { getPlainDeetObject } from 'server/lib/model';
 
 interface Args {
   deetId?: number;
@@ -99,11 +101,6 @@ export default {
       }
     });
 
-    return {
-      ...deet.get({ plain: true }),
-      email_address: {
-        ...result.get({ plain: true }),
-      },
-    };
+    return getPlainDeetObject(deet as DeetType, result as Deet);
   },
 };

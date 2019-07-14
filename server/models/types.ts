@@ -15,6 +15,7 @@ export interface User {
 interface CommonDeetFields {
   id: number;
   deet_id: number;
+  get(o: Object): Object;
 }
 
 export interface Address extends CommonDeetFields {
@@ -38,12 +39,13 @@ export interface EmailAddress extends CommonDeetFields {
 export interface DeetType {
   id: number;
   owner_id: number;
-  type: Deet;
+  type: DeetTypes;
   notes?: string;
   label: string;
   created_at: Date;
   updated_at: Date;
   getDeet(o: Object): Promise<any>;
+  get(o: Object): Object;
 }
 
 export type DeetTypes = 'address' | 'phone_number' | 'email_address';
