@@ -26,6 +26,7 @@ class MyApp extends App {
 
   render() {
     const { Component, pageProps } = this.props;
+    console.log(`app ${!!pageProps.user}`);
 
     return (
       <Container>

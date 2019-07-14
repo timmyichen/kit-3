@@ -1,11 +1,12 @@
 import * as express from 'express';
-import { GraphQLBoolean, GraphQLNonNull, GraphQLInt } from 'graphql';
+import { GraphQLNonNull, GraphQLInt } from 'graphql';
 import { AuthenticationError, UserInputError } from 'apollo-server';
 import { BlockedUsers, Users } from 'server/models';
+import userType from '../types/userType';
 
 export default {
   description: 'Unblock a user',
-  type: GraphQLBoolean,
+  type: GraphQLNonNull(userType),
   args: {
     targetUserId: { type: new GraphQLNonNull(GraphQLInt) },
   },
@@ -18,8 +19,14 @@ export default {
       throw new AuthenticationError('Must be logged in');
     }
 
-    if (!targetUserId || !(await Users.findByPk(targetUserId))) {
-      throw new UserInputError('User not found');
+    if (!targetUserId) {
+      throw new UserInputError('Cannot find user');
+    }
+
+    const targetUser = await Users.findByPk(targetUserId);
+
+    if (!targetUser) {
+      throw new UserInputError('Cannot find user');
     }
 
     const existingBlock = await BlockedUsers.findOne({
@@ -35,6 +42,6 @@ export default {
 
     await existingBlock.destroy();
 
-    return true;
+    return targetUser;
   },
 };

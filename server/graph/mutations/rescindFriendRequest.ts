@@ -1,11 +1,12 @@
 import * as express from 'express';
-import { GraphQLBoolean, GraphQLNonNull, GraphQLInt } from 'graphql';
+import { GraphQLNonNull, GraphQLInt } from 'graphql';
 import { AuthenticationError, UserInputError } from 'apollo-server';
-import { FriendRequests } from 'server/models';
+import { FriendRequests, Users } from 'server/models';
+import userType from '../types/userType';
 
 export default {
   description: 'Rescind a friend request',
-  type: GraphQLBoolean,
+  type: GraphQLNonNull(userType),
   args: {
     targetUserId: { type: new GraphQLNonNull(GraphQLInt) },
   },
@@ -19,7 +20,13 @@ export default {
     }
 
     if (!targetUserId) {
-      throw new UserInputError('Need target');
+      throw new UserInputError('Cannot find user');
+    }
+
+    const targetUser = await Users.findByPk(targetUserId);
+
+    if (!targetUser) {
+      throw new UserInputError('Cannot find user');
     }
 
     const existingRequest = await FriendRequests.findOne({
@@ -35,6 +42,6 @@ export default {
 
     await existingRequest.destroy();
 
-    return true;
+    return targetUser;
   },
 };

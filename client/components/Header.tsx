@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import classnames from 'classnames';
 import Link from 'next/link';
 import colors from 'client/styles/colors';
-import css from 'styled-jsx/css';
 
 interface Props {
   isAuthed: boolean;

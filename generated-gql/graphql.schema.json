@@ -761,7 +761,11 @@
                 "defaultValue": null
               }
             ],
-            "type": { "kind": "SCALAR", "name": "Boolean", "ofType": null },
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "OBJECT", "name": "User", "ofType": null }
+            },
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -780,7 +784,11 @@
                 "defaultValue": null
               }
             ],
-            "type": { "kind": "SCALAR", "name": "Boolean", "ofType": null },
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "OBJECT", "name": "User", "ofType": null }
+            },
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -799,7 +807,11 @@
                 "defaultValue": null
               }
             ],
-            "type": { "kind": "SCALAR", "name": "Boolean", "ofType": null },
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "OBJECT", "name": "User", "ofType": null }
+            },
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -818,7 +830,11 @@
                 "defaultValue": null
               }
             ],
-            "type": { "kind": "SCALAR", "name": "Boolean", "ofType": null },
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "OBJECT", "name": "User", "ofType": null }
+            },
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -837,7 +853,11 @@
                 "defaultValue": null
               }
             ],
-            "type": { "kind": "SCALAR", "name": "Boolean", "ofType": null },
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "OBJECT", "name": "User", "ofType": null }
+            },
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -856,7 +876,11 @@
                 "defaultValue": null
               }
             ],
-            "type": { "kind": "SCALAR", "name": "Boolean", "ofType": null },
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "OBJECT", "name": "User", "ofType": null }
+            },
             "isDeprecated": false,
             "deprecationReason": null
           },

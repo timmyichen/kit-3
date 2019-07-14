@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { GraphQLBoolean, GraphQLNonNull, GraphQLInt } from 'graphql';
+import { GraphQLNonNull, GraphQLInt } from 'graphql';
 import { AuthenticationError, UserInputError } from 'apollo-server';
 import {
   Friendships,
@@ -11,10 +11,11 @@ import {
 } from 'server/models';
 import { db } from 'server/lib/db';
 import { Op } from 'sequelize';
+import userType from '../types/userType';
 
 export default {
   description: 'Block a user',
-  type: GraphQLBoolean,
+  type: GraphQLNonNull(userType),
   args: {
     targetUserId: { type: new GraphQLNonNull(GraphQLInt) },
   },
@@ -27,8 +28,14 @@ export default {
       throw new AuthenticationError('Must be logged in');
     }
 
-    if (!targetUserId || !(await Users.findByPk(targetUserId))) {
-      throw new UserInputError('User not found');
+    if (!targetUserId) {
+      throw new UserInputError('Cannot find user');
+    }
+
+    const targetUser = await Users.findByPk(targetUserId);
+
+    if (!targetUser) {
+      throw new UserInputError('Cannot find user');
     }
 
     let sharedDeets = await SharedDeets.findAll({
@@ -90,6 +97,6 @@ export default {
       await Promise.all([promises]);
     });
 
-    return true;
+    return targetUser;
   },
 };

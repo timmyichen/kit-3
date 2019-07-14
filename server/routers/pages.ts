@@ -16,6 +16,10 @@ router.getAsync(
   '/dashboard',
   async (req: express.Request, res: express.Response) => {
     if (!req.user) {
+      console.log(`
+      
+      
+      redirect dashboard`);
       res.redirect('/login');
       return;
     }

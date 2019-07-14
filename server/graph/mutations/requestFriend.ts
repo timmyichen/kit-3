@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { GraphQLBoolean, GraphQLNonNull, GraphQLInt } from 'graphql';
+import { GraphQLNonNull, GraphQLInt } from 'graphql';
 import { AuthenticationError, UserInputError } from 'apollo-server';
 import {
   FriendRequests,
@@ -8,10 +8,11 @@ import {
   Users,
 } from 'server/models';
 import { db } from 'server/lib/db';
+import userType from '../types/userType';
 
 export default {
   description: 'Request a user to be your friend',
-  type: GraphQLBoolean,
+  type: GraphQLNonNull(userType),
   args: {
     targetUserId: { type: new GraphQLNonNull(GraphQLInt) },
   },
@@ -24,7 +25,13 @@ export default {
       throw new AuthenticationError('Must be logged in');
     }
 
-    if (!targetUserId || !(await Users.findByPk(targetUserId))) {
+    if (!targetUserId) {
+      throw new UserInputError('Target user not found');
+    }
+
+    const targetUser = await Users.findByPk(targetUserId);
+
+    if (!targetUser) {
       throw new UserInputError('Target user not found');
     }
 
@@ -106,6 +113,6 @@ export default {
       });
     }
 
-    return true;
+    return targetUser;
   },
 };

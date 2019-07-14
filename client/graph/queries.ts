@@ -1,17 +1,13 @@
 import gql from 'graphql-tag';
+import { OTHER_USER_FRAGMENT } from './fragments';
 
 export const SEARCH_USERS_QUERY = gql`
   query searchUsers($searchQuery: String!, $count: Int) {
     searchUsers(searchQuery: $searchQuery, count: $count) {
-      id
-      fullName
-      username
-      isFriend
-      isRequested
-      hasRequestedUser
-      isBlocked
+      ...otherUser
     }
   }
+  ${OTHER_USER_FRAGMENT}
 `;
 
 export const CURRENT_USER_QUERY = gql`

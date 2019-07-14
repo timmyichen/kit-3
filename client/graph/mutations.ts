@@ -2,37 +2,55 @@ import gql from 'graphql-tag';
 
 export const REQUEST_FRIEND_MUTATION = gql`
   mutation requestFriend($targetUserId: Int!) {
-    requestFriend(targetUserId: $targetUserId)
+    requestFriend(targetUserId: $targetUserId) {
+      id
+      __typename
+    }
   }
 `;
 
 export const REMOVE_FRIEND_MUTATION = gql`
   mutation removeFriend($targetUserId: Int!) {
-    removeFriend(targetUserId: $targetUserId)
+    removeFriend(targetUserId: $targetUserId) {
+      id
+      __typename
+    }
   }
 `;
 
 export const BLOCK_USER_MUTATION = gql`
   mutation blockUser($targetUserId: Int!) {
-    blockUser(targetUserId: $targetUserId)
+    blockUser(targetUserId: $targetUserId) {
+      id
+      __typename
+    }
   }
 `;
 
 export const UNBLOCK_USER_MUTATION = gql`
   mutation unblockUser($targetUserId: Int!) {
-    unblockUser(targetUserId: $targetUserId)
+    unblockUser(targetUserId: $targetUserId) {
+      id
+      __typename
+    }
   }
 `;
 
 export const RESCIND_REQUEST_MUTATION = gql`
   mutation rescindFriendRequest($targetUserId: Int!) {
-    rescindFriendRequest(targetUserId: $targetUserId)
+    rescindFriendRequest(targetUserId: $targetUserId) {
+      id
+      __typename
+    }
   }
 `;
 
 export const ACCEPT_REQUEST_MUTATION = gql`
   mutation acceptFriendRequest($targetUserId: Int!) {
-    acceptFriendRequest(targetUserId: $targetUserId)
+    acceptFriendRequest(targetUserId: $targetUserId) {
+      id
+      __typename
+    }
   }
 `;
 

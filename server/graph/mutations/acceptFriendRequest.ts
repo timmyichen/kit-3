@@ -1,12 +1,13 @@
 import * as express from 'express';
-import { GraphQLBoolean, GraphQLNonNull, GraphQLInt } from 'graphql';
+import { GraphQLNonNull, GraphQLInt } from 'graphql';
 import { AuthenticationError, UserInputError } from 'apollo-server';
-import { FriendRequests, Friendships } from 'server/models';
+import { FriendRequests, Friendships, Users } from 'server/models';
 import { db } from 'server/lib/db';
+import userType from '../types/userType';
 
 export default {
   description: 'Accept a friend request',
-  type: GraphQLBoolean,
+  type: GraphQLNonNull(userType),
   args: {
     targetUserId: { type: new GraphQLNonNull(GraphQLInt) },
   },
@@ -20,7 +21,13 @@ export default {
     }
 
     if (!targetUserId) {
-      throw new UserInputError('Missing requester ID');
+      throw new UserInputError('Cannot find user');
+    }
+
+    const targetUser = await Users.findByPk(targetUserId);
+
+    if (!targetUser) {
+      throw new UserInputError('Cannot find user');
     }
 
     const existingRequest = await FriendRequests.findOne({
@@ -54,6 +61,6 @@ export default {
       ]),
     );
 
-    return true;
+    return targetUser;
   },
 };
