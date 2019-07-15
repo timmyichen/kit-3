@@ -8,12 +8,15 @@ import client from 'client/lib/apollo';
 import { ContextProvider } from 'client/components/ContextProvider';
 import Page from 'client/components/Page';
 import UserLoader from 'client/components/UserLoader';
+import fetch from 'isomorphic-fetch';
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }: any) {
     let user;
     if (ctx.req && ctx.req.user) {
       user = ctx.req.user;
+    } else {
+      user = await fetch('/data/user_info');
     }
     let pageProps = {};
 
@@ -26,7 +29,6 @@ class MyApp extends App {
 
   render() {
     const { Component, pageProps } = this.props;
-    console.log(`app ${!!pageProps.user}`);
 
     return (
       <Container>
