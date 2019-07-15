@@ -125,12 +125,24 @@
                 "description": null,
                 "type": { "kind": "SCALAR", "name": "String", "ofType": null },
                 "defaultValue": null
+              },
+              {
+                "name": "count",
+                "description": null,
+                "type": { "kind": "SCALAR", "name": "Int", "ofType": null },
+                "defaultValue": null
+              },
+              {
+                "name": "after",
+                "description": null,
+                "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+                "defaultValue": null
               }
             ],
             "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": { "kind": "UNION", "name": "Deet", "ofType": null }
+              "kind": "OBJECT",
+              "name": "SharedDeetsPagination",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -731,6 +743,45 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "SharedDeetsPagination",
+        "description": "Pagination for SharedDeets",
+        "fields": [
+          {
+            "name": "items",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": { "kind": "UNION", "name": "Deet", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "pageInfo",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "PaginationInfo",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null

@@ -4,6 +4,7 @@ import {
   GraphQLNonNull,
   GraphQLBoolean,
   GraphQLString,
+  GraphQLUnionType,
 } from 'graphql';
 
 interface PageInfo {
@@ -30,7 +31,7 @@ const pageInfoType = new GraphQLObjectType({
   }),
 });
 
-export default (name: string, type: GraphQLObjectType) =>
+export default (name: string, type: GraphQLObjectType | GraphQLUnionType) =>
   new GraphQLObjectType({
     name: `${name}Pagination`,
     description: `Pagination for ${name}`,
