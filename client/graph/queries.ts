@@ -85,3 +85,40 @@ export const CURRENT_USER_DEETS_QUERY = gql`
   ${ADDRESS_FRAGMENT}
   ${PHONE_NUMBER_FRAGMENT}
 `;
+
+export const ACCESSIBLE_DEETS_QUERY = gql`
+  query accessibleDeets($type: String) {
+    accessibleDeets(type: $type) {
+      items {
+        ...EmailAddressFragment
+        ... on EmailAddressDeet {
+          owner {
+            fullName
+            username
+          }
+        }
+        ...AddressFragment
+        ... on AddressDeet {
+          owner {
+            fullName
+            username
+          }
+        }
+        ...PhoneNumberFragment
+        ... on PhoneNumberDeet {
+          owner {
+            fullName
+            username
+          }
+        }
+      }
+      pageInfo {
+        hasNext
+        nextCursor
+      }
+    }
+  }
+  ${EMAIL_ADDRESS_FRAGMENT}
+  ${ADDRESS_FRAGMENT}
+  ${PHONE_NUMBER_FRAGMENT}
+`;

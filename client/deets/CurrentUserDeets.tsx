@@ -1,43 +1,11 @@
 import * as React from 'react';
 import { useQuery } from 'react-apollo-hooks';
 import { CURRENT_USER_DEETS_QUERY } from 'client/graph/queries';
-import {
-  AddressDeet,
-  EmailAddressDeet,
-  PhoneNumberDeet,
-  Deet,
-} from 'client/types';
-import { AddressCard } from './AddressCard';
-import { EmailAddressCard } from './EmailAddressCard';
-import { PhoneNumberCard } from './PhoneNumberCard';
+import { Deet } from 'client/types';
+import { DeetCard } from './DeetCard';
 import useWindowSize from 'client/hooks/useWindowSize';
 import { isBrowser, splitColumns } from 'client/lib/dom';
 import Loader from 'client/components/Loader';
-
-const getDeetCard = (item: Deet) => {
-  switch (item.__typename) {
-    case 'AddressDeet':
-      return (
-        <div className="deet-item" key={`my-deets-${item.id}`}>
-          <AddressCard address={item as AddressDeet} />
-        </div>
-      );
-      break;
-    case 'EmailAddressDeet':
-      return (
-        <div className="deet-item" key={`my-deets-${item.id}`}>
-          <EmailAddressCard email={item as EmailAddressDeet} />
-        </div>
-      );
-      break;
-    case 'PhoneNumberDeet':
-      return (
-        <div className="deet-item" key={`my-deets-${item.id}`}>
-          <PhoneNumberCard phoneNumber={item as PhoneNumberDeet} />
-        </div>
-      );
-  }
-};
 
 function CurrentUserDeets() {
   const { data: deets, loading: loadingDeets } = useQuery(
@@ -62,7 +30,9 @@ function CurrentUserDeets() {
     );
   }
 
-  const deetCards = deets.userDeets.map(getDeetCard);
+  const deetCards = deets.userDeets.map((item: Deet) => (
+    <DeetCard deet={item} isOwner />
+  ));
 
   const columns = splitColumns(deetCards, colCount);
 

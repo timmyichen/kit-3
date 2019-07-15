@@ -20,6 +20,7 @@ export const EMAIL_ADDRESS_FRAGMENT = gql`
     label
     emailAddress
     updatedAt
+    type
     __typename
   }
 `;
@@ -36,6 +37,7 @@ export const ADDRESS_FRAGMENT = gql`
     postalCode
     country
     updatedAt
+    type
     __typename
   }
 `;
@@ -48,6 +50,7 @@ export const PHONE_NUMBER_FRAGMENT = gql`
     number
     countryCode
     updatedAt
+    type
     __typename
   }
 `;

@@ -1,4 +1,4 @@
-import { GraphQLList, GraphQLString, GraphQLInt } from 'graphql';
+import { GraphQLString, GraphQLInt } from 'graphql';
 import deetType from '../types/deetType';
 import { DeetTypes, Deet } from 'server/models/types';
 import { AuthenticationError } from 'apollo-server';

@@ -25,6 +25,7 @@ interface BaseDeet {
   notes: string;
   owner: User;
   updatedAt: string;
+  type: DeetTypes;
   __typename: ApolloDeetTypes;
 }
 

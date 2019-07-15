@@ -9,6 +9,10 @@ export const commonDeetFields = () => ({
     type: GraphQLString,
     resolve: (obj: any) => obj.notes,
   },
+  type: {
+    type: new GraphQLNonNull(GraphQLString),
+    resolve: (obj: any) => obj.type,
+  },
 });
 
 export const timestamps = (opts?: { paranoid: boolean }) => {

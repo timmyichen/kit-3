@@ -11,8 +11,6 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData,
 });
 
-export const dataIdFromObject = (o: any) => `${o.__typename}:${o.id}`;
-
 const client = new ApolloClient({
   link: new HttpLink({
     uri: '/graphql',
@@ -20,7 +18,6 @@ const client = new ApolloClient({
   }),
   cache: new InMemoryCache({
     fragmentMatcher,
-    dataIdFromObject,
   }),
 });
 

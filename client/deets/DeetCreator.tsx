@@ -15,7 +15,7 @@ import { useCtxDispatch } from 'client/components/ContextProvider';
 import { CURRENT_USER_DEETS_QUERY } from 'client/graph/queries';
 import postMutationUpdateCache from 'client/lib/postMutationUpdateCache';
 
-const DEET_TYPES = {
+export const DEET_TYPES = {
   address: {
     key: 'address',
     text: 'Address',

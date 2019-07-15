@@ -3,6 +3,7 @@ import { Menu } from 'semantic-ui-react';
 import DeetDashboard from 'client/deets/DeetDashboard';
 import DeetCreator from 'client/deets/DeetCreator';
 import { useRouter } from 'next/router';
+import SharedDeetsDashboard from 'client/deets/SharedDeetsDashboard';
 
 type MenuKey = 'default' | 'shared';
 
@@ -34,6 +35,9 @@ const Deets = () => {
   switch (activeTab) {
     case 'my-deets':
       content = <DeetDashboard />;
+      break;
+    case 'shared-with-me':
+      content = <SharedDeetsDashboard />;
       break;
   }
 
