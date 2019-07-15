@@ -27,6 +27,7 @@ const DeetSharingModal = ({ deet }: Props) => {
     UPDATE_SHARED_PERMISSIONS_MUTATION,
   );
   const { data, loading } = useQuery(DEET_PERMISSIONS_QUERY, {
+    fetchPolicy: 'network-only',
     variables: {
       searchQuery: search,
       count: 20,
