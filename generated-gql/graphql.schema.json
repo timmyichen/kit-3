@@ -117,7 +117,7 @@
             "deprecationReason": null
           },
           {
-            "name": "accessibleDeet",
+            "name": "accessibleDeets",
             "description": "Deets accessible to the currently authed user",
             "args": [
               {

@@ -34,4 +34,8 @@ export default class PhoneNumbers extends Model<PhoneNumbers> {
 
   @BelongsTo(() => Deets)
   deet: Deets;
+
+  getType() {
+    return 'phone_number';
+  }
 }

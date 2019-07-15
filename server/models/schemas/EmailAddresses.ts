@@ -31,4 +31,8 @@ export default class EmailAddresses extends Model<EmailAddresses> {
 
   @BelongsTo(() => Deets)
   deet: Deets;
+
+  getType() {
+    return 'email_address';
+  }
 }

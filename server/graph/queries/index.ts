@@ -4,7 +4,7 @@ import searchUsers from './searchUsers';
 import userByUsername from './userByUsername';
 import friends from './friends';
 import userDeets from './userDeets';
-import accessibleDeet from './accessibleDeet';
+import accessibleDeets from './accessibleDeets';
 import pendingFriendRequests from './pendingFriendRequests';
 
 // turned strict function types in tsconfig off because: https://github.com/DefinitelyTyped/DefinitelyTyped/issues/21359
@@ -17,7 +17,7 @@ export default new GraphQLObjectType({
     userByUsername,
     friends,
     userDeets,
-    accessibleDeet,
+    accessibleDeets,
     pendingFriendRequests,
   }),
 });

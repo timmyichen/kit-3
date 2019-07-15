@@ -1,6 +1,6 @@
 import { GraphQLList, GraphQLString } from 'graphql';
 import deetType from '../types/deetType';
-import { DeetTypes } from 'server/models/types';
+import { DeetTypes, Deet } from 'server/models/types';
 import { AuthenticationError } from 'apollo-server';
 import {
   Deets,
@@ -12,7 +12,7 @@ import {
 import { ReqWithLoader } from 'server/lib/loader';
 
 interface Args {
-  type: DeetTypes;
+  type?: DeetTypes;
 }
 
 export default {
@@ -21,7 +21,7 @@ export default {
   args: {
     type: { type: GraphQLString },
   },
-  async resolve(_1: any, args: Args, { user, loader }: ReqWithLoader) {
+  async resolve(_: any, args: Args, { user, loader }: ReqWithLoader) {
     if (!user) {
       throw new AuthenticationError('Must be logged in');
     }
@@ -35,13 +35,17 @@ export default {
       opts.type = args.type;
     }
 
-    const deets = await Promise.all(
-      sharedWithUser.map(i =>
-        loader(SharedDeets).loadManyBy('id', i.deet_id, opts),
-      ),
+    const deets = (await Promise.all(
+      sharedWithUser.map(i => loader(Deets).loadBy('id', i.deet_id, opts)),
+    )).reduce(
+      (obj, d) => ({
+        ...obj,
+        [d.id]: d,
+      }),
+      {},
     );
 
-    const promises: Array<Promise<any> | undefined> = deets.map(
+    const promises: Array<Promise<Deet>> = Object.values(deets).map(
       (deet: Deets) => {
         switch (deet.type) {
           case 'address':
@@ -51,13 +55,20 @@ export default {
           case 'phone_number':
             return loader(PhoneNumbers).loadBy('deet_id', deet.id);
           default:
-            throw new Error('unrecognized deet');
+            throw new Error('unrecognized deet ' + deet.type);
         }
       },
     );
 
-    const result = await Promise.all(promises);
+    const results = await Promise.all(promises);
 
-    return result;
+    for (const result of results) {
+      if (!result) {
+        continue;
+      }
+      deets[result.deet_id][result.getType()] = result.get({ simple: true });
+    }
+
+    return Object.values(deets);
   },
 };

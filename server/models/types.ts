@@ -25,15 +25,18 @@ export interface Address extends CommonDeetFields {
   state?: string;
   postal_code?: string;
   country_code: string;
+  getType(): 'address';
 }
 
 export interface PhoneNumber extends CommonDeetFields {
   country_code?: string;
   phone_number: string;
+  getType(): 'phone_number';
 }
 
 export interface EmailAddress extends CommonDeetFields {
   email_address: string;
+  getType(): 'email_address';
 }
 
 export interface DeetType {
@@ -46,6 +49,9 @@ export interface DeetType {
   updated_at: Date;
   getDeet(o: Object): Promise<any>;
   get(o: Object): Object;
+  address?: Address;
+  phone_number?: PhoneNumber;
+  email_address?: EmailAddress;
 }
 
 export interface PaginationResponse<T> {

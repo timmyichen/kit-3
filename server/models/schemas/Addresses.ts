@@ -46,4 +46,8 @@ export default class Addresses extends Model<Addresses> {
 
   @BelongsTo(() => Deets)
   deet: Deets;
+
+  getType() {
+    return 'address';
+  }
 }
