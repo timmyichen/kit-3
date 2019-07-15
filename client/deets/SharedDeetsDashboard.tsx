@@ -1,13 +1,16 @@
 import * as React from 'react';
 import { DeetTypes, Deet } from 'client/types';
 import { DEET_TYPES } from './DeetCreator';
-import { Dropdown } from 'semantic-ui-react';
+import { Dropdown, Button } from 'semantic-ui-react';
 import { useQuery } from 'react-apollo-hooks';
 import { ACCESSIBLE_DEETS_QUERY } from 'client/graph/queries';
 import Loader from 'client/components/Loader';
 import { DeetCard } from './DeetCard';
 import { isBrowser, splitColumns } from 'client/lib/dom';
 import useWindowSize from 'client/hooks/useWindowSize';
+import createUpdateQuery from 'client/lib/createUpdateQuery';
+
+const PAGE_COUNT = 1;
 
 const DEEP_TYPES_WITH_EMPTY = {
   all: {
@@ -30,15 +33,17 @@ function SharedDeetsDashboard() {
     }, [size.width]);
   }
 
-  const { data: deets, loading: loadingDeets } = useQuery(
-    ACCESSIBLE_DEETS_QUERY,
-    {
-      variables: {
-        type: filterType === 'all' ? undefined : filterType,
-        count: 20,
-      },
+  const {
+    data: deets,
+    loading: loadingDeets,
+    fetchMore: fetchMoreDeets,
+  } = useQuery(ACCESSIBLE_DEETS_QUERY, {
+    variables: {
+      type: filterType === 'all' ? undefined : filterType,
+      count: PAGE_COUNT,
+      after: undefined,
     },
-  );
+  });
 
   const changeType = (_: any, { value }: { value: DeetTypes }) => {
     setFilterType(value);
@@ -53,7 +58,27 @@ function SharedDeetsDashboard() {
     ));
     const columns = splitColumns(deetCards, colCount);
 
-    content = <div className="shared-deets-list">{columns}</div>;
+    content = (
+      <>
+        <div className="shared-deets-list">{columns}</div>
+        {deets.accessibleDeets.pageInfo.hasNext && (
+          <Button
+            onClick={() => {
+              fetchMoreDeets({
+                variables: {
+                  after: deets.accessibleDeets.pageInfo.nextCursor,
+                  count: PAGE_COUNT,
+                  type: filterType === 'all' ? undefined : filterType,
+                },
+                updateQuery: createUpdateQuery('accessibleDeets'),
+              });
+            }}
+          >
+            Load more
+          </Button>
+        )}
+      </>
+    );
   }
 
   return (

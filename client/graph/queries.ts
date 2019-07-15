@@ -87,8 +87,8 @@ export const CURRENT_USER_DEETS_QUERY = gql`
 `;
 
 export const ACCESSIBLE_DEETS_QUERY = gql`
-  query accessibleDeets($type: String) {
-    accessibleDeets(type: $type) {
+  query accessibleDeets($type: String, $after: String, $count: Int) {
+    accessibleDeets(type: $type, count: $count, after: $after) {
       items {
         ...EmailAddressFragment
         ... on EmailAddressDeet {
