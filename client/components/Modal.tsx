@@ -17,7 +17,7 @@ export default function CtxModal({ children, ...props }: ModalProps) {
   };
 
   return (
-    <Modal open {...props} onClose={onClose}>
+    <Modal open closeIcon {...props} onClose={onClose}>
       {children}
     </Modal>
   );

@@ -157,7 +157,7 @@ function DeetCreationModal({
   };
 
   return (
-    <CtxModal size="small">
+    <CtxModal size="small" closeOnDimmerClick={false}>
       <Header icon="plus" content={`Create ${DEET_TYPES[creatingType].text}`} />
       <Modal.Content>
         <div className="selector">

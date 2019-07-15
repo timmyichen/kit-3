@@ -69,7 +69,7 @@ const DeetSharingModal = ({ deet }: Props) => {
   };
 
   return (
-    <CtxModal size="tiny">
+    <CtxModal size="tiny" closeOnDimmerClick={false}>
       <Header icon="users" content="Sharing Settings" />
       <Modal.Content>
         <h3>Sharing settings for {deet.label}</h3>

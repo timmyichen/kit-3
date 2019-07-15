@@ -7,7 +7,6 @@ export default function Page({
   children: Array<React.ReactChild>;
 }) {
   const { modal, currentUser } = useCtxState();
-  console.log(currentUser);
 
   return (
     <div>
