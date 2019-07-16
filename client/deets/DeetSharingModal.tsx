@@ -66,7 +66,6 @@ const DeetSharingModal = ({ deet }: Props) => {
       newPerms.push({ userId, permitted });
     }
     setChangedPerms(newPerms);
-    console.log(newPerms);
   };
 
   return (

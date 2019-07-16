@@ -15,9 +15,19 @@ class MyApp extends App {
     let user;
     if (ctx.req && ctx.req.user) {
       user = ctx.req.user;
+    } else if (ctx.req) {
+      const baseUrl = `${ctx.req.protocol}://${ctx.req.get('Host')}`;
+      const response = await fetch(baseUrl + '/data/user_info');
+      user = await response.json();
     } else {
-      user = await fetch('/data/user_info');
+      const response = await fetch('/data/user_info');
+      user = await response.json();
     }
+
+    if (user.error) {
+      user = null;
+    }
+
     let pageProps = {};
 
     if (Component.getInitialProps) {
