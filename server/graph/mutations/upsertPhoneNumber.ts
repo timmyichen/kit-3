@@ -37,7 +37,7 @@ export default {
     const { notes, label } = args;
 
     if (args.deetId) {
-      let result;
+      let result: Deet | null = null;
       const deet = await Deets.findByPk(args.deetId);
 
       if (!deet || deet.owner_id !== user.id) {
@@ -50,25 +50,44 @@ export default {
         throw new ApolloError(`Matching deet entry not found for ${deet.id}`);
       }
 
-      try {
-        result = await entry.update({
-          notes,
-          label,
-          phone_number: args.phoneNumber,
-          country_code: args.countryCode,
-        });
-      } catch (e) {
-        if (e.message.toLowerCase().includes('validation')) {
-          throw new UserInputError(e.message);
-        } else {
-          throw new ApolloError(e.message);
+      let updatedDeet;
+
+      await db.transaction(async (transaction: any) => {
+        try {
+          // @ts-ignore
+          [updatedDeet, result] = await Promise.all([
+            deet.update(
+              {
+                notes,
+                label,
+              },
+              { transaction },
+            ),
+            entry.update(
+              {
+                phone_number: args.phoneNumber,
+                country_code: args.countryCode,
+              },
+              { transaction },
+            ),
+          ]);
+        } catch (e) {
+          if (e.message.toLowerCase().includes('validation')) {
+            throw new UserInputError(e.message);
+          } else {
+            throw new ApolloError(e.message);
+          }
         }
+      });
+
+      if (!result || !updatedDeet) {
+        throw new Error('Something went wrong.');
       }
 
       return {
         ...deet.get({ plain: true }),
         phone_number: {
-          ...result.get({ plain: true }),
+          ...(result as Deet).get({ plain: true }),
         },
       };
     }
