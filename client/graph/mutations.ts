@@ -94,6 +94,7 @@ export const UPSERT_ADDRESS_MUTATION = gql`
       postalCode
       country
       updatedAt
+      type
       __typename
     }
   }
@@ -120,6 +121,7 @@ export const UPSERT_PHONE_NUMBER_MUTATION = gql`
       phoneNumber
       countryCode
       updatedAt
+      type
       __typename
     }
   }
@@ -143,6 +145,7 @@ export const UPSERT_EMAIL_ADDRESS_MUTATION = gql`
       label
       emailAddress
       updatedAt
+      type
       __typename
     }
   }

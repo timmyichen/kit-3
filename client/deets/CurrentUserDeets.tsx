@@ -30,6 +30,8 @@ function CurrentUserDeets() {
     );
   }
 
+  console.log(deets);
+
   const deetCards = deets.userDeets.map((item: Deet) => (
     <DeetCard key={`current-user-deet-${item.id}`} deet={item} isOwner />
   ));
