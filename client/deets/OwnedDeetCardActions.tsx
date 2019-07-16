@@ -4,6 +4,7 @@ import { Dropdown } from 'semantic-ui-react';
 import DeetSharingModal from './DeetSharingModal';
 import { useCtxDispatch } from 'client/components/ContextProvider';
 import DeleteDeetModal from './DeleteDeetModal';
+import { EditDeetModal } from './EditDeetModal';
 
 interface Props {
   deet: Deet;
@@ -30,6 +31,11 @@ export function OwnedDeetCardActions({ deet }: Props) {
         className="icon"
       >
         <Dropdown.Menu>
+          <Dropdown.Item
+            text="Edit"
+            icon="pencil alternate"
+            onClick={() => showModal(<EditDeetModal deet={deet} />)}
+          />
           <Dropdown.Item
             text="Share"
             icon="users"

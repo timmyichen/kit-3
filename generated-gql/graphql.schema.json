@@ -569,7 +569,7 @@
             "deprecationReason": null
           },
           {
-            "name": "number",
+            "name": "phoneNumber",
             "description": null,
             "args": [],
             "type": {

@@ -43,7 +43,7 @@ export interface EmailAddressDeet extends BaseDeet {
 }
 
 export interface PhoneNumberDeet extends BaseDeet {
-  number: string;
+  phoneNumber: string;
   countryCode: string;
 }
 

@@ -1,5 +1,7 @@
 import * as React from 'react';
+import pick from 'lodash/pick';
 import { Form, Input, TextArea, Button } from 'semantic-ui-react';
+import { PhoneNumberDeet } from 'client/types';
 
 interface Fields {
   countryCode?: string;
@@ -8,8 +10,21 @@ interface Fields {
   notes?: string;
 }
 
+const defaultFields = {
+  countryCode: '',
+  phoneNumber: '',
+  label: '',
+  notes: '',
+};
+
+const getPhoneFields = (phone: PhoneNumberDeet) =>
+  pick(phone, Object.keys(defaultFields));
+
 interface Props {
   loading: boolean;
+  phone?: PhoneNumberDeet;
+  ctaText?: string;
+  isModal?: boolean;
   onClose(): void;
   onSubmit(variables: Object): Promise<void>;
 }
@@ -18,13 +33,20 @@ export default function PhoneNumberCreator({
   onSubmit,
   loading,
   onClose,
+  phone,
+  ctaText,
 }: Props) {
-  const [fields, setFields] = React.useState<Fields>({});
+  const [fields, setFields] = React.useState<Fields>(
+    phone ? getPhoneFields(phone) : defaultFields,
+  );
 
   const setValue = (field: keyof Fields, value: any) => {
     const updatedFields = fields;
     updatedFields[field] = value;
-    setFields(updatedFields);
+    setFields(prevState => ({
+      ...prevState,
+      ...updatedFields,
+    }));
   };
 
   return (
@@ -79,7 +101,7 @@ export default function PhoneNumberCreator({
           color="blue"
           onClick={() => onSubmit(fields)}
         >
-          {loading ? 'Creating' : 'Create'}
+          {ctaText || 'Create'}
         </Button>
       </div>
       <style jsx>{`

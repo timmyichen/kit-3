@@ -13,7 +13,7 @@ function postMutationUpdateCache<QueryType, ObjectType>({
   query: DataProxy.Query<any>;
   fieldName: string;
   isPaginated?: boolean;
-  type: 'unshift' | 'remove';
+  type: 'unshift' | 'remove' | 'replace';
   targetObj: ObjectType;
 }) {
   let q: QueryType | null = null;
@@ -46,6 +46,11 @@ function postMutationUpdateCache<QueryType, ObjectType>({
           return o.id === targetObj.id;
         });
         arr.splice(removeIndex, 1);
+        break;
+      case 'replace':
+        // @ts-ignore
+        const i = arr.findIndex(e => e.id === targetObj.id);
+        arr[i] = targetObj;
         break;
     }
 

@@ -1,5 +1,7 @@
 import * as React from 'react';
+import pick from 'lodash/pick';
 import { Form, Input, TextArea, Button } from 'semantic-ui-react';
+import { EmailAddressDeet } from 'client/types';
 
 interface Fields {
   emailAddress?: string;
@@ -7,8 +9,20 @@ interface Fields {
   notes?: string;
 }
 
+const defaultFields = {
+  emailAddress: '',
+  label: '',
+  notes: '',
+};
+
+const getEmailFields = (email: EmailAddressDeet) =>
+  pick(email, Object.keys(defaultFields));
+
 interface Props {
   loading: boolean;
+  email?: EmailAddressDeet;
+  ctaText?: string;
+  isModal?: boolean;
   onSubmit(variables: Object): Promise<void>;
   onClose(): void;
 }
@@ -17,13 +31,20 @@ export default function EmailAddressCreator({
   onSubmit,
   loading,
   onClose,
+  email,
+  ctaText,
 }: Props) {
-  const [fields, setFields] = React.useState<Fields>({});
+  const [fields, setFields] = React.useState<Fields>(
+    email ? getEmailFields(email) : defaultFields,
+  );
 
   const setValue = (field: keyof Fields, value: any) => {
     const updatedFields = fields;
     updatedFields[field] = value;
-    setFields(updatedFields);
+    setFields(prevState => ({
+      ...prevState,
+      ...updatedFields,
+    }));
   };
 
   return (
@@ -66,7 +87,7 @@ export default function EmailAddressCreator({
           color="blue"
           onClick={() => onSubmit(fields)}
         >
-          {loading ? 'Creating' : 'Create'}
+          {ctaText || 'Create'}
         </Button>
       </div>
       <style jsx>{`

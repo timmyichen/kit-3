@@ -25,7 +25,7 @@ export default new GraphQLObjectType({
       type: GraphQLString,
       resolve: (num: any) => num.phone_number.country_code,
     },
-    number: {
+    phoneNumber: {
       type: new GraphQLNonNull(GraphQLString),
       resolve: (num: any) => num.phone_number.phone_number,
     },

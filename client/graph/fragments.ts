@@ -47,7 +47,7 @@ export const PHONE_NUMBER_FRAGMENT = gql`
     id
     notes
     label
-    number
+    phoneNumber
     countryCode
     updatedAt
     type

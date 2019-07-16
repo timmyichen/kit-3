@@ -117,7 +117,7 @@ export const UPSERT_PHONE_NUMBER_MUTATION = gql`
       id
       notes
       label
-      number
+      phoneNumber
       countryCode
       updatedAt
       __typename

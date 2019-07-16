@@ -67,7 +67,7 @@ export const DeetCardDescription = ({ deet }: { deet: Deet }) => {
       return (
         <div>
           {phoneNumber.countryCode && `+${phoneNumber.countryCode} `}
-          {phoneNumber.number}
+          {phoneNumber.phoneNumber}
         </div>
       );
     case 'email_address':

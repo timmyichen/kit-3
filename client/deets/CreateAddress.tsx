@@ -1,5 +1,8 @@
 import * as React from 'react';
+import pick from 'lodash/pick';
+import omit from 'lodash/omit';
 import { Form, Input, TextArea, Button } from 'semantic-ui-react';
+import { AddressDeet } from 'client/types';
 
 interface Fields {
   addressLine1?: string;
@@ -12,19 +15,56 @@ interface Fields {
   notes?: string;
 }
 
+const defaultFields = {
+  addressLine1: '',
+  addressLine2: '',
+  city: '',
+  state: '',
+  postalCode: '',
+  countryCode: '',
+  label: '',
+  notes: '',
+};
+
+const getAddressFields = (address: AddressDeet) => {
+  const fields = {
+    ...pick(
+      // country should be countryCode here
+      omit(address, 'country'),
+      Object.keys(defaultFields),
+    ),
+    countryCode: address.country || '',
+  };
+  return fields;
+};
+
 interface Props {
   loading: boolean;
+  address?: AddressDeet;
+  ctaText?: string;
+  isModal?: boolean;
   onSubmit(variables: Object): Promise<void>;
   onClose(): void;
 }
 
-export default function AddressCreator({ onSubmit, loading, onClose }: Props) {
-  const [fields, setFields] = React.useState<Fields>({});
+export default function AddressCreator({
+  onSubmit,
+  loading,
+  onClose,
+  address,
+  ctaText,
+}: Props) {
+  const [fields, setFields] = React.useState<Fields>(
+    address ? getAddressFields(address) : defaultFields,
+  );
 
   const setValue = (field: keyof Fields, value: any) => {
     const updatedFields = fields;
     updatedFields[field] = value;
-    setFields(updatedFields);
+    setFields(prevState => ({
+      ...prevState,
+      ...updatedFields,
+    }));
   };
 
   return (
@@ -117,7 +157,7 @@ export default function AddressCreator({ onSubmit, loading, onClose }: Props) {
           onClick={() => onSubmit(fields)}
           type="submit"
         >
-          {loading ? 'Creating' : 'Create'}
+          {ctaText || 'Create'}
         </Button>
       </div>
       <style jsx>{`
@@ -125,7 +165,7 @@ export default function AddressCreator({ onSubmit, loading, onClose }: Props) {
           max-width: 400px;
           margin: 0 auto;
         }
-        .ctas {
+        .address-creator :global(.ctas) {
           display: flex;
           justify-content: space-between;
           margin-top: 20px;

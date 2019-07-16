@@ -31,7 +31,7 @@ function CurrentUserDeets() {
   }
 
   const deetCards = deets.userDeets.map((item: Deet) => (
-    <DeetCard deet={item} isOwner />
+    <DeetCard key={`current-user-deet-${item.id}`} deet={item} isOwner />
   ));
 
   const columns = splitColumns(deetCards, colCount);
