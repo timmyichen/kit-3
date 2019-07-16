@@ -49,6 +49,7 @@ nextjs.nextApp.prepare().then(async () => {
       store,
     }),
   );
+  app.use(express.static('public'));
   app.use(passport.initialize());
   app.use(passport.session());
 

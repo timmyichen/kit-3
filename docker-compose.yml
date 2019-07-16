@@ -8,3 +8,4 @@ services:
     working_dir: /usr/ydb2/
     ports:
     - "8000:8000"
+    - "8888:8888"
