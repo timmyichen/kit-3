@@ -1,0 +1,15 @@
+#import "./UserAccessFragment.graphql"
+
+mutation updateSharedPermissions(
+  $deetId: Int!
+  $userIdsToAdd: [Int]!
+  $userIdsToRemove: [Int]!
+) {
+  updateSharedPermissions(
+    deetId: $deetId
+    userIdsToAdd: $userIdsToAdd
+    userIdsToRemove: $userIdsToRemove
+  ) {
+    ...UserAccessFragment
+  }
+}

@@ -1,0 +1,7 @@
+#import "./OtherUserFragment.graphql"
+
+mutation removeFriend($targetUserId: Int!) {
+  removeFriend(targetUserId: $targetUserId) {
+    ...OtherUserFragment
+  }
+}

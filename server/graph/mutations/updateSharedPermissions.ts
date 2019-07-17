@@ -1,10 +1,5 @@
 import * as express from 'express';
-import {
-  GraphQLNonNull,
-  GraphQLInt,
-  GraphQLList,
-  GraphQLBoolean,
-} from 'graphql';
+import { GraphQLNonNull, GraphQLInt, GraphQLList } from 'graphql';
 import { Op } from 'sequelize';
 import {
   AuthenticationError,
@@ -13,6 +8,7 @@ import {
 } from 'apollo-server';
 import { Friendships, Deets, SharedDeets } from 'server/models';
 import { db } from 'server/lib/db';
+import userType from '../types/userType';
 
 type Args = {
   deetId: number;
@@ -22,7 +18,7 @@ type Args = {
 
 export default {
   description: 'Update permissions for shared',
-  type: new GraphQLNonNull(GraphQLBoolean),
+  type: new GraphQLList(userType),
   args: {
     deetId: { type: new GraphQLNonNull(GraphQLInt) },
     userIdsToAdd: { type: new GraphQLList(GraphQLInt) },

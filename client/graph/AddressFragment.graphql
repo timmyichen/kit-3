@@ -1,0 +1,14 @@
+fragment AddressFragment on AddressDeet {
+  id
+  notes
+  label
+  addressLine1
+  addressLine2
+  city
+  state
+  postalCode
+  country
+  updatedAt
+  type
+  __typename
+}

@@ -1,0 +1,7 @@
+fragment UserAccessFragment on User {
+  id
+  fullName
+  username
+  hasAccessToDeet(deetId: $deetId)
+  __typename
+}

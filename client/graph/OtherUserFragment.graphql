@@ -1,0 +1,10 @@
+fragment OtherUserFragment on User {
+  id
+  fullName
+  username
+  isFriend
+  isRequested
+  hasRequestedUser
+  isBlocked
+  __typename
+}

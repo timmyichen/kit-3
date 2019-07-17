@@ -1,0 +1,7 @@
+#import "./OtherUserFragment.graphql"
+
+query searchUsers($searchQuery: String!, $count: Int) {
+  searchUsers(searchQuery: $searchQuery, count: $count) {
+    ...OtherUserFragment
+  }
+}

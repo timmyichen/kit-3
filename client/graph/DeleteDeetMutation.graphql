@@ -1,0 +1,11 @@
+#import "./EmailAddressFragment.graphql"
+#import "./PhoneNumberFragment.graphql"
+#import "./AddressFragment.graphql"
+
+mutation deleteDeet($deetId: Int!) {
+  deleteDeet(deetId: $deetId) {
+    ...EmailAddressFragment
+    ...AddressFragment
+    ...PhoneNumberFragment
+  }
+}

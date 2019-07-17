@@ -1,0 +1,18 @@
+#import "./UserAccessFragment.graphql"
+
+query deetPerms(
+  $searchQuery: String
+  $count: Int
+  $after: String
+  $deetId: Int!
+) {
+  friends(searchQuery: $searchQuery, count: $count, after: $after) {
+    items {
+      ...UserAccessFragment
+    }
+    pageInfo {
+      hasNext
+      nextCursor
+    }
+  }
+}

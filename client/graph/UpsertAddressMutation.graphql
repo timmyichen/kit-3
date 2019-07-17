@@ -1,0 +1,27 @@
+#import "./AddressFragment.graphql"
+
+mutation upsertAddress(
+  $deetId: Int
+  $notes: String
+  $label: String!
+  $addressLine1: String!
+  $addressLine2: String
+  $city: String
+  $state: String
+  $postalCode: String
+  $countryCode: String!
+) {
+  upsertAddress(
+    deetId: $deetId
+    notes: $notes
+    label: $label
+    addressLine1: $addressLine1
+    addressLine2: $addressLine2
+    city: $city
+    state: $state
+    postalCode: $postalCode
+    countryCode: $countryCode
+  ) {
+    ...AddressFragment
+  }
+}

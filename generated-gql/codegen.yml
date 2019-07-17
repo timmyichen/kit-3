@@ -1,10 +1,20 @@
 overwrite: true
 schema: "http://localhost:8000/graphql"
-documents: "src/**/*.graphql"
+documents: "**/*.graphql"
 generates:
   generated-gql/graph.d.ts:
     plugins:
       - "fragment-matcher"
+  generated-gql/generated-types.tsx:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+    config:
+      withComponent: true
+      withHOC: true
+      withHooks: true
+      withMutationFn: true
   generated-gql/graphql.schema.json:
     plugins:
       - "introspection"

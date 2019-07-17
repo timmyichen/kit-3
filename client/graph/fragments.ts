@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const OTHER_USER_FRAGMENT = gql`
-  fragment OtherUser on User {
+  fragment OtherUserFragment on User {
     id
     fullName
     username

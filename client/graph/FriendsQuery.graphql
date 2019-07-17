@@ -1,0 +1,14 @@
+query friends($searchQuery: String, $count: Int, $after: String) {
+  friends(searchQuery: $searchQuery, count: $count, after: $after) {
+    items {
+      id
+      fullName
+      username
+      __typename
+    }
+    pageInfo {
+      hasNext
+      nextCursor
+    }
+  }
+}

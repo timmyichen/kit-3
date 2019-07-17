@@ -1,0 +1,9 @@
+fragment EmailAddressFragment on EmailAddressDeet {
+  id
+  notes
+  label
+  emailAddress
+  updatedAt
+  type
+  __typename
+}

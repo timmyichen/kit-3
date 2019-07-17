@@ -1,0 +1,7 @@
+#import "./OtherUserFragment.graphql"
+
+mutation unblockUser($targetUserId: Int!) {
+  unblockUser(targetUserId: $targetUserId) {
+    ...OtherUserFragment
+  }
+}

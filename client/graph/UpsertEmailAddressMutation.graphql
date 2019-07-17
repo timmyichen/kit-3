@@ -1,0 +1,17 @@
+#import "./EmailAddressFragment.graphql"
+
+mutation upsertEmailAddress(
+  $deetId: Int
+  $notes: String
+  $label: String!
+  $emailAddress: String!
+) {
+  upsertEmailAddress(
+    deetId: $deetId
+    notes: $notes
+    label: $label
+    emailAddress: $emailAddress
+  ) {
+    ...EmailAddressFragment
+  }
+}

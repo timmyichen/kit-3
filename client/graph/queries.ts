@@ -15,15 +15,6 @@ export const SEARCH_USERS_QUERY = gql`
   ${OTHER_USER_FRAGMENT}
 `;
 
-export const CURRENT_USER_QUERY = gql`
-  query currentUser {
-    currentUser {
-      email
-      name
-    }
-  }
-`;
-
 export const FRIENDS_QUERY = gql`
   query friends($searchQuery: String, $count: Int, $after: String) {
     friends(searchQuery: $searchQuery, count: $count, after: $after) {

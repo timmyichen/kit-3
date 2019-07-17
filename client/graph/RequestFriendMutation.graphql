@@ -1,0 +1,7 @@
+#import "./OtherUserFragment.graphql"
+
+mutation requestFriend($targetUserId: Int!) {
+  requestFriend(targetUserId: $targetUserId) {
+    ...OtherUserFragment
+  }
+}

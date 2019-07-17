@@ -1,0 +1,10 @@
+fragment PhoneNumberFragment on PhoneNumberDeet {
+  id
+  notes
+  label
+  phoneNumber
+  countryCode
+  updatedAt
+  type
+  __typename
+}

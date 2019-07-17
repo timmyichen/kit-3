@@ -1,0 +1,7 @@
+#import "./OtherUserFragment.graphql"
+
+mutation rescindFriendRequest($targetUserId: Int!) {
+  rescindFriendRequest(targetUserId: $targetUserId) {
+    ...OtherUserFragment
+  }
+}

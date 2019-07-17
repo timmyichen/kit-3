@@ -1,0 +1,8 @@
+query pendingFriendRequests($count: Int) {
+  pendingFriendRequests(count: $count) {
+    id
+    fullName
+    username
+    __typename
+  }
+}

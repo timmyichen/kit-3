@@ -1,0 +1,19 @@
+#import "./PhoneNumberFragment.graphql"
+
+mutation upsertPhoneNumber(
+  $deetId: Int
+  $notes: String
+  $label: String!
+  $phoneNumber: String!
+  $countryCode: String
+) {
+  upsertPhoneNumber(
+    deetId: $deetId
+    notes: $notes
+    label: $label
+    phoneNumber: $phoneNumber
+    countryCode: $countryCode
+  ) {
+    ...PhoneNumberFragment
+  }
+}
