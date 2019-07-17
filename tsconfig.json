@@ -3,7 +3,8 @@
     "baseUrl": ".",
     "paths": {
       "server/*": ["server/*"],
-      "client/*": ["client/*"]
+      "client/*": ["client/*"],
+      "generated/*": ["generated-gql/*"]
     },
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
@@ -33,6 +34,7 @@
     "client",
     "server",
     "pages",
+    "generated-gql",
     "./types/**/*"
   ]
 }

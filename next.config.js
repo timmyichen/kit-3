@@ -6,6 +6,7 @@ module.exports = withTs({
   webpack(config, options) {
     config.resolve.alias.client = './client';
     config.resolve.alias.server = './server';
+    config.resolve.alias.generated = './generated-gql';
     config.plugins.push(new ForkTsCheckerWebpackPlugin());
     // config.plugins.push(new BundleAnalyzerPlugin({ analyzerMode: 'static' }));
     return config;

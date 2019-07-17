@@ -13,7 +13,8 @@
         ],
         "alias": {
           "client": "./client",
-          "server": "./server"
+          "server": "./server",
+          "generated": "./generated-gql"
         }
       }
     ],
