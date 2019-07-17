@@ -8,7 +8,7 @@ query deetPerms(
 ) {
   friends(searchQuery: $searchQuery, count: $count, after: $after) {
     items {
-      ...UserAccessFragment
+      ...UserAccess
     }
     pageInfo {
       hasNext

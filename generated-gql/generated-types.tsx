@@ -19,19 +19,25 @@ export type AddressDeet = {
   id: Scalars['Int'];
   owner: User;
   addressLine1: Scalars['String'];
-  addressLine2?: Maybe<Scalars['String']>;
-  city?: Maybe<Scalars['String']>;
-  state?: Maybe<Scalars['String']>;
-  postalCode?: Maybe<Scalars['String']>;
+  addressLine2: Scalars['String'];
+  city: Scalars['String'];
+  state: Scalars['String'];
+  postalCode: Scalars['String'];
   country: Scalars['String'];
   label: Scalars['String'];
-  notes?: Maybe<Scalars['String']>;
-  type: Scalars['String'];
+  notes: Scalars['String'];
+  type: DeetType;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
 
 export type Deet = EmailAddressDeet | PhoneNumberDeet | AddressDeet;
+
+export enum DeetType {
+  Address = 'address',
+  EmailAddress = 'email_address',
+  PhoneNumber = 'phone_number',
+}
 
 /** An email addressdeet */
 export type EmailAddressDeet = {
@@ -40,8 +46,8 @@ export type EmailAddressDeet = {
   owner: User;
   emailAddress: Scalars['String'];
   label: Scalars['String'];
-  notes?: Maybe<Scalars['String']>;
-  type: Scalars['String'];
+  notes: Scalars['String'];
+  type: DeetType;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -64,11 +70,11 @@ export type PhoneNumberDeet = {
   __typename?: 'PhoneNumberDeet';
   id: Scalars['Int'];
   owner: User;
-  countryCode?: Maybe<Scalars['String']>;
+  countryCode: Scalars['String'];
   phoneNumber: Scalars['String'];
   label: Scalars['String'];
-  notes?: Maybe<Scalars['String']>;
-  type: Scalars['String'];
+  notes: Scalars['String'];
+  type: DeetType;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -125,29 +131,29 @@ export type RootMutationRescindFriendRequestArgs = {
 
 export type RootMutationUpsertAddressArgs = {
   deetId?: Maybe<Scalars['Int']>;
-  notes?: Maybe<Scalars['String']>;
+  notes: Scalars['String'];
   label: Scalars['String'];
   addressLine1: Scalars['String'];
-  addressLine2?: Maybe<Scalars['String']>;
-  city?: Maybe<Scalars['String']>;
-  state?: Maybe<Scalars['String']>;
-  postalCode?: Maybe<Scalars['String']>;
+  addressLine2: Scalars['String'];
+  city: Scalars['String'];
+  state: Scalars['String'];
+  postalCode: Scalars['String'];
   countryCode: Scalars['String'];
 };
 
 export type RootMutationUpsertEmailAddressArgs = {
   deetId?: Maybe<Scalars['Int']>;
-  notes?: Maybe<Scalars['String']>;
+  notes: Scalars['String'];
   label: Scalars['String'];
   emailAddress: Scalars['String'];
 };
 
 export type RootMutationUpsertPhoneNumberArgs = {
   deetId?: Maybe<Scalars['Int']>;
-  notes?: Maybe<Scalars['String']>;
+  notes: Scalars['String'];
   label: Scalars['String'];
   phoneNumber: Scalars['String'];
-  countryCode?: Maybe<Scalars['String']>;
+  countryCode: Scalars['String'];
 };
 
 export type RootMutationDeleteDeetArgs = {
@@ -171,7 +177,7 @@ export type RootQuery = {
   /** A users friends */
   friends?: Maybe<FriendsPagination>;
   /** Get all deets owned by a user */
-  userDeets?: Maybe<Array<Maybe<Deet>>>;
+  userDeets?: Maybe<Array<Deet>>;
   /** Deets accessible to the currently authed user */
   accessibleDeets?: Maybe<SharedDeetsPagination>;
   /** A users friends */
@@ -234,7 +240,7 @@ export type AcceptFriendRequestMutationVariables = {
 };
 
 export type AcceptFriendRequestMutation = { __typename?: 'RootMutation' } & {
-  acceptFriendRequest: { __typename?: 'User' } & OtherUserFragmentFragment;
+  acceptFriendRequest: { __typename?: 'User' } & OtherUserFragment;
 };
 
 export type AccessibleDeetsQueryVariables = {
@@ -248,29 +254,7 @@ export type AccessibleDeetsQuery = { __typename?: 'RootQuery' } & {
     { __typename?: 'SharedDeetsPagination' } & {
       items: Maybe<
         Array<
-          Maybe<
-            | (EmailAddressFragmentFragment &
-                ({ __typename?: 'EmailAddressDeet' } & {
-                  owner: { __typename?: 'User' } & Pick<
-                    User,
-                    'fullName' | 'username'
-                  >;
-                }))
-            | (AddressFragmentFragment &
-                ({ __typename?: 'AddressDeet' } & {
-                  owner: { __typename?: 'User' } & Pick<
-                    User,
-                    'fullName' | 'username'
-                  >;
-                }))
-            | (PhoneNumberFragmentFragment &
-                ({ __typename?: 'PhoneNumberDeet' } & {
-                  owner: { __typename?: 'User' } & Pick<
-                    User,
-                    'fullName' | 'username'
-                  >;
-                }))
-          >
+          Maybe<EmailAddressFragment | AddressFragment | PhoneNumberFragment>
         >
       >;
       pageInfo: { __typename?: 'PaginationInfo' } & Pick<
@@ -281,7 +265,7 @@ export type AccessibleDeetsQuery = { __typename?: 'RootQuery' } & {
   >;
 };
 
-export type AddressFragmentFragment = { __typename: 'AddressDeet' } & Pick<
+export type AddressFragment = { __typename: 'AddressDeet' } & Pick<
   AddressDeet,
   | 'id'
   | 'notes'
@@ -294,6 +278,11 @@ export type AddressFragmentFragment = { __typename: 'AddressDeet' } & Pick<
   | 'country'
   | 'updatedAt'
   | 'type'
+> & { owner: { __typename?: 'User' } & BaseUserFragment };
+
+export type BaseUserFragment = { __typename: 'User' } & Pick<
+  User,
+  'id' | 'username' | 'fullName'
 >;
 
 export type BlockUserMutationVariables = {
@@ -301,20 +290,14 @@ export type BlockUserMutationVariables = {
 };
 
 export type BlockUserMutation = { __typename?: 'RootMutation' } & {
-  blockUser: { __typename?: 'User' } & OtherUserFragmentFragment;
+  blockUser: { __typename?: 'User' } & OtherUserFragment;
 };
 
 export type CurrentUserDeetsQueryVariables = {};
 
 export type CurrentUserDeetsQuery = { __typename?: 'RootQuery' } & {
   userDeets: Maybe<
-    Array<
-      Maybe<
-        | EmailAddressFragmentFragment
-        | AddressFragmentFragment
-        | PhoneNumberFragmentFragment
-      >
-    >
+    Array<EmailAddressFragment | AddressFragment | PhoneNumberFragment>
   >;
 };
 
@@ -328,9 +311,7 @@ export type DeetPermsQueryVariables = {
 export type DeetPermsQuery = { __typename?: 'RootQuery' } & {
   friends: Maybe<
     { __typename?: 'FriendsPagination' } & {
-      items: Maybe<
-        Array<Maybe<{ __typename?: 'User' } & UserAccessFragmentFragment>>
-      >;
+      items: Maybe<Array<Maybe<{ __typename?: 'User' } & UserAccessFragment>>>;
       pageInfo: { __typename?: 'PaginationInfo' } & Pick<
         PaginationInfo,
         'hasNext' | 'nextCursor'
@@ -345,18 +326,14 @@ export type DeleteDeetMutationVariables = {
 
 export type DeleteDeetMutation = { __typename?: 'RootMutation' } & {
   deleteDeet: Maybe<
-    | EmailAddressFragmentFragment
-    | AddressFragmentFragment
-    | PhoneNumberFragmentFragment
+    EmailAddressFragment | AddressFragment | PhoneNumberFragment
   >;
 };
 
-export type EmailAddressFragmentFragment = {
-  __typename: 'EmailAddressDeet';
-} & Pick<
+export type EmailAddressFragment = { __typename: 'EmailAddressDeet' } & Pick<
   EmailAddressDeet,
   'id' | 'notes' | 'label' | 'emailAddress' | 'updatedAt' | 'type'
->;
+> & { owner: { __typename?: 'User' } & BaseUserFragment };
 
 export type FriendsQueryVariables = {
   searchQuery?: Maybe<Scalars['String']>;
@@ -382,7 +359,7 @@ export type FriendsQuery = { __typename?: 'RootQuery' } & {
   >;
 };
 
-export type OtherUserFragmentFragment = { __typename: 'User' } & Pick<
+export type OtherUserFragment = { __typename: 'User' } & Pick<
   User,
   | 'id'
   | 'fullName'
@@ -405,9 +382,7 @@ export type PendingFriendRequestsQuery = { __typename?: 'RootQuery' } & {
   >;
 };
 
-export type PhoneNumberFragmentFragment = {
-  __typename: 'PhoneNumberDeet';
-} & Pick<
+export type PhoneNumberFragment = { __typename: 'PhoneNumberDeet' } & Pick<
   PhoneNumberDeet,
   | 'id'
   | 'notes'
@@ -416,14 +391,14 @@ export type PhoneNumberFragmentFragment = {
   | 'countryCode'
   | 'updatedAt'
   | 'type'
->;
+> & { owner: { __typename?: 'User' } & BaseUserFragment };
 
 export type RemoveFriendMutationVariables = {
   targetUserId: Scalars['Int'];
 };
 
 export type RemoveFriendMutation = { __typename?: 'RootMutation' } & {
-  removeFriend: { __typename?: 'User' } & OtherUserFragmentFragment;
+  removeFriend: { __typename?: 'User' } & OtherUserFragment;
 };
 
 export type RequestFriendMutationVariables = {
@@ -431,7 +406,7 @@ export type RequestFriendMutationVariables = {
 };
 
 export type RequestFriendMutation = { __typename?: 'RootMutation' } & {
-  requestFriend: { __typename?: 'User' } & OtherUserFragmentFragment;
+  requestFriend: { __typename?: 'User' } & OtherUserFragment;
 };
 
 export type RescindFriendRequestMutationVariables = {
@@ -439,7 +414,7 @@ export type RescindFriendRequestMutationVariables = {
 };
 
 export type RescindFriendRequestMutation = { __typename?: 'RootMutation' } & {
-  rescindFriendRequest: { __typename?: 'User' } & OtherUserFragmentFragment;
+  rescindFriendRequest: { __typename?: 'User' } & OtherUserFragment;
 };
 
 export type SearchUsersQueryVariables = {
@@ -448,9 +423,7 @@ export type SearchUsersQueryVariables = {
 };
 
 export type SearchUsersQuery = { __typename?: 'RootQuery' } & {
-  searchUsers: Maybe<
-    Array<Maybe<{ __typename?: 'User' } & OtherUserFragmentFragment>>
-  >;
+  searchUsers: Maybe<Array<Maybe<{ __typename?: 'User' } & OtherUserFragment>>>;
 };
 
 export type UnblockUserMutationVariables = {
@@ -458,7 +431,7 @@ export type UnblockUserMutationVariables = {
 };
 
 export type UnblockUserMutation = { __typename?: 'RootMutation' } & {
-  unblockUser: { __typename?: 'User' } & OtherUserFragmentFragment;
+  unblockUser: { __typename?: 'User' } & OtherUserFragment;
 };
 
 export type UpdateSharedPermissionsMutationVariables = {
@@ -471,61 +444,67 @@ export type UpdateSharedPermissionsMutation = {
   __typename?: 'RootMutation';
 } & {
   updateSharedPermissions: Maybe<
-    Array<Maybe<{ __typename?: 'User' } & UserAccessFragmentFragment>>
+    Array<Maybe<{ __typename?: 'User' } & UserAccessFragment>>
   >;
 };
 
 export type UpsertAddressMutationVariables = {
   deetId?: Maybe<Scalars['Int']>;
-  notes?: Maybe<Scalars['String']>;
+  notes: Scalars['String'];
   label: Scalars['String'];
   addressLine1: Scalars['String'];
-  addressLine2?: Maybe<Scalars['String']>;
-  city?: Maybe<Scalars['String']>;
-  state?: Maybe<Scalars['String']>;
-  postalCode?: Maybe<Scalars['String']>;
+  addressLine2: Scalars['String'];
+  city: Scalars['String'];
+  state: Scalars['String'];
+  postalCode: Scalars['String'];
   countryCode: Scalars['String'];
 };
 
 export type UpsertAddressMutation = { __typename?: 'RootMutation' } & {
-  upsertAddress: Maybe<
-    { __typename?: 'AddressDeet' } & AddressFragmentFragment
-  >;
+  upsertAddress: Maybe<{ __typename?: 'AddressDeet' } & AddressFragment>;
 };
 
 export type UpsertEmailAddressMutationVariables = {
   deetId?: Maybe<Scalars['Int']>;
-  notes?: Maybe<Scalars['String']>;
+  notes: Scalars['String'];
   label: Scalars['String'];
   emailAddress: Scalars['String'];
 };
 
 export type UpsertEmailAddressMutation = { __typename?: 'RootMutation' } & {
   upsertEmailAddress: Maybe<
-    { __typename?: 'EmailAddressDeet' } & EmailAddressFragmentFragment
+    { __typename?: 'EmailAddressDeet' } & EmailAddressFragment
   >;
 };
 
 export type UpsertPhoneNumberMutationVariables = {
   deetId?: Maybe<Scalars['Int']>;
-  notes?: Maybe<Scalars['String']>;
+  notes: Scalars['String'];
   label: Scalars['String'];
   phoneNumber: Scalars['String'];
-  countryCode?: Maybe<Scalars['String']>;
+  countryCode: Scalars['String'];
 };
 
 export type UpsertPhoneNumberMutation = { __typename?: 'RootMutation' } & {
   upsertPhoneNumber: Maybe<
-    { __typename?: 'PhoneNumberDeet' } & PhoneNumberFragmentFragment
+    { __typename?: 'PhoneNumberDeet' } & PhoneNumberFragment
   >;
 };
 
-export type UserAccessFragmentFragment = { __typename: 'User' } & Pick<
+export type UserAccessFragment = { __typename: 'User' } & Pick<
   User,
   'id' | 'fullName' | 'username' | 'hasAccessToDeet'
 >;
-export const AddressFragmentFragmentDoc = gql`
-  fragment AddressFragment on AddressDeet {
+export const BaseUserFragmentDoc = gql`
+  fragment BaseUser on User {
+    id
+    username
+    fullName
+    __typename
+  }
+`;
+export const AddressFragmentDoc = gql`
+  fragment Address on AddressDeet {
     id
     notes
     label
@@ -537,22 +516,30 @@ export const AddressFragmentFragmentDoc = gql`
     country
     updatedAt
     type
+    owner {
+      ...BaseUser
+    }
     __typename
   }
+  ${BaseUserFragmentDoc}
 `;
-export const EmailAddressFragmentFragmentDoc = gql`
-  fragment EmailAddressFragment on EmailAddressDeet {
+export const EmailAddressFragmentDoc = gql`
+  fragment EmailAddress on EmailAddressDeet {
     id
     notes
     label
     emailAddress
     updatedAt
     type
+    owner {
+      ...BaseUser
+    }
     __typename
   }
+  ${BaseUserFragmentDoc}
 `;
-export const OtherUserFragmentFragmentDoc = gql`
-  fragment OtherUserFragment on User {
+export const OtherUserFragmentDoc = gql`
+  fragment OtherUser on User {
     id
     fullName
     username
@@ -563,8 +550,8 @@ export const OtherUserFragmentFragmentDoc = gql`
     __typename
   }
 `;
-export const PhoneNumberFragmentFragmentDoc = gql`
-  fragment PhoneNumberFragment on PhoneNumberDeet {
+export const PhoneNumberFragmentDoc = gql`
+  fragment PhoneNumber on PhoneNumberDeet {
     id
     notes
     label
@@ -572,11 +559,15 @@ export const PhoneNumberFragmentFragmentDoc = gql`
     countryCode
     updatedAt
     type
+    owner {
+      ...BaseUser
+    }
     __typename
   }
+  ${BaseUserFragmentDoc}
 `;
-export const UserAccessFragmentFragmentDoc = gql`
-  fragment UserAccessFragment on User {
+export const UserAccessFragmentDoc = gql`
+  fragment UserAccess on User {
     id
     fullName
     username
@@ -587,10 +578,10 @@ export const UserAccessFragmentFragmentDoc = gql`
 export const AcceptFriendRequestDocument = gql`
   mutation acceptFriendRequest($targetUserId: Int!) {
     acceptFriendRequest(targetUserId: $targetUserId) {
-      ...OtherUserFragment
+      ...OtherUser
     }
   }
-  ${OtherUserFragmentFragmentDoc}
+  ${OtherUserFragmentDoc}
 `;
 export type AcceptFriendRequestMutationFn = ReactApollo.MutationFn<
   AcceptFriendRequestMutation,
@@ -660,27 +651,9 @@ export const AccessibleDeetsDocument = gql`
   query accessibleDeets($type: String, $after: String, $count: Int) {
     accessibleDeets(type: $type, count: $count, after: $after) {
       items {
-        ...EmailAddressFragment
-        ... on EmailAddressDeet {
-          owner {
-            fullName
-            username
-          }
-        }
-        ...AddressFragment
-        ... on AddressDeet {
-          owner {
-            fullName
-            username
-          }
-        }
-        ...PhoneNumberFragment
-        ... on PhoneNumberDeet {
-          owner {
-            fullName
-            username
-          }
-        }
+        ...EmailAddress
+        ...Address
+        ...PhoneNumber
       }
       pageInfo {
         hasNext
@@ -688,9 +661,9 @@ export const AccessibleDeetsDocument = gql`
       }
     }
   }
-  ${EmailAddressFragmentFragmentDoc}
-  ${AddressFragmentFragmentDoc}
-  ${PhoneNumberFragmentFragmentDoc}
+  ${EmailAddressFragmentDoc}
+  ${AddressFragmentDoc}
+  ${PhoneNumberFragmentDoc}
 `;
 export type AccessibleDeetsComponentProps = Omit<
   ReactApollo.QueryProps<AccessibleDeetsQuery, AccessibleDeetsQueryVariables>,
@@ -745,10 +718,10 @@ export type AccessibleDeetsQueryHookResult = ReturnType<
 export const BlockUserDocument = gql`
   mutation blockUser($targetUserId: Int!) {
     blockUser(targetUserId: $targetUserId) {
-      ...OtherUserFragment
+      ...OtherUser
     }
   }
-  ${OtherUserFragmentFragmentDoc}
+  ${OtherUserFragmentDoc}
 `;
 export type BlockUserMutationFn = ReactApollo.MutationFn<
   BlockUserMutation,
@@ -806,14 +779,14 @@ export type BlockUserMutationHookResult = ReturnType<
 export const CurrentUserDeetsDocument = gql`
   query currentUserDeets {
     userDeets {
-      ...EmailAddressFragment
-      ...AddressFragment
-      ...PhoneNumberFragment
+      ...EmailAddress
+      ...Address
+      ...PhoneNumber
     }
   }
-  ${EmailAddressFragmentFragmentDoc}
-  ${AddressFragmentFragmentDoc}
-  ${PhoneNumberFragmentFragmentDoc}
+  ${EmailAddressFragmentDoc}
+  ${AddressFragmentDoc}
+  ${PhoneNumberFragmentDoc}
 `;
 export type CurrentUserDeetsComponentProps = Omit<
   ReactApollo.QueryProps<CurrentUserDeetsQuery, CurrentUserDeetsQueryVariables>,
@@ -874,7 +847,7 @@ export const DeetPermsDocument = gql`
   ) {
     friends(searchQuery: $searchQuery, count: $count, after: $after) {
       items {
-        ...UserAccessFragment
+        ...UserAccess
       }
       pageInfo {
         hasNext
@@ -882,7 +855,7 @@ export const DeetPermsDocument = gql`
       }
     }
   }
-  ${UserAccessFragmentFragmentDoc}
+  ${UserAccessFragmentDoc}
 `;
 export type DeetPermsComponentProps = Omit<
   ReactApollo.QueryProps<DeetPermsQuery, DeetPermsQueryVariables>,
@@ -932,14 +905,14 @@ export type DeetPermsQueryHookResult = ReturnType<typeof useDeetPermsQuery>;
 export const DeleteDeetDocument = gql`
   mutation deleteDeet($deetId: Int!) {
     deleteDeet(deetId: $deetId) {
-      ...EmailAddressFragment
-      ...AddressFragment
-      ...PhoneNumberFragment
+      ...EmailAddress
+      ...Address
+      ...PhoneNumber
     }
   }
-  ${EmailAddressFragmentFragmentDoc}
-  ${AddressFragmentFragmentDoc}
-  ${PhoneNumberFragmentFragmentDoc}
+  ${EmailAddressFragmentDoc}
+  ${AddressFragmentDoc}
+  ${PhoneNumberFragmentDoc}
 `;
 export type DeleteDeetMutationFn = ReactApollo.MutationFn<
   DeleteDeetMutation,
@@ -1126,10 +1099,10 @@ export type PendingFriendRequestsQueryHookResult = ReturnType<
 export const RemoveFriendDocument = gql`
   mutation removeFriend($targetUserId: Int!) {
     removeFriend(targetUserId: $targetUserId) {
-      ...OtherUserFragment
+      ...OtherUser
     }
   }
-  ${OtherUserFragmentFragmentDoc}
+  ${OtherUserFragmentDoc}
 `;
 export type RemoveFriendMutationFn = ReactApollo.MutationFn<
   RemoveFriendMutation,
@@ -1190,10 +1163,10 @@ export type RemoveFriendMutationHookResult = ReturnType<
 export const RequestFriendDocument = gql`
   mutation requestFriend($targetUserId: Int!) {
     requestFriend(targetUserId: $targetUserId) {
-      ...OtherUserFragment
+      ...OtherUser
     }
   }
-  ${OtherUserFragmentFragmentDoc}
+  ${OtherUserFragmentDoc}
 `;
 export type RequestFriendMutationFn = ReactApollo.MutationFn<
   RequestFriendMutation,
@@ -1254,10 +1227,10 @@ export type RequestFriendMutationHookResult = ReturnType<
 export const RescindFriendRequestDocument = gql`
   mutation rescindFriendRequest($targetUserId: Int!) {
     rescindFriendRequest(targetUserId: $targetUserId) {
-      ...OtherUserFragment
+      ...OtherUser
     }
   }
-  ${OtherUserFragmentFragmentDoc}
+  ${OtherUserFragmentDoc}
 `;
 export type RescindFriendRequestMutationFn = ReactApollo.MutationFn<
   RescindFriendRequestMutation,
@@ -1326,10 +1299,10 @@ export type RescindFriendRequestMutationHookResult = ReturnType<
 export const SearchUsersDocument = gql`
   query searchUsers($searchQuery: String!, $count: Int) {
     searchUsers(searchQuery: $searchQuery, count: $count) {
-      ...OtherUserFragment
+      ...OtherUser
     }
   }
-  ${OtherUserFragmentFragmentDoc}
+  ${OtherUserFragmentDoc}
 `;
 export type SearchUsersComponentProps = Omit<
   ReactApollo.QueryProps<SearchUsersQuery, SearchUsersQueryVariables>,
@@ -1379,10 +1352,10 @@ export type SearchUsersQueryHookResult = ReturnType<typeof useSearchUsersQuery>;
 export const UnblockUserDocument = gql`
   mutation unblockUser($targetUserId: Int!) {
     unblockUser(targetUserId: $targetUserId) {
-      ...OtherUserFragment
+      ...OtherUser
     }
   }
-  ${OtherUserFragmentFragmentDoc}
+  ${OtherUserFragmentDoc}
 `;
 export type UnblockUserMutationFn = ReactApollo.MutationFn<
   UnblockUserMutation,
@@ -1448,10 +1421,10 @@ export const UpdateSharedPermissionsDocument = gql`
       userIdsToAdd: $userIdsToAdd
       userIdsToRemove: $userIdsToRemove
     ) {
-      ...UserAccessFragment
+      ...UserAccess
     }
   }
-  ${UserAccessFragmentFragmentDoc}
+  ${UserAccessFragmentDoc}
 `;
 export type UpdateSharedPermissionsMutationFn = ReactApollo.MutationFn<
   UpdateSharedPermissionsMutation,
@@ -1520,13 +1493,13 @@ export type UpdateSharedPermissionsMutationHookResult = ReturnType<
 export const UpsertAddressDocument = gql`
   mutation upsertAddress(
     $deetId: Int
-    $notes: String
+    $notes: String!
     $label: String!
     $addressLine1: String!
-    $addressLine2: String
-    $city: String
-    $state: String
-    $postalCode: String
+    $addressLine2: String!
+    $city: String!
+    $state: String!
+    $postalCode: String!
     $countryCode: String!
   ) {
     upsertAddress(
@@ -1540,10 +1513,10 @@ export const UpsertAddressDocument = gql`
       postalCode: $postalCode
       countryCode: $countryCode
     ) {
-      ...AddressFragment
+      ...Address
     }
   }
-  ${AddressFragmentFragmentDoc}
+  ${AddressFragmentDoc}
 `;
 export type UpsertAddressMutationFn = ReactApollo.MutationFn<
   UpsertAddressMutation,
@@ -1604,7 +1577,7 @@ export type UpsertAddressMutationHookResult = ReturnType<
 export const UpsertEmailAddressDocument = gql`
   mutation upsertEmailAddress(
     $deetId: Int
-    $notes: String
+    $notes: String!
     $label: String!
     $emailAddress: String!
   ) {
@@ -1614,10 +1587,10 @@ export const UpsertEmailAddressDocument = gql`
       label: $label
       emailAddress: $emailAddress
     ) {
-      ...EmailAddressFragment
+      ...EmailAddress
     }
   }
-  ${EmailAddressFragmentFragmentDoc}
+  ${EmailAddressFragmentDoc}
 `;
 export type UpsertEmailAddressMutationFn = ReactApollo.MutationFn<
   UpsertEmailAddressMutation,
@@ -1686,10 +1659,10 @@ export type UpsertEmailAddressMutationHookResult = ReturnType<
 export const UpsertPhoneNumberDocument = gql`
   mutation upsertPhoneNumber(
     $deetId: Int
-    $notes: String
+    $notes: String!
     $label: String!
     $phoneNumber: String!
-    $countryCode: String
+    $countryCode: String!
   ) {
     upsertPhoneNumber(
       deetId: $deetId
@@ -1698,10 +1671,10 @@ export const UpsertPhoneNumberDocument = gql`
       phoneNumber: $phoneNumber
       countryCode: $countryCode
     ) {
-      ...PhoneNumberFragment
+      ...PhoneNumber
     }
   }
-  ${PhoneNumberFragmentFragmentDoc}
+  ${PhoneNumberFragmentDoc}
 `;
 export type UpsertPhoneNumberMutationFn = ReactApollo.MutationFn<
   UpsertPhoneNumberMutation,

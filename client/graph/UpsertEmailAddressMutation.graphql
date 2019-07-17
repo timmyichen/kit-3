@@ -2,7 +2,7 @@
 
 mutation upsertEmailAddress(
   $deetId: Int
-  $notes: String
+  $notes: String!
   $label: String!
   $emailAddress: String!
 ) {
@@ -12,6 +12,6 @@ mutation upsertEmailAddress(
     label: $label
     emailAddress: $emailAddress
   ) {
-    ...EmailAddressFragment
+    ...EmailAddress
   }
 }

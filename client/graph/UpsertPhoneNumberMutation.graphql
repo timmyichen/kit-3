@@ -2,10 +2,10 @@
 
 mutation upsertPhoneNumber(
   $deetId: Int
-  $notes: String
+  $notes: String!
   $label: String!
   $phoneNumber: String!
-  $countryCode: String
+  $countryCode: String!
 ) {
   upsertPhoneNumber(
     deetId: $deetId
@@ -14,6 +14,6 @@ mutation upsertPhoneNumber(
     phoneNumber: $phoneNumber
     countryCode: $countryCode
   ) {
-    ...PhoneNumberFragment
+    ...PhoneNumber
   }
 }

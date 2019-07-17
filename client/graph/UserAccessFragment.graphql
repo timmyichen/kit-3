@@ -1,4 +1,4 @@
-fragment UserAccessFragment on User {
+fragment UserAccess on User {
   id
   fullName
   username

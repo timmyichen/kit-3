@@ -4,8 +4,8 @@
 
 query currentUserDeets {
   userDeets {
-    ...EmailAddressFragment
-    ...AddressFragment
-    ...PhoneNumberFragment
+    ...EmailAddress
+    ...Address
+    ...PhoneNumber
   }
 }

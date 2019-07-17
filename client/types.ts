@@ -1,8 +1,11 @@
-export interface User {
+export interface User extends BaseUser {
+  hasAccessToDeet: boolean;
+}
+
+export interface BaseUser {
   id: number;
   fullName: string;
   username: string;
-  hasAccessToDeet: boolean;
   __typename: 'User';
 }
 
@@ -23,7 +26,7 @@ interface BaseDeet {
   id: number;
   label: string;
   notes: string;
-  owner: User;
+  owner: BaseUser;
   updatedAt: string;
   type: DeetTypes;
   __typename: ApolloDeetTypes;

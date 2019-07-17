@@ -13,7 +13,7 @@ import { getPlainDeetObject } from 'server/lib/model';
 
 interface Args {
   deetId?: number;
-  notes?: string;
+  notes: string;
   label: string;
   emailAddress: string;
 }
@@ -23,7 +23,7 @@ export default {
   type: emailAddressType,
   args: {
     deetId: { type: GraphQLInt },
-    notes: { type: GraphQLString },
+    notes: { type: new GraphQLNonNull(GraphQLString) },
     label: { type: new GraphQLNonNull(GraphQLString) },
     emailAddress: { type: new GraphQLNonNull(GraphQLString) },
   },

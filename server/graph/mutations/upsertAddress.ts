@@ -13,13 +13,13 @@ import { DeetType, Deet } from 'server/models/types';
 
 interface Args {
   deetId?: number;
-  notes?: string;
+  notes: string;
   label: string;
   addressLine1: string;
-  addressLine2?: string;
-  city?: string;
-  state?: string;
-  postalCode?: string;
+  addressLine2: string;
+  city: string;
+  state: string;
+  postalCode: string;
   countryCode: string;
 }
 
@@ -28,13 +28,13 @@ export default {
   type: addressType,
   args: {
     deetId: { type: GraphQLInt },
-    notes: { type: GraphQLString },
+    notes: { type: new GraphQLNonNull(GraphQLString) },
     label: { type: new GraphQLNonNull(GraphQLString) },
     addressLine1: { type: new GraphQLNonNull(GraphQLString) },
-    addressLine2: { type: GraphQLString },
-    city: { type: GraphQLString },
-    state: { type: GraphQLString },
-    postalCode: { type: GraphQLString },
+    addressLine2: { type: new GraphQLNonNull(GraphQLString) },
+    city: { type: new GraphQLNonNull(GraphQLString) },
+    state: { type: new GraphQLNonNull(GraphQLString) },
+    postalCode: { type: new GraphQLNonNull(GraphQLString) },
     countryCode: { type: new GraphQLNonNull(GraphQLString) },
   },
   async resolve(_: any, args: Args, { user }: express.Request) {

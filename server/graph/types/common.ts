@@ -1,4 +1,5 @@
 import { GraphQLNonNull, GraphQLString } from 'graphql';
+import deetTypeType from './deetTypeType';
 
 export const commonDeetFields = () => ({
   label: {
@@ -6,11 +7,11 @@ export const commonDeetFields = () => ({
     resolve: (obj: any) => obj.label,
   },
   notes: {
-    type: GraphQLString,
+    type: new GraphQLNonNull(GraphQLString),
     resolve: (obj: any) => obj.notes,
   },
   type: {
-    type: new GraphQLNonNull(GraphQLString),
+    type: new GraphQLNonNull(deetTypeType),
     resolve: (obj: any) => obj.type,
   },
 });

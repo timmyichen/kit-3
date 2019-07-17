@@ -13,9 +13,9 @@ import { DeetType, Deet } from 'server/models/types';
 
 interface Args {
   deetId?: number;
-  notes?: string;
+  notes: string;
   label: string;
-  countryCode?: string;
+  countryCode: string;
   phoneNumber: string;
 }
 
@@ -24,10 +24,10 @@ export default {
   type: phoneNumberType,
   args: {
     deetId: { type: GraphQLInt },
-    notes: { type: GraphQLString },
+    notes: { type: new GraphQLNonNull(GraphQLString) },
     label: { type: new GraphQLNonNull(GraphQLString) },
     phoneNumber: { type: new GraphQLNonNull(GraphQLString) },
-    countryCode: { type: GraphQLString },
+    countryCode: { type: new GraphQLNonNull(GraphQLString) },
   },
   async resolve(_: any, args: Args, { user }: express.Request) {
     if (!user) {

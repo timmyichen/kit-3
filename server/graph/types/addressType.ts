@@ -26,19 +26,19 @@ export default new GraphQLObjectType({
       resolve: (address: any) => address.address.address_line_1,
     },
     addressLine2: {
-      type: GraphQLString,
+      type: new GraphQLNonNull(GraphQLString),
       resolve: (address: any) => address.address.address_line_2,
     },
     city: {
-      type: GraphQLString,
+      type: new GraphQLNonNull(GraphQLString),
       resolve: (address: any) => address.address.city,
     },
     state: {
-      type: GraphQLString,
+      type: new GraphQLNonNull(GraphQLString),
       resolve: (address: any) => address.address.state,
     },
     postalCode: {
-      type: GraphQLString,
+      type: new GraphQLNonNull(GraphQLString),
       resolve: (address: any) => address.address.postal_code,
     },
     country: {

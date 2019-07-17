@@ -2,6 +2,6 @@
 
 mutation rescindFriendRequest($targetUserId: Int!) {
   rescindFriendRequest(targetUserId: $targetUserId) {
-    ...OtherUserFragment
+    ...OtherUser
   }
 }

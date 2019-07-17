@@ -2,6 +2,6 @@
 
 mutation requestFriend($targetUserId: Int!) {
   requestFriend(targetUserId: $targetUserId) {
-    ...OtherUserFragment
+    ...OtherUser
   }
 }

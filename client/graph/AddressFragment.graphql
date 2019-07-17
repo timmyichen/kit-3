@@ -1,4 +1,6 @@
-fragment AddressFragment on AddressDeet {
+#import "./BaseUserFragment.graphql"
+
+fragment Address on AddressDeet {
   id
   notes
   label
@@ -10,5 +12,8 @@ fragment AddressFragment on AddressDeet {
   country
   updatedAt
   type
+  owner {
+    ...BaseUser
+  }
   __typename
 }

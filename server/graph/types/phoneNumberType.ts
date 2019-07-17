@@ -22,7 +22,7 @@ export default new GraphQLObjectType({
         loader(Users).loadBy('id', num.owner_id),
     },
     countryCode: {
-      type: GraphQLString,
+      type: new GraphQLNonNull(GraphQLString),
       resolve: (num: any) => num.phone_number.country_code,
     },
     phoneNumber: {

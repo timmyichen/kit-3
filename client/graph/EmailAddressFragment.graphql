@@ -1,9 +1,14 @@
-fragment EmailAddressFragment on EmailAddressDeet {
+#import "./BaseUserFragment.graphql"
+
+fragment EmailAddress on EmailAddressDeet {
   id
   notes
   label
   emailAddress
   updatedAt
   type
+  owner {
+    ...BaseUser
+  }
   __typename
 }

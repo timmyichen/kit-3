@@ -21,6 +21,10 @@ export const EMAIL_ADDRESS_FRAGMENT = gql`
     emailAddress
     updatedAt
     type
+    owner {
+      username
+      fullName
+    }
     __typename
   }
 `;
@@ -38,6 +42,10 @@ export const ADDRESS_FRAGMENT = gql`
     country
     updatedAt
     type
+    owner {
+      username
+      fullName
+    }
     __typename
   }
 `;
@@ -51,6 +59,10 @@ export const PHONE_NUMBER_FRAGMENT = gql`
     countryCode
     updatedAt
     type
+    owner {
+      username
+      fullName
+    }
     __typename
   }
 `;

@@ -2,6 +2,6 @@
 
 mutation removeFriend($targetUserId: Int!) {
   removeFriend(targetUserId: $targetUserId) {
-    ...OtherUserFragment
+    ...OtherUser
   }
 }

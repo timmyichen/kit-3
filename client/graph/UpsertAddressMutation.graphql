@@ -2,13 +2,13 @@
 
 mutation upsertAddress(
   $deetId: Int
-  $notes: String
+  $notes: String!
   $label: String!
   $addressLine1: String!
-  $addressLine2: String
-  $city: String
-  $state: String
-  $postalCode: String
+  $addressLine2: String!
+  $city: String!
+  $state: String!
+  $postalCode: String!
   $countryCode: String!
 ) {
   upsertAddress(
@@ -22,6 +22,6 @@ mutation upsertAddress(
     postalCode: $postalCode
     countryCode: $countryCode
   ) {
-    ...AddressFragment
+    ...Address
   }
 }

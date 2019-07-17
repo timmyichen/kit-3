@@ -5,27 +5,9 @@
 query accessibleDeets($type: String, $after: String, $count: Int) {
   accessibleDeets(type: $type, count: $count, after: $after) {
     items {
-      ...EmailAddressFragment
-      ... on EmailAddressDeet {
-        owner {
-          fullName
-          username
-        }
-      }
-      ...AddressFragment
-      ... on AddressDeet {
-        owner {
-          fullName
-          username
-        }
-      }
-      ...PhoneNumberFragment
-      ... on PhoneNumberDeet {
-        owner {
-          fullName
-          username
-        }
-      }
+      ...EmailAddress
+      ...Address
+      ...PhoneNumber
     }
     pageInfo {
       hasNext

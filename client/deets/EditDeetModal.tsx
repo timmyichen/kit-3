@@ -11,20 +11,18 @@ import { Header, Modal } from 'semantic-ui-react';
 import AddressCreator from './CreateAddress';
 import EmailAddressCreator from './CreateEmailAddress';
 import PhoneNumberCreator from './CreatePhoneNumber';
-import { CURRENT_USER_DEETS_QUERY } from 'client/graph/queries';
 import {
-  UPSERT_ADDRESS_MUTATION,
-  UPSERT_PHONE_NUMBER_MUTATION,
-  UPSERT_EMAIL_ADDRESS_MUTATION,
-} from 'client/graph/mutations';
-import { useMutation } from 'react-apollo-hooks';
-import postMutationUpdateCache from 'client/lib/postMutationUpdateCache';
+  useUpsertAddressMutation,
+  useUpsertPhoneNumberMutation,
+  useUpsertEmailAddressMutation,
+  UpsertAddressMutationVariables,
+  UpsertPhoneNumberMutationVariables,
+  UpsertEmailAddressMutationVariables,
+} from 'generated/generated-types';
 
 interface Props {
   deet: Deet;
 }
-
-const query = { query: CURRENT_USER_DEETS_QUERY };
 
 export function EditDeetModal({ deet }: Props) {
   const [saving, setSaving] = React.useState<boolean>(false);
@@ -32,59 +30,35 @@ export function EditDeetModal({ deet }: Props) {
 
   const onCloseModal = () => closeModal(dispatch);
 
-  const upsertAddress = useMutation(UPSERT_ADDRESS_MUTATION, {
-    update: (cache, { data }: { data: { upsertAddress: Deet } }) => {
-      postMutationUpdateCache<{ userDeets: Array<Deet> }, Deet>({
-        cache,
-        query,
-        fieldName: 'userDeets',
-        type: 'replace',
-        targetObj: data.upsertAddress,
-      });
-    },
-  });
-  const upsertPhoneNumber = useMutation(UPSERT_PHONE_NUMBER_MUTATION, {
-    update: (cache, { data }: { data: { upsertPhoneNumber: Deet } }) => {
-      postMutationUpdateCache<{ userDeets: Array<Deet> }, Deet>({
-        cache,
-        query,
-        fieldName: 'userDeets',
-        type: 'replace',
-        targetObj: data.upsertPhoneNumber,
-      });
-    },
-  });
-  const upsertEmailAddress = useMutation(UPSERT_EMAIL_ADDRESS_MUTATION, {
-    update: (cache, { data }: { data: { upsertEmailAddress: Deet } }) => {
-      postMutationUpdateCache<{ userDeets: Array<Deet> }, Deet>({
-        cache,
-        query,
-        fieldName: 'userDeets',
-        type: 'replace',
-        targetObj: data.upsertEmailAddress,
-      });
-    },
-  });
+  const upsertAddress = useUpsertAddressMutation();
+  const upsertPhoneNumber = useUpsertPhoneNumberMutation();
+  const upsertEmailAddress = useUpsertEmailAddressMutation();
 
   const submitForm = async (variables: Object) => {
-    let mutation;
-    switch (deet.type) {
-      case 'address':
-        mutation = upsertAddress;
-        break;
-      case 'phone_number':
-        mutation = upsertPhoneNumber;
-        break;
-      case 'email_address':
-        mutation = upsertEmailAddress;
-        break;
-      default:
-        throw new Error(`Unrecognized type ${deet.type}`);
-    }
-
     setSaving(true);
     try {
-      await mutation({ variables: { ...variables, deetId: deet.id } });
+      switch (deet.type) {
+        case 'address':
+          const addressVars = variables as UpsertAddressMutationVariables;
+          await upsertAddress({
+            variables: { ...addressVars, deetId: deet.id },
+          });
+          break;
+        case 'phone_number':
+          const phoneVars = variables as UpsertPhoneNumberMutationVariables;
+          await upsertPhoneNumber({
+            variables: { ...phoneVars, deetId: deet.id },
+          });
+          break;
+        case 'email_address':
+          const emailVars = variables as UpsertEmailAddressMutationVariables;
+          await upsertEmailAddress({
+            variables: { ...emailVars, deetId: deet.id },
+          });
+          break;
+        default:
+          throw new Error(`Unrecognized type ${deet.type}`);
+      }
     } catch (e) {
       setSaving(false);
       throw e;

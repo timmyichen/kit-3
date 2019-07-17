@@ -1,16 +1,13 @@
 import * as React from 'react';
-import { useQuery } from 'react-apollo-hooks';
-import { CURRENT_USER_DEETS_QUERY } from 'client/graph/queries';
 import { Deet } from 'client/types';
 import { DeetCard } from './DeetCard';
 import useWindowSize from 'client/hooks/useWindowSize';
 import { isBrowser, splitColumns } from 'client/lib/dom';
 import Loader from 'client/components/Loader';
+import { useCurrentUserDeetsQuery } from 'generated/generated-types';
 
 function CurrentUserDeets() {
-  const { data: deets, loading: loadingDeets } = useQuery(
-    CURRENT_USER_DEETS_QUERY,
-  );
+  const { data: deets, loading: loadingDeets } = useCurrentUserDeetsQuery();
 
   const [colCount, setColCount] = React.useState<number>(3);
 
@@ -22,7 +19,7 @@ function CurrentUserDeets() {
     }, [size.width]);
   }
 
-  if (loadingDeets) {
+  if (loadingDeets || !deets || !deets.userDeets) {
     return (
       <div className="current-user-deets">
         <Loader />

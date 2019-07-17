@@ -1,4 +1,6 @@
-fragment PhoneNumberFragment on PhoneNumberDeet {
+#import "./BaseUserFragment.graphql"
+
+fragment PhoneNumber on PhoneNumberDeet {
   id
   notes
   label
@@ -6,5 +8,8 @@ fragment PhoneNumberFragment on PhoneNumberDeet {
   countryCode
   updatedAt
   type
+  owner {
+    ...BaseUser
+  }
   __typename
 }

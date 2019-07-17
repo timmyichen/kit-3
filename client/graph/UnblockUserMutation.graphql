@@ -2,6 +2,6 @@
 
 mutation unblockUser($targetUserId: Int!) {
   unblockUser(targetUserId: $targetUserId) {
-    ...OtherUserFragment
+    ...OtherUser
   }
 }

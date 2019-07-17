@@ -4,8 +4,8 @@
 
 mutation deleteDeet($deetId: Int!) {
   deleteDeet(deetId: $deetId) {
-    ...EmailAddressFragment
-    ...AddressFragment
-    ...PhoneNumberFragment
+    ...EmailAddress
+    ...Address
+    ...PhoneNumber
   }
 }
