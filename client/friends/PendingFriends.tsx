@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { Card, Image, Button, Header } from 'semantic-ui-react';
-import { User, PaginationResponse } from 'client/types';
-import { useMutation } from 'react-apollo-hooks';
-import { ACCEPT_REQUEST_MUTATION } from 'client/graph/mutations';
+import { User } from 'client/types';
 import BlockUserModal from 'client/components/BlockUserModal';
 import { useCtxDispatch } from 'client/components/ContextProvider';
 import Loader from 'client/components/Loader';
@@ -14,20 +12,23 @@ import {
   usePendingFriendRequestsQuery,
   PendingFriendRequestsDocument,
   FriendsDocument,
+  useAcceptFriendRequestMutation,
+  PendingFriendRequestsQuery,
+  FriendsQuery,
 } from 'generated/generated-types';
 
 const PendingFriends = ({ colCount }: { colCount: number }) => {
   const dispatch = useCtxDispatch();
-  const acceptFriendRequest = useMutation(ACCEPT_REQUEST_MUTATION, {
+  const acceptFriendRequest = useAcceptFriendRequestMutation({
     update: (cache, { data }: FetchResult<any>) => {
-      postMutationUpdateCache<{ pendingFriendRequests: Array<User> }, User>({
+      postMutationUpdateCache<PendingFriendRequestsQuery, User>({
         cache,
         query: { query: PendingFriendRequestsDocument },
         fieldName: 'pendingFriendRequests',
         type: 'remove',
         targetObj: data.acceptFriendRequest,
       });
-      postMutationUpdateCache<{ friends: PaginationResponse<User> }, User>({
+      postMutationUpdateCache<FriendsQuery, User>({
         cache,
         query: {
           query: FriendsDocument,

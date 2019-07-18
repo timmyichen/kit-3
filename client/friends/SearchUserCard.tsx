@@ -1,20 +1,19 @@
 import * as React from 'react';
 import { UserSearch } from 'client/types';
-import { useMutation } from 'react-apollo-hooks';
 import cloneDeep from 'lodash/cloneDeep';
 import omit from 'lodash/omit';
 import { Button, Card, Image } from 'semantic-ui-react';
-import {
-  REQUEST_FRIEND_MUTATION,
-  REMOVE_FRIEND_MUTATION,
-  BLOCK_USER_MUTATION,
-  UNBLOCK_USER_MUTATION,
-  RESCIND_REQUEST_MUTATION,
-  ACCEPT_REQUEST_MUTATION,
-} from 'client/graph/mutations';
 import { DataProxy } from 'apollo-cache';
 import { FetchResult, DocumentNode } from 'apollo-link';
-import { SearchUsersDocument } from 'generated/generated-types';
+import {
+  SearchUsersDocument,
+  useAcceptFriendRequestMutation,
+  useRescindFriendRequestMutation,
+  useUnblockUserMutation,
+  useBlockUserMutation,
+  useRemoveFriendMutation,
+  useRequestFriendMutation,
+} from 'generated/generated-types';
 
 const searchQuery = {
   query: SearchUsersDocument,
@@ -28,62 +27,12 @@ interface Props {
 function SearchUserCard({ user }: Props) {
   const [loading, setLoading] = React.useState<boolean>(false);
 
-  const requestFriend = useMutation(REQUEST_FRIEND_MUTATION, {
-    update: createCacheUpdate({
-      query: searchQuery,
-      incomingDataField: 'requestFriend',
-      updateFields: { isRequested: true },
-    }),
-  });
-
-  const removeFriend = useMutation(REMOVE_FRIEND_MUTATION, {
-    update: createCacheUpdate({
-      query: searchQuery,
-      incomingDataField: 'removeFriend',
-      updateFields: { isFriend: false },
-    }),
-  });
-
-  const blockUser = useMutation(BLOCK_USER_MUTATION, {
-    update: createCacheUpdate({
-      query: searchQuery,
-      incomingDataField: 'blockUser',
-      updateFields: {
-        isFriend: false,
-        isBlocked: true,
-        isRequested: false,
-        hasRequestedUser: false,
-      },
-    }),
-  });
-
-  const unblockUser = useMutation(UNBLOCK_USER_MUTATION, {
-    update: createCacheUpdate({
-      query: searchQuery,
-      incomingDataField: 'unblockUser',
-      updateFields: { isBlocked: false },
-    }),
-  });
-
-  const rescindRequest = useMutation(RESCIND_REQUEST_MUTATION, {
-    update: createCacheUpdate({
-      query: searchQuery,
-      incomingDataField: 'rescindFriendRequest',
-      updateFields: { isRequested: false },
-    }),
-  });
-
-  const acceptRequest = useMutation(ACCEPT_REQUEST_MUTATION, {
-    update: createCacheUpdate({
-      query: searchQuery,
-      incomingDataField: 'acceptFriendRequest',
-      updateFields: {
-        isFriend: true,
-        hasRequestedUser: false,
-        isRequested: false,
-      },
-    }),
-  });
+  const requestFriend = useRequestFriendMutation();
+  const removeFriend = useRemoveFriendMutation();
+  const blockUser = useBlockUserMutation();
+  const unblockUser = useUnblockUserMutation();
+  const rescindRequest = useRescindFriendRequestMutation();
+  const acceptRequest = useAcceptFriendRequestMutation();
 
   const doAction = (action: () => void) => async () => {
     setLoading(true);

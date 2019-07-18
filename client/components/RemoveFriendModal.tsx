@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { User } from 'client/types';
-import { useMutation } from 'react-apollo-hooks';
-import { REMOVE_FRIEND_MUTATION } from 'client/graph/mutations';
 import { Modal, Button, Header } from 'semantic-ui-react';
 import CtxModal, { closeModal } from './Modal';
 import { useCtxDispatch } from './ContextProvider';
 import { DataProxy } from 'apollo-cache';
 import { FetchResult } from 'react-apollo';
+import { useRemoveFriendMutation } from 'generated/generated-types';
 
 interface RemoveModalProps {
   user: User;
@@ -14,7 +13,7 @@ interface RemoveModalProps {
 }
 
 export default function RemoveFriendModal({ user, update }: RemoveModalProps) {
-  const removeFriend = useMutation(REMOVE_FRIEND_MUTATION, { update });
+  const removeFriend = useRemoveFriendMutation({ update });
   const [removing, setRemoving] = React.useState<boolean>(false);
   const dispatch = useCtxDispatch();
 
