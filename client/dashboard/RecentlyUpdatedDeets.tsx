@@ -26,7 +26,7 @@ function RecentlyUpdatedDeets() {
   let content;
   if (loading) {
     content = <Loader />;
-  } else if (deets) {
+  } else if (deets && deets.accessibleDeets) {
     const deetCards = deets.accessibleDeets.items.map(deet => (
       <DeetCard key={`recent-deet-${deet.id}`} deet={deet} isOwner={false} />
     ));
@@ -53,6 +53,8 @@ function RecentlyUpdatedDeets() {
         )}
       </>
     );
+  } else {
+    content = 'No deets found. Get some deets from friends!';
   }
 
   return (
