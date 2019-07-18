@@ -1,5 +1,6 @@
 import { GraphQLString, GraphQLInt, GraphQLNonNull } from 'graphql';
 import deetType from '../types/deetType';
+import { orderBy, reverse } from 'lodash';
 import { DeetTypes, Deet } from 'server/models/types';
 import { AuthenticationError } from 'apollo-server';
 import {
@@ -64,7 +65,7 @@ export default {
     const allDeets = paginatedDeets.items.reduce(
       (obj: { [n: number]: Deet }, d: Deet) => ({
         ...obj,
-        [d.id]: d,
+        [d.id]: d.get({ plain: true }),
       }),
       {},
     );
@@ -93,9 +94,12 @@ export default {
       allDeets[result.deet_id][result.getType()] = result.get({ simple: true });
     }
 
+    console.log(Object.values(allDeets));
+
     return {
       ...paginatedDeets,
-      items: Object.values(allDeets),
+      // lodash orderby desc sucks: https://github.com/lodash/lodash/issues/3285
+      items: reverse(orderBy(Object.values(allDeets), ['updated_at', 'asc'])),
     };
   },
 };
