@@ -14,12 +14,6 @@ import {
   useRemoveFriendMutation,
   useRequestFriendMutation,
 } from 'generated/generated-types';
-
-const searchQuery = {
-  query: SearchUsersDocument,
-  name: 'searchUsers',
-  variables: { searchQuery: '' },
-};
 interface Props {
   user: UserSearch;
 }

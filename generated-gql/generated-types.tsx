@@ -177,7 +177,7 @@ export type RootQuery = {
   /** A users friends */
   friends: FriendsPagination;
   /** Get all deets owned by a user */
-  userDeets: Array<Maybe<Deet>>;
+  userDeets: Array<Deet>;
   /** Deets accessible to the currently authed user */
   accessibleDeets: SharedDeetsPagination;
   /** A users friends */
@@ -301,7 +301,7 @@ export type CurrentUserDeetsQueryVariables = {};
 
 export type CurrentUserDeetsQuery = { __typename?: 'RootQuery' } & {
   userDeets: Array<
-    Maybe<EmailAddressFragment | AddressFragment | PhoneNumberFragment>
+    EmailAddressFragment | AddressFragment | PhoneNumberFragment
   >;
 };
 

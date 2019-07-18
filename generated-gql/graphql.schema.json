@@ -122,7 +122,11 @@
               "ofType": {
                 "kind": "LIST",
                 "name": null,
-                "ofType": { "kind": "UNION", "name": "Deet", "ofType": null }
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "UNION", "name": "Deet", "ofType": null }
+                }
               }
             },
             "isDeprecated": false,
