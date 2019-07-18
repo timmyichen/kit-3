@@ -4,8 +4,8 @@ import { User, PaginationResponse } from 'client/types';
 import BlockUserModal from 'client/components/BlockUserModal';
 import RemoveFriendModal from 'client/components/RemoveFriendModal';
 import { useCtxDispatch } from 'client/components/ContextProvider';
-import { FRIENDS_QUERY } from 'client/graph/queries';
 import postMutationUpdateCache from 'client/lib/postMutationUpdateCache';
+import { FriendsDocument } from 'generated/generated-types';
 
 interface Props {
   friend: User;
@@ -14,7 +14,7 @@ interface Props {
 export const PAGE_COUNT = 20;
 
 const friendsQuery = {
-  query: FRIENDS_QUERY,
+  query: FriendsDocument,
   variables: { count: PAGE_COUNT, after: null },
 };
 

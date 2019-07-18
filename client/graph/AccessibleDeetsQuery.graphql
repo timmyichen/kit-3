@@ -1,13 +1,29 @@
 #import "./EmailAddressFragment.graphql"
 #import "./PhoneNumberFragment.graphql"
-#import "AddressFragment.graphql"
+#import "./AddressFragment.graphql"
+#import "./BaseUserFragment.graphql"
 
 query accessibleDeets($type: String, $after: String, $count: Int) {
   accessibleDeets(type: $type, count: $count, after: $after) {
     items {
-      ...EmailAddress
-      ...Address
-      ...PhoneNumber
+      ... on EmailAddressDeet {
+        ...EmailAddress
+        owner {
+          ...BaseUser
+        }
+      }
+      ... on AddressDeet {
+        ...Address
+        owner {
+          ...BaseUser
+        }
+      }
+      ... on PhoneNumberDeet {
+        ...PhoneNumber
+        owner {
+          ...BaseUser
+        }
+      }
     }
     pageInfo {
       hasNext

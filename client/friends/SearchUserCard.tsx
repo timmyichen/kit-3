@@ -4,7 +4,6 @@ import { useMutation } from 'react-apollo-hooks';
 import cloneDeep from 'lodash/cloneDeep';
 import omit from 'lodash/omit';
 import { Button, Card, Image } from 'semantic-ui-react';
-import { SEARCH_USERS_QUERY } from 'client/graph/queries';
 import {
   REQUEST_FRIEND_MUTATION,
   REMOVE_FRIEND_MUTATION,
@@ -15,9 +14,10 @@ import {
 } from 'client/graph/mutations';
 import { DataProxy } from 'apollo-cache';
 import { FetchResult, DocumentNode } from 'apollo-link';
+import { SearchUsersDocument } from 'generated/generated-types';
 
 const searchQuery = {
-  query: SEARCH_USERS_QUERY,
+  query: SearchUsersDocument,
   name: 'searchUsers',
   variables: { searchQuery: '' },
 };

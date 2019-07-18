@@ -1,5 +1,3 @@
-#import "./BaseUserFragment.graphql"
-
 fragment PhoneNumber on PhoneNumberDeet {
   id
   notes
@@ -8,8 +6,5 @@ fragment PhoneNumber on PhoneNumberDeet {
   countryCode
   updatedAt
   type
-  owner {
-    ...BaseUser
-  }
   __typename
 }

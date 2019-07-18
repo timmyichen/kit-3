@@ -2,15 +2,14 @@ import * as React from 'react';
 import { DeetTypes, Deet } from 'client/types';
 import { DEET_TYPES } from './DeetCreator';
 import { Dropdown, Button } from 'semantic-ui-react';
-import { useQuery } from 'react-apollo-hooks';
-import { ACCESSIBLE_DEETS_QUERY } from 'client/graph/queries';
 import Loader from 'client/components/Loader';
 import { DeetCard } from './DeetCard';
 import { isBrowser, splitColumns } from 'client/lib/dom';
 import useWindowSize from 'client/hooks/useWindowSize';
 import createUpdateQuery from 'client/lib/createUpdateQuery';
+import { useAccessibleDeetsQuery } from 'generated/generated-types';
 
-const PAGE_COUNT = 1;
+const PAGE_COUNT = 20;
 
 const DEEP_TYPES_WITH_EMPTY = {
   all: {
@@ -37,7 +36,7 @@ function SharedDeetsDashboard() {
     data: deets,
     loading: loadingDeets,
     fetchMore: fetchMoreDeets,
-  } = useQuery(ACCESSIBLE_DEETS_QUERY, {
+  } = useAccessibleDeetsQuery({
     variables: {
       type: filterType === 'all' ? undefined : filterType,
       count: PAGE_COUNT,
@@ -50,7 +49,7 @@ function SharedDeetsDashboard() {
   };
 
   let content;
-  if (loadingDeets) {
+  if (loadingDeets || !deets || !deets.accessibleDeets) {
     content = <Loader />;
   } else {
     const deetCards = deets.accessibleDeets.items.map((deet: Deet) => (

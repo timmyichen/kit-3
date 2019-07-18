@@ -13,7 +13,7 @@ interface Args {
 
 export default {
   description: 'Upsert a phone number record',
-  type: deetType,
+  type: new GraphQLNonNull(deetType),
   args: {
     deetId: { type: new GraphQLNonNull(GraphQLInt) },
   },

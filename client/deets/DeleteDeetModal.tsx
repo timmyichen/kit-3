@@ -1,27 +1,27 @@
 import * as React from 'react';
 import { Deet } from 'client/types';
-import { useMutation } from 'react-apollo-hooks';
-import { DELETE_DEET_MUTATION } from 'client/graph/mutations';
 import { Modal, Button, Header } from 'semantic-ui-react';
 import { useCtxDispatch } from 'client/components/ContextProvider';
 import CtxModal, { closeModal } from 'client/components/Modal';
-import { CURRENT_USER_DEETS_QUERY } from 'client/graph/queries';
 import postMutationUpdateCache from 'client/lib/postMutationUpdateCache';
+import {
+  useDeleteDeetMutation,
+  CurrentUserDeetsDocument,
+} from 'generated/generated-types';
 
 interface Props {
   deet: Deet;
 }
 
 export default function DeleteDeetModal({ deet }: Props) {
-  const deleteDeet = useMutation(DELETE_DEET_MUTATION, {
-    update: (cache, { data }: { data: { deleteDeet: Deet } }) => {
+  const deleteDeet = useDeleteDeetMutation({
+    update: (cache, { data }) => {
       postMutationUpdateCache<{ userDeets: Array<Deet> }, Deet>({
         cache,
-        query: { query: CURRENT_USER_DEETS_QUERY },
+        query: { query: CurrentUserDeetsDocument },
         fieldName: 'userDeets',
-        isPaginated: false,
         type: 'remove',
-        targetObj: data.deleteDeet,
+        targetObj: data!.deleteDeet,
       });
     },
   });

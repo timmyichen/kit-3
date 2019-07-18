@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { Modal, Header, Button, Checkbox } from 'semantic-ui-react';
 import { Deet, User } from 'client/types';
-import { useMutation, useQuery } from 'react-apollo-hooks';
-import { UPDATE_SHARED_PERMISSIONS_MUTATION } from 'client/graph/mutations';
-import { DEET_PERMISSIONS_QUERY } from 'client/graph/queries';
 import CtxModal, { closeModal } from 'client/components/Modal';
 import { useCtxDispatch } from 'client/components/ContextProvider';
 import Loader from 'client/components/Loader';
+import {
+  useUpdateSharedPermissionsMutation,
+  useDeetPermsQuery,
+} from 'generated/generated-types';
 
 interface Props {
   deet: Deet;
@@ -23,10 +24,8 @@ const DeetSharingModal = ({ deet }: Props) => {
   // const [search, setSearch] = React.useState<string>('');
   const [search] = React.useState<string>('');
   const [changedPerms, setChangedPerms] = React.useState<Array<Permission>>([]);
-  const updateSharingPermissions = useMutation(
-    UPDATE_SHARED_PERMISSIONS_MUTATION,
-  );
-  const { data, loading } = useQuery(DEET_PERMISSIONS_QUERY, {
+  const updateSharingPermissions = useUpdateSharedPermissionsMutation();
+  const { data, loading } = useDeetPermsQuery({
     fetchPolicy: 'network-only',
     variables: {
       searchQuery: search,
@@ -75,7 +74,7 @@ const DeetSharingModal = ({ deet }: Props) => {
         <h3>Sharing settings for {deet.label}</h3>
       </Modal.Content>
       <Modal.Content>
-        {loading ? (
+        {loading || !data || !data.friends || !data.friends.items ? (
           <Loader />
         ) : (
           <div className="friend-share-wrapper">

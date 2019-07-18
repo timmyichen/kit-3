@@ -55,7 +55,7 @@ export type EmailAddressDeet = {
 /** Pagination for Friends */
 export type FriendsPagination = {
   __typename?: 'FriendsPagination';
-  items?: Maybe<Array<Maybe<User>>>;
+  items: Array<User>;
   pageInfo: PaginationInfo;
 };
 
@@ -94,13 +94,13 @@ export type RootMutation = {
   /** Rescind a friend request */
   rescindFriendRequest: User;
   /** Upsert an address record */
-  upsertAddress?: Maybe<AddressDeet>;
+  upsertAddress: AddressDeet;
   /** Upsert a phone number record */
-  upsertEmailAddress?: Maybe<EmailAddressDeet>;
+  upsertEmailAddress: EmailAddressDeet;
   /** Upsert a phone number record */
-  upsertPhoneNumber?: Maybe<PhoneNumberDeet>;
+  upsertPhoneNumber: PhoneNumberDeet;
   /** Upsert a phone number record */
-  deleteDeet?: Maybe<Deet>;
+  deleteDeet: Deet;
   /** Update permissions for shared */
   updateSharedPermissions?: Maybe<Array<Maybe<User>>>;
 };
@@ -171,17 +171,17 @@ export type RootQuery = {
   /** The currently authed user */
   currentUser?: Maybe<User>;
   /** Searching for users */
-  searchUsers?: Maybe<Array<Maybe<User>>>;
+  searchUsers: Array<Maybe<User>>;
   /** The currently authed user */
   userByUsername?: Maybe<User>;
   /** A users friends */
-  friends?: Maybe<FriendsPagination>;
+  friends: FriendsPagination;
   /** Get all deets owned by a user */
-  userDeets?: Maybe<Array<Deet>>;
+  userDeets: Array<Maybe<Deet>>;
   /** Deets accessible to the currently authed user */
-  accessibleDeets?: Maybe<SharedDeetsPagination>;
+  accessibleDeets: SharedDeetsPagination;
   /** A users friends */
-  pendingFriendRequests?: Maybe<Array<Maybe<User>>>;
+  pendingFriendRequests: Array<Maybe<User>>;
 };
 
 export type RootQuerySearchUsersArgs = {
@@ -212,7 +212,7 @@ export type RootQueryPendingFriendRequestsArgs = {
 /** Pagination for SharedDeets */
 export type SharedDeetsPagination = {
   __typename?: 'SharedDeetsPagination';
-  items?: Maybe<Array<Maybe<Deet>>>;
+  items: Array<Deet>;
   pageInfo: PaginationInfo;
 };
 
@@ -250,19 +250,23 @@ export type AccessibleDeetsQueryVariables = {
 };
 
 export type AccessibleDeetsQuery = { __typename?: 'RootQuery' } & {
-  accessibleDeets: Maybe<
-    { __typename?: 'SharedDeetsPagination' } & {
-      items: Maybe<
-        Array<
-          Maybe<EmailAddressFragment | AddressFragment | PhoneNumberFragment>
-        >
-      >;
-      pageInfo: { __typename?: 'PaginationInfo' } & Pick<
-        PaginationInfo,
-        'hasNext' | 'nextCursor'
-      >;
-    }
-  >;
+  accessibleDeets: { __typename?: 'SharedDeetsPagination' } & {
+    items: Array<
+      | ({ __typename?: 'EmailAddressDeet' } & {
+          owner: { __typename?: 'User' } & BaseUserFragment;
+        } & EmailAddressFragment)
+      | ({ __typename?: 'AddressDeet' } & {
+          owner: { __typename?: 'User' } & BaseUserFragment;
+        } & AddressFragment)
+      | ({ __typename?: 'PhoneNumberDeet' } & {
+          owner: { __typename?: 'User' } & BaseUserFragment;
+        } & PhoneNumberFragment)
+    >;
+    pageInfo: { __typename?: 'PaginationInfo' } & Pick<
+      PaginationInfo,
+      'hasNext' | 'nextCursor'
+    >;
+  };
 };
 
 export type AddressFragment = { __typename: 'AddressDeet' } & Pick<
@@ -278,7 +282,7 @@ export type AddressFragment = { __typename: 'AddressDeet' } & Pick<
   | 'country'
   | 'updatedAt'
   | 'type'
-> & { owner: { __typename?: 'User' } & BaseUserFragment };
+>;
 
 export type BaseUserFragment = { __typename: 'User' } & Pick<
   User,
@@ -296,8 +300,8 @@ export type BlockUserMutation = { __typename?: 'RootMutation' } & {
 export type CurrentUserDeetsQueryVariables = {};
 
 export type CurrentUserDeetsQuery = { __typename?: 'RootQuery' } & {
-  userDeets: Maybe<
-    Array<EmailAddressFragment | AddressFragment | PhoneNumberFragment>
+  userDeets: Array<
+    Maybe<EmailAddressFragment | AddressFragment | PhoneNumberFragment>
   >;
 };
 
@@ -309,15 +313,13 @@ export type DeetPermsQueryVariables = {
 };
 
 export type DeetPermsQuery = { __typename?: 'RootQuery' } & {
-  friends: Maybe<
-    { __typename?: 'FriendsPagination' } & {
-      items: Maybe<Array<Maybe<{ __typename?: 'User' } & UserAccessFragment>>>;
-      pageInfo: { __typename?: 'PaginationInfo' } & Pick<
-        PaginationInfo,
-        'hasNext' | 'nextCursor'
-      >;
-    }
-  >;
+  friends: { __typename?: 'FriendsPagination' } & {
+    items: Array<{ __typename?: 'User' } & UserAccessFragment>;
+    pageInfo: { __typename?: 'PaginationInfo' } & Pick<
+      PaginationInfo,
+      'hasNext' | 'nextCursor'
+    >;
+  };
 };
 
 export type DeleteDeetMutationVariables = {
@@ -325,15 +327,13 @@ export type DeleteDeetMutationVariables = {
 };
 
 export type DeleteDeetMutation = { __typename?: 'RootMutation' } & {
-  deleteDeet: Maybe<
-    EmailAddressFragment | AddressFragment | PhoneNumberFragment
-  >;
+  deleteDeet: EmailAddressFragment | AddressFragment | PhoneNumberFragment;
 };
 
 export type EmailAddressFragment = { __typename: 'EmailAddressDeet' } & Pick<
   EmailAddressDeet,
   'id' | 'notes' | 'label' | 'emailAddress' | 'updatedAt' | 'type'
-> & { owner: { __typename?: 'User' } & BaseUserFragment };
+>;
 
 export type FriendsQueryVariables = {
   searchQuery?: Maybe<Scalars['String']>;
@@ -342,21 +342,15 @@ export type FriendsQueryVariables = {
 };
 
 export type FriendsQuery = { __typename?: 'RootQuery' } & {
-  friends: Maybe<
-    { __typename?: 'FriendsPagination' } & {
-      items: Maybe<
-        Array<
-          Maybe<
-            { __typename: 'User' } & Pick<User, 'id' | 'fullName' | 'username'>
-          >
-        >
-      >;
-      pageInfo: { __typename?: 'PaginationInfo' } & Pick<
-        PaginationInfo,
-        'hasNext' | 'nextCursor'
-      >;
-    }
-  >;
+  friends: { __typename?: 'FriendsPagination' } & {
+    items: Array<
+      { __typename: 'User' } & Pick<User, 'id' | 'fullName' | 'username'>
+    >;
+    pageInfo: { __typename?: 'PaginationInfo' } & Pick<
+      PaginationInfo,
+      'hasNext' | 'nextCursor'
+    >;
+  };
 };
 
 export type OtherUserFragment = { __typename: 'User' } & Pick<
@@ -375,10 +369,8 @@ export type PendingFriendRequestsQueryVariables = {
 };
 
 export type PendingFriendRequestsQuery = { __typename?: 'RootQuery' } & {
-  pendingFriendRequests: Maybe<
-    Array<
-      Maybe<{ __typename: 'User' } & Pick<User, 'id' | 'fullName' | 'username'>>
-    >
+  pendingFriendRequests: Array<
+    Maybe<{ __typename: 'User' } & Pick<User, 'id' | 'fullName' | 'username'>>
   >;
 };
 
@@ -391,7 +383,7 @@ export type PhoneNumberFragment = { __typename: 'PhoneNumberDeet' } & Pick<
   | 'countryCode'
   | 'updatedAt'
   | 'type'
-> & { owner: { __typename?: 'User' } & BaseUserFragment };
+>;
 
 export type RemoveFriendMutationVariables = {
   targetUserId: Scalars['Int'];
@@ -423,7 +415,7 @@ export type SearchUsersQueryVariables = {
 };
 
 export type SearchUsersQuery = { __typename?: 'RootQuery' } & {
-  searchUsers: Maybe<Array<Maybe<{ __typename?: 'User' } & OtherUserFragment>>>;
+  searchUsers: Array<Maybe<{ __typename?: 'User' } & OtherUserFragment>>;
 };
 
 export type UnblockUserMutationVariables = {
@@ -461,7 +453,9 @@ export type UpsertAddressMutationVariables = {
 };
 
 export type UpsertAddressMutation = { __typename?: 'RootMutation' } & {
-  upsertAddress: Maybe<{ __typename?: 'AddressDeet' } & AddressFragment>;
+  upsertAddress: { __typename?: 'AddressDeet' } & {
+    owner: { __typename?: 'User' } & BaseUserFragment;
+  } & AddressFragment;
 };
 
 export type UpsertEmailAddressMutationVariables = {
@@ -472,9 +466,9 @@ export type UpsertEmailAddressMutationVariables = {
 };
 
 export type UpsertEmailAddressMutation = { __typename?: 'RootMutation' } & {
-  upsertEmailAddress: Maybe<
-    { __typename?: 'EmailAddressDeet' } & EmailAddressFragment
-  >;
+  upsertEmailAddress: {
+    __typename?: 'EmailAddressDeet';
+  } & EmailAddressFragment;
 };
 
 export type UpsertPhoneNumberMutationVariables = {
@@ -486,23 +480,15 @@ export type UpsertPhoneNumberMutationVariables = {
 };
 
 export type UpsertPhoneNumberMutation = { __typename?: 'RootMutation' } & {
-  upsertPhoneNumber: Maybe<
-    { __typename?: 'PhoneNumberDeet' } & PhoneNumberFragment
-  >;
+  upsertPhoneNumber: { __typename?: 'PhoneNumberDeet' } & {
+    owner: { __typename?: 'User' } & BaseUserFragment;
+  } & PhoneNumberFragment;
 };
 
 export type UserAccessFragment = { __typename: 'User' } & Pick<
   User,
   'id' | 'fullName' | 'username' | 'hasAccessToDeet'
 >;
-export const BaseUserFragmentDoc = gql`
-  fragment BaseUser on User {
-    id
-    username
-    fullName
-    __typename
-  }
-`;
 export const AddressFragmentDoc = gql`
   fragment Address on AddressDeet {
     id
@@ -516,12 +502,16 @@ export const AddressFragmentDoc = gql`
     country
     updatedAt
     type
-    owner {
-      ...BaseUser
-    }
     __typename
   }
-  ${BaseUserFragmentDoc}
+`;
+export const BaseUserFragmentDoc = gql`
+  fragment BaseUser on User {
+    id
+    username
+    fullName
+    __typename
+  }
 `;
 export const EmailAddressFragmentDoc = gql`
   fragment EmailAddress on EmailAddressDeet {
@@ -531,12 +521,8 @@ export const EmailAddressFragmentDoc = gql`
     emailAddress
     updatedAt
     type
-    owner {
-      ...BaseUser
-    }
     __typename
   }
-  ${BaseUserFragmentDoc}
 `;
 export const OtherUserFragmentDoc = gql`
   fragment OtherUser on User {
@@ -559,12 +545,8 @@ export const PhoneNumberFragmentDoc = gql`
     countryCode
     updatedAt
     type
-    owner {
-      ...BaseUser
-    }
     __typename
   }
-  ${BaseUserFragmentDoc}
 `;
 export const UserAccessFragmentDoc = gql`
   fragment UserAccess on User {
@@ -651,9 +633,24 @@ export const AccessibleDeetsDocument = gql`
   query accessibleDeets($type: String, $after: String, $count: Int) {
     accessibleDeets(type: $type, count: $count, after: $after) {
       items {
-        ...EmailAddress
-        ...Address
-        ...PhoneNumber
+        ... on EmailAddressDeet {
+          ...EmailAddress
+          owner {
+            ...BaseUser
+          }
+        }
+        ... on AddressDeet {
+          ...Address
+          owner {
+            ...BaseUser
+          }
+        }
+        ... on PhoneNumberDeet {
+          ...PhoneNumber
+          owner {
+            ...BaseUser
+          }
+        }
       }
       pageInfo {
         hasNext
@@ -662,6 +659,7 @@ export const AccessibleDeetsDocument = gql`
     }
   }
   ${EmailAddressFragmentDoc}
+  ${BaseUserFragmentDoc}
   ${AddressFragmentDoc}
   ${PhoneNumberFragmentDoc}
 `;
@@ -1514,9 +1512,13 @@ export const UpsertAddressDocument = gql`
       countryCode: $countryCode
     ) {
       ...Address
+      owner {
+        ...BaseUser
+      }
     }
   }
   ${AddressFragmentDoc}
+  ${BaseUserFragmentDoc}
 `;
 export type UpsertAddressMutationFn = ReactApollo.MutationFn<
   UpsertAddressMutation,
@@ -1672,9 +1674,13 @@ export const UpsertPhoneNumberDocument = gql`
       countryCode: $countryCode
     ) {
       ...PhoneNumber
+      owner {
+        ...BaseUser
+      }
     }
   }
   ${PhoneNumberFragmentDoc}
+  ${BaseUserFragmentDoc}
 `;
 export type UpsertPhoneNumberMutationFn = ReactApollo.MutationFn<
   UpsertPhoneNumberMutation,

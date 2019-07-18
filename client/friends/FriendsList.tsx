@@ -3,24 +3,23 @@ import { User } from 'client/types';
 import FriendItem, { PAGE_COUNT } from './FriendItem';
 import { Button, Header } from 'semantic-ui-react';
 import createUpdateQuery from 'client/lib/createUpdateQuery';
-import { useQuery } from 'react-apollo-hooks';
-import { FRIENDS_QUERY } from 'client/graph/queries';
 import Loader from 'client/components/Loader';
 import { splitColumns } from 'client/lib/dom';
+import { useFriendsQuery } from 'generated/generated-types';
 
 const FriendsList = ({ colCount }: { colCount: number }) => {
   const {
     data: friendsData,
     loading: friendsLoading,
     fetchMore: fetchMoreFriends,
-  } = useQuery(FRIENDS_QUERY, {
+  } = useFriendsQuery({
     variables: { count: PAGE_COUNT, after: null },
   });
 
   const [loadingMore, setLoadingMore] = React.useState<boolean>(false);
 
   let content;
-  if (friendsLoading) {
+  if (friendsLoading || !friendsData) {
     content = <Loader />;
   } else {
     const friendCards = friendsData.friends.items.map((friend: User) => (
@@ -37,7 +36,8 @@ const FriendsList = ({ colCount }: { colCount: number }) => {
       <Header as="h2">Friends</Header>
       {content}
       {loadingMore && <Loader />}
-      {friendsData.friends &&
+      {friendsData &&
+      friendsData.friends &&
       friendsData.friends.items.length &&
       friendsData.friends.pageInfo.hasNext ? (
         <div className="load-more-wrapper">

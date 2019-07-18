@@ -31,13 +31,23 @@ const pageInfoType = new GraphQLObjectType({
   }),
 });
 
-export default (name: string, type: GraphQLObjectType | GraphQLUnionType) =>
+interface Opts {
+  name: string;
+  type: GraphQLObjectType | GraphQLUnionType;
+  options?: {
+    nullable?: boolean;
+  };
+}
+
+export default ({ name, type, options = {} }: Opts) =>
   new GraphQLObjectType({
     name: `${name}Pagination`,
     description: `Pagination for ${name}`,
     fields: () => ({
       items: {
-        type: new GraphQLList(type),
+        type: new GraphQLNonNull(
+          new GraphQLList(options.nullable ? type : new GraphQLNonNull(type)),
+        ),
         resolve: (root: PaginationType) => root.items,
       },
       pageInfo: {

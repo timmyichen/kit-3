@@ -1,4 +1,4 @@
-import { GraphQLString, GraphQLInt } from 'graphql';
+import { GraphQLString, GraphQLInt, GraphQLNonNull } from 'graphql';
 import deetType from '../types/deetType';
 import { DeetTypes, Deet } from 'server/models/types';
 import { AuthenticationError } from 'apollo-server';
@@ -22,7 +22,9 @@ interface Args {
 
 export default {
   description: 'Deets accessible to the currently authed user',
-  type: paginationType('SharedDeets', deetType),
+  type: new GraphQLNonNull(
+    paginationType({ name: 'SharedDeets', type: deetType }),
+  ),
   args: {
     type: { type: GraphQLString },
     count: { type: GraphQLInt },

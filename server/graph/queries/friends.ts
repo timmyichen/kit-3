@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { GraphQLString, GraphQLInt } from 'graphql';
+import { GraphQLString, GraphQLInt, GraphQLNonNull } from 'graphql';
 import { AuthenticationError } from 'apollo-server';
 import { Op } from 'sequelize';
 import { Users, Friendships } from 'server/models';
@@ -15,7 +15,7 @@ interface Args {
 
 export default {
   description: 'A users friends',
-  type: paginationType('Friends', userType),
+  type: new GraphQLNonNull(paginationType({ name: 'Friends', type: userType })),
   args: {
     after: { type: GraphQLString },
     searchQuery: { type: GraphQLString },

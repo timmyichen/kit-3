@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { GraphQLList, GraphQLInt } from 'graphql';
+import { GraphQLList, GraphQLInt, GraphQLNonNull } from 'graphql';
 import { AuthenticationError } from 'apollo-server';
 import { Op } from 'sequelize';
 import { Users, FriendRequests } from 'server/models';
@@ -11,7 +11,7 @@ interface Args {
 
 export default {
   description: 'A users friends',
-  type: new GraphQLList(userType),
+  type: new GraphQLNonNull(new GraphQLList(userType)),
   args: {
     count: { type: GraphQLInt },
   },

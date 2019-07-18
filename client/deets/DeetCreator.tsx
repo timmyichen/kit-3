@@ -4,16 +4,18 @@ import { DeetTypes, Deet } from 'client/types';
 import AddressCreator from './CreateAddress';
 import PhoneNumberCreator from './CreatePhoneNumber';
 import EmailAddressCreator from './CreateEmailAddress';
-import {
-  UPSERT_ADDRESS_MUTATION,
-  UPSERT_PHONE_NUMBER_MUTATION,
-  UPSERT_EMAIL_ADDRESS_MUTATION,
-} from 'client/graph/mutations';
-import { useMutation } from 'react-apollo-hooks';
 import CtxModal, { closeModal } from 'client/components/Modal';
 import { useCtxDispatch } from 'client/components/ContextProvider';
-import { CURRENT_USER_DEETS_QUERY } from 'client/graph/queries';
 import postMutationUpdateCache from 'client/lib/postMutationUpdateCache';
+import {
+  useUpsertAddressMutation,
+  useUpsertPhoneNumberMutation,
+  useUpsertEmailAddressMutation,
+  UpsertAddressMutationVariables,
+  UpsertPhoneNumberMutationVariables,
+  UpsertEmailAddressMutationVariables,
+  CurrentUserDeetsDocument,
+} from 'generated/generated-types';
 
 export const DEET_TYPES = {
   address: {
@@ -81,7 +83,7 @@ interface ModalProps {
   loading: boolean;
 }
 
-const query = { query: CURRENT_USER_DEETS_QUERY };
+const query = { query: CurrentUserDeetsDocument };
 
 function DeetCreationModal({
   closeCreationModal,
@@ -94,59 +96,65 @@ function DeetCreationModal({
     setCreatingType(value);
   };
 
-  const upsertAddress = useMutation(UPSERT_ADDRESS_MUTATION, {
-    update: (cache, { data }: { data: { upsertAddress: Deet } }) => {
+  const upsertAddress = useUpsertAddressMutation({
+    update: (cache, { data }) => {
       postMutationUpdateCache<{ userDeets: Array<Deet> }, Deet>({
         cache,
         query,
         fieldName: 'userDeets',
         type: 'unshift',
-        targetObj: data.upsertAddress,
+        targetObj: data!.upsertAddress,
       });
     },
   });
-  const upsertPhoneNumber = useMutation(UPSERT_PHONE_NUMBER_MUTATION, {
-    update: (cache, { data }: { data: { upsertPhoneNumber: Deet } }) => {
+  const upsertPhoneNumber = useUpsertPhoneNumberMutation({
+    update: (cache, { data }) => {
       postMutationUpdateCache<{ userDeets: Array<Deet> }, Deet>({
         cache,
         query,
         fieldName: 'userDeets',
         type: 'unshift',
-        targetObj: data.upsertPhoneNumber,
+        targetObj: data!.upsertPhoneNumber,
       });
     },
   });
-  const upsertEmailAddress = useMutation(UPSERT_EMAIL_ADDRESS_MUTATION, {
-    update: (cache, { data }: { data: { upsertEmailAddress: Deet } }) => {
+  const upsertEmailAddress = useUpsertEmailAddressMutation({
+    update: (cache, { data }) => {
       postMutationUpdateCache<{ userDeets: Array<Deet> }, Deet>({
         cache,
         query,
         fieldName: 'userDeets',
         type: 'unshift',
-        targetObj: data.upsertEmailAddress,
+        targetObj: data!.upsertEmailAddress,
       });
     },
   });
 
   const submitForm = async (variables: Object) => {
-    let mutation;
-    switch (creatingType) {
-      case 'address':
-        mutation = upsertAddress;
-        break;
-      case 'phone_number':
-        mutation = upsertPhoneNumber;
-        break;
-      case 'email_address':
-        mutation = upsertEmailAddress;
-        break;
-      default:
-        throw new Error(`Unrecognized type ${creatingType}`);
-    }
-
     setLoading(true);
     try {
-      await mutation({ variables });
+      switch (creatingType) {
+        case 'address':
+          const addressVars = variables as UpsertAddressMutationVariables;
+          await upsertAddress({
+            variables: addressVars,
+          });
+          break;
+        case 'phone_number':
+          const phoneVars = variables as UpsertPhoneNumberMutationVariables;
+          await upsertPhoneNumber({
+            variables: phoneVars,
+          });
+          break;
+        case 'email_address':
+          const emailVars = variables as UpsertEmailAddressMutationVariables;
+          await upsertEmailAddress({
+            variables: emailVars,
+          });
+          break;
+        default:
+          throw new Error(`Unrecognized type ${creatingType}`);
+      }
     } catch (e) {
       setLoading(false);
       throw e;

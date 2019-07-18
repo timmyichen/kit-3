@@ -6,21 +6,19 @@ import { UserSearch } from 'client/types';
 import { isBrowser, splitColumns } from 'client/lib/dom';
 import useWindowSize from 'client/hooks/useWindowSize';
 import Loader from 'client/components/Loader';
-import { compose, graphql } from 'react-apollo';
 import SearchUserCard from './SearchUserCard';
-import { SEARCH_USERS_QUERY } from 'client/graph/queries';
+import { useSearchUsersQuery } from 'generated/generated-types';
 
-interface Props {
-  search: {
-    loading: boolean;
-    searchUsers?: Array<UserSearch>;
-    fetchMore(o: any): void;
-  };
-}
-
-const FriendSearch = ({ search }: Props) => {
-  const results = search.searchUsers || [];
+const FriendSearch = () => {
   const [colCount, setColCount] = React.useState<number>(3);
+
+  const {
+    data,
+    loading: loadingSearch,
+    fetchMore: searchFetchMore,
+  } = useSearchUsersQuery({ variables: { searchQuery: '' } });
+
+  const results = (data && data.searchUsers) || [];
 
   if (isBrowser) {
     const size = useWindowSize();
@@ -34,16 +32,14 @@ const FriendSearch = ({ search }: Props) => {
   const [query, setQuery] = React.useState<string>('');
 
   React.useEffect(() => {
-    setLoading(search.loading);
-  }, [search.loading]);
+    setLoading(loadingSearch);
+  }, [loadingSearch]);
 
   const doSearch = debounce(async (value: string) => {
-    search.fetchMore({
+    await searchFetchMore({
       variables: { searchQuery: value },
-      updateQuery: (
-        _: any,
-        { fetchMoreResult }: { fetchMoreResult: Array<UserSearch> },
-      ) => fetchMoreResult,
+      updateQuery: (_, { fetchMoreResult }) =>
+        fetchMoreResult ? fetchMoreResult : { searchUsers: [] },
     });
     setLoading(false);
   }, 400);
@@ -85,11 +81,4 @@ const FriendSearch = ({ search }: Props) => {
   );
 };
 
-const searchUsersQuery = graphql(SEARCH_USERS_QUERY, {
-  name: 'search',
-  options: () => ({
-    variables: { searchQuery: '' },
-  }),
-});
-
-export default compose(searchUsersQuery)(FriendSearch);
+export default FriendSearch;

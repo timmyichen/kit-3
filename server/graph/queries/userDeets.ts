@@ -6,7 +6,7 @@ import deetType from '../types/deetType';
 
 export default {
   description: 'Get all deets owned by a user',
-  type: new GraphQLList(new GraphQLNonNull(deetType)),
+  type: new GraphQLNonNull(new GraphQLList(deetType)),
   async resolve(_1: any, _2: any, { user }: express.Request) {
     if (!user) {
       throw new AuthenticationError('Must be logged in');

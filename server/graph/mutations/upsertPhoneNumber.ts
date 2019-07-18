@@ -21,7 +21,7 @@ interface Args {
 
 export default {
   description: 'Upsert a phone number record',
-  type: phoneNumberType,
+  type: new GraphQLNonNull(phoneNumberType),
   args: {
     deetId: { type: GraphQLInt },
     notes: { type: new GraphQLNonNull(GraphQLString) },

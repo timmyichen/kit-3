@@ -1,4 +1,5 @@
 #import "./AddressFragment.graphql"
+#import "./BaseUserFragment.graphql"
 
 mutation upsertAddress(
   $deetId: Int
@@ -23,5 +24,8 @@ mutation upsertAddress(
     countryCode: $countryCode
   ) {
     ...Address
+    owner {
+      ...BaseUser
+    }
   }
 }

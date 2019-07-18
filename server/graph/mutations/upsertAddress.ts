@@ -25,7 +25,7 @@ interface Args {
 
 export default {
   description: 'Upsert an address record',
-  type: addressType,
+  type: new GraphQLNonNull(addressType),
   args: {
     deetId: { type: GraphQLInt },
     notes: { type: new GraphQLNonNull(GraphQLString) },

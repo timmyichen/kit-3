@@ -17,7 +17,7 @@ interface Args {
 
 export default {
   description: 'Searching for users',
-  type: new GraphQLList(userType),
+  type: new GraphQLNonNull(new GraphQLList(userType)),
   args: {
     searchQuery: { type: new GraphQLNonNull(GraphQLString) },
     count: { type: GraphQLInt },
@@ -25,6 +25,10 @@ export default {
   async resolve(_: any, args: Args, { user }: ReqWithLoader) {
     if (!user) {
       throw new AuthenticationError('Must be logged in');
+    }
+
+    if (args.searchQuery === '') {
+      return [];
     }
 
     const users = await Users.findAll({
