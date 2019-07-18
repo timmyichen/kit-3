@@ -37,15 +37,20 @@ export const DeetCardType = ({
 }: {
   deet: Deet;
   isOwner: boolean;
-}) =>
-  isOwner ? (
+}) => {
+  if (!isOwner && !deet.owner) {
+    throw new Error('Expected owner for non-owned deets');
+  }
+
+  return isOwner ? (
     <Card.Meta>{deetMap[deet.type].text}</Card.Meta>
   ) : (
     <Card.Meta>
-      <span title={deet.owner.username}>{deet.owner.fullName}</span>'s{' '}
+      <span title={deet.owner!.username}>{deet.owner!.fullName}</span>'s{' '}
       {deetMap[deet.type].text}
     </Card.Meta>
   );
+};
 
 export const DeetCardDescription = ({ deet }: { deet: Deet }) => {
   switch (deet.type) {

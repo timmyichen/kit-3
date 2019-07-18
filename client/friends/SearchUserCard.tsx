@@ -6,7 +6,6 @@ import { Button, Card, Image } from 'semantic-ui-react';
 import { DataProxy } from 'apollo-cache';
 import { FetchResult, DocumentNode } from 'apollo-link';
 import {
-  SearchUsersDocument,
   useAcceptFriendRequestMutation,
   useRescindFriendRequestMutation,
   useUnblockUserMutation,
@@ -136,33 +135,3 @@ interface CreateCacheUpdateProps {
     [k in RelationField]?: any;
   };
 }
-
-const createCacheUpdate = ({
-  incomingDataField,
-  updateFields,
-  query,
-}: CreateCacheUpdateProps) => (
-  cache: DataProxy,
-  { data }: FetchResult<any>,
-) => {
-  const q: { [s: string]: Array<UserSearch> } | null = cache.readQuery(
-    omit(query, ['name']),
-  );
-  if (!q) {
-    return;
-  }
-
-  const updateIndex = q[query.name].findIndex(
-    u => u.id === data[incomingDataField].id,
-  );
-  const copy = cloneDeep(q[query.name]);
-
-  for (const key of Object.keys(updateFields)) {
-    const k = key as RelationField;
-    copy[updateIndex][k] = updateFields[k];
-  }
-
-  cache.writeQuery({ ...query, data: { [query.name]: copy } });
-};
-
-export default SearchUserCard;
