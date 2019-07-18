@@ -1,10 +1,6 @@
 import * as React from 'react';
 import { UserSearch } from 'client/types';
-import cloneDeep from 'lodash/cloneDeep';
-import omit from 'lodash/omit';
 import { Button, Card, Image } from 'semantic-ui-react';
-import { DataProxy } from 'apollo-cache';
-import { FetchResult, DocumentNode } from 'apollo-link';
 import {
   useAcceptFriendRequestMutation,
   useRescindFriendRequestMutation,
@@ -118,20 +114,4 @@ function SearchUserCard({ user }: Props) {
   );
 }
 
-type RelationField =
-  | 'isFriend'
-  | 'isRequested'
-  | 'hasRequestedUser'
-  | 'isBlocked';
-
-interface CreateCacheUpdateProps {
-  incomingDataField: string;
-  query: {
-    query: DocumentNode;
-    name: string;
-    variables: any;
-  };
-  updateFields: {
-    [k in RelationField]?: any;
-  };
-}
+export default SearchUserCard;
