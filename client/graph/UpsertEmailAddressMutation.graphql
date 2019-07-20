@@ -5,12 +5,14 @@ mutation upsertEmailAddress(
   $notes: String!
   $label: String!
   $emailAddress: String!
+  $isPrimary: Boolean!
 ) {
   upsertEmailAddress(
     deetId: $deetId
     notes: $notes
     label: $label
     emailAddress: $emailAddress
+    isPrimary: $isPrimary
   ) {
     ...EmailAddress
   }

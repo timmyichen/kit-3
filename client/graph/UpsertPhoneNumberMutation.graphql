@@ -7,6 +7,7 @@ mutation upsertPhoneNumber(
   $label: String!
   $phoneNumber: String!
   $countryCode: String!
+  $isPrimary: Boolean!
 ) {
   upsertPhoneNumber(
     deetId: $deetId
@@ -14,6 +15,7 @@ mutation upsertPhoneNumber(
     label: $label
     phoneNumber: $phoneNumber
     countryCode: $countryCode
+    isPrimary: $isPrimary
   ) {
     ...PhoneNumber
     owner {

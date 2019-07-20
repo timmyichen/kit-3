@@ -29,6 +29,7 @@ interface BaseDeet {
   owner?: BaseUser;
   updatedAt: string;
   type: DeetTypes;
+  isPrimary: boolean;
   __typename: ApolloDeetTypes;
 }
 

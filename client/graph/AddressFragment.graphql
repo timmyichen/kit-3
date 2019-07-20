@@ -10,5 +10,6 @@ fragment Address on AddressDeet {
   country
   updatedAt
   type
+  isPrimary
   __typename
 }

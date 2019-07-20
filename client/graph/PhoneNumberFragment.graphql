@@ -6,5 +6,6 @@ fragment PhoneNumber on PhoneNumberDeet {
   countryCode
   updatedAt
   type
+  isPrimary
   __typename
 }

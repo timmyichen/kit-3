@@ -1,5 +1,10 @@
 import * as express from 'express';
-import { GraphQLNonNull, GraphQLInt, GraphQLString } from 'graphql';
+import {
+  GraphQLNonNull,
+  GraphQLInt,
+  GraphQLString,
+  GraphQLBoolean,
+} from 'graphql';
 import {
   AuthenticationError,
   UserInputError,
@@ -21,6 +26,7 @@ interface Args {
   state: string;
   postalCode: string;
   countryCode: string;
+  isPrimary: boolean;
 }
 
 export default {
@@ -36,13 +42,14 @@ export default {
     state: { type: new GraphQLNonNull(GraphQLString) },
     postalCode: { type: new GraphQLNonNull(GraphQLString) },
     countryCode: { type: new GraphQLNonNull(GraphQLString) },
+    isPrimary: { type: new GraphQLNonNull(GraphQLBoolean) },
   },
   async resolve(_: any, args: Args, { user }: express.Request) {
     if (!user) {
       throw new AuthenticationError('Must be logged in');
     }
 
-    const { notes, label, city, state } = args;
+    const { notes, label, city, state, isPrimary } = args;
 
     if (args.deetId) {
       let result: Deet | null = null;
@@ -62,12 +69,20 @@ export default {
 
       await db.transaction(async (transaction: any) => {
         try {
-          // @ts-ignore
+          if (deet.is_primary !== isPrimary) {
+            await Deets.update(
+              { is_primary: false },
+              { where: { owner_id: user.id }, transaction },
+            );
+          }
+
+          // @ts-ignore something about bluebird promises
           [updatedDeet, result] = await Promise.all([
             deet.update(
               {
                 label,
                 notes,
+                is_primary: isPrimary,
               },
               { transaction },
             ),
@@ -108,12 +123,20 @@ export default {
     let result: { get?: any } = {};
 
     await db.transaction(async (transaction: any) => {
+      if (isPrimary) {
+        await Deets.update(
+          { is_primary: false },
+          { where: { owner_id: user.id }, transaction },
+        );
+      }
+
       deet = await Deets.create(
         {
           type: 'address',
           owner_id: user.id,
           notes,
           label,
+          is_primary: isPrimary,
         },
         { transaction },
       );

@@ -1,7 +1,7 @@
 // this file pulled from https://github.com/graphql/express-graphql/issues/427
 
 import { NextFunction, Request, Response } from 'express';
-import hijackResponse from 'hijackresponse';
+import hijackResponse = require('hijackresponse');
 
 // Extend Express Response with hijack specific function
 interface IHijackedResponse extends Response {

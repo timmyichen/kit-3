@@ -1,6 +1,6 @@
 import * as React from 'react';
 import pick from 'lodash/pick';
-import { Form, Input, TextArea, Button } from 'semantic-ui-react';
+import { Form, Input, TextArea, Button, Checkbox } from 'semantic-ui-react';
 import { PhoneNumberDeet } from 'client/types';
 
 interface Fields {
@@ -8,6 +8,7 @@ interface Fields {
   phoneNumber?: string;
   label?: string;
   notes?: string;
+  isPrimary?: boolean;
 }
 
 const defaultFields = {
@@ -15,6 +16,7 @@ const defaultFields = {
   phoneNumber: '',
   label: '',
   notes: '',
+  isPrimary: false,
 };
 
 const getPhoneFields = (phone: PhoneNumberDeet) =>
@@ -88,6 +90,15 @@ export default function PhoneNumberCreator({
             value={fields.notes}
             onChange={(_, { value }: { value: any }) =>
               setValue('notes', value)
+            }
+          />
+        </Form.Field>
+        <Form.Field>
+          <Checkbox
+            label="This is my primary phone number"
+            checked={fields.isPrimary}
+            onChange={(_, { checked }: { checked: boolean }) =>
+              setValue('isPrimary', checked)
             }
           />
         </Form.Field>

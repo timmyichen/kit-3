@@ -27,6 +27,7 @@ export type AddressDeet = {
   label: Scalars['String'];
   notes: Scalars['String'];
   type: DeetType;
+  isPrimary: Scalars['Boolean'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -48,6 +49,7 @@ export type EmailAddressDeet = {
   label: Scalars['String'];
   notes: Scalars['String'];
   type: DeetType;
+  isPrimary: Scalars['Boolean'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -75,6 +77,7 @@ export type PhoneNumberDeet = {
   label: Scalars['String'];
   notes: Scalars['String'];
   type: DeetType;
+  isPrimary: Scalars['Boolean'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -139,6 +142,7 @@ export type RootMutationUpsertAddressArgs = {
   state: Scalars['String'];
   postalCode: Scalars['String'];
   countryCode: Scalars['String'];
+  isPrimary: Scalars['Boolean'];
 };
 
 export type RootMutationUpsertEmailAddressArgs = {
@@ -146,6 +150,7 @@ export type RootMutationUpsertEmailAddressArgs = {
   notes: Scalars['String'];
   label: Scalars['String'];
   emailAddress: Scalars['String'];
+  isPrimary: Scalars['Boolean'];
 };
 
 export type RootMutationUpsertPhoneNumberArgs = {
@@ -154,6 +159,7 @@ export type RootMutationUpsertPhoneNumberArgs = {
   label: Scalars['String'];
   phoneNumber: Scalars['String'];
   countryCode: Scalars['String'];
+  isPrimary: Scalars['Boolean'];
 };
 
 export type RootMutationDeleteDeetArgs = {
@@ -282,6 +288,7 @@ export type AddressFragment = { __typename: 'AddressDeet' } & Pick<
   | 'country'
   | 'updatedAt'
   | 'type'
+  | 'isPrimary'
 >;
 
 export type BaseUserFragment = { __typename: 'User' } & Pick<
@@ -332,7 +339,7 @@ export type DeleteDeetMutation = { __typename?: 'RootMutation' } & {
 
 export type EmailAddressFragment = { __typename: 'EmailAddressDeet' } & Pick<
   EmailAddressDeet,
-  'id' | 'notes' | 'label' | 'emailAddress' | 'updatedAt' | 'type'
+  'id' | 'notes' | 'label' | 'emailAddress' | 'updatedAt' | 'type' | 'isPrimary'
 >;
 
 export type FriendsQueryVariables = {
@@ -383,6 +390,7 @@ export type PhoneNumberFragment = { __typename: 'PhoneNumberDeet' } & Pick<
   | 'countryCode'
   | 'updatedAt'
   | 'type'
+  | 'isPrimary'
 >;
 
 export type RemoveFriendMutationVariables = {
@@ -450,6 +458,7 @@ export type UpsertAddressMutationVariables = {
   state: Scalars['String'];
   postalCode: Scalars['String'];
   countryCode: Scalars['String'];
+  isPrimary: Scalars['Boolean'];
 };
 
 export type UpsertAddressMutation = { __typename?: 'RootMutation' } & {
@@ -463,6 +472,7 @@ export type UpsertEmailAddressMutationVariables = {
   notes: Scalars['String'];
   label: Scalars['String'];
   emailAddress: Scalars['String'];
+  isPrimary: Scalars['Boolean'];
 };
 
 export type UpsertEmailAddressMutation = { __typename?: 'RootMutation' } & {
@@ -477,6 +487,7 @@ export type UpsertPhoneNumberMutationVariables = {
   label: Scalars['String'];
   phoneNumber: Scalars['String'];
   countryCode: Scalars['String'];
+  isPrimary: Scalars['Boolean'];
 };
 
 export type UpsertPhoneNumberMutation = { __typename?: 'RootMutation' } & {
@@ -502,6 +513,7 @@ export const AddressFragmentDoc = gql`
     country
     updatedAt
     type
+    isPrimary
     __typename
   }
 `;
@@ -521,6 +533,7 @@ export const EmailAddressFragmentDoc = gql`
     emailAddress
     updatedAt
     type
+    isPrimary
     __typename
   }
 `;
@@ -545,6 +558,7 @@ export const PhoneNumberFragmentDoc = gql`
     countryCode
     updatedAt
     type
+    isPrimary
     __typename
   }
 `;
@@ -1499,6 +1513,7 @@ export const UpsertAddressDocument = gql`
     $state: String!
     $postalCode: String!
     $countryCode: String!
+    $isPrimary: Boolean!
   ) {
     upsertAddress(
       deetId: $deetId
@@ -1510,6 +1525,7 @@ export const UpsertAddressDocument = gql`
       state: $state
       postalCode: $postalCode
       countryCode: $countryCode
+      isPrimary: $isPrimary
     ) {
       ...Address
       owner {
@@ -1582,12 +1598,14 @@ export const UpsertEmailAddressDocument = gql`
     $notes: String!
     $label: String!
     $emailAddress: String!
+    $isPrimary: Boolean!
   ) {
     upsertEmailAddress(
       deetId: $deetId
       notes: $notes
       label: $label
       emailAddress: $emailAddress
+      isPrimary: $isPrimary
     ) {
       ...EmailAddress
     }
@@ -1665,6 +1683,7 @@ export const UpsertPhoneNumberDocument = gql`
     $label: String!
     $phoneNumber: String!
     $countryCode: String!
+    $isPrimary: Boolean!
   ) {
     upsertPhoneNumber(
       deetId: $deetId
@@ -1672,6 +1691,7 @@ export const UpsertPhoneNumberDocument = gql`
       label: $label
       phoneNumber: $phoneNumber
       countryCode: $countryCode
+      isPrimary: $isPrimary
     ) {
       ...PhoneNumber
       owner {

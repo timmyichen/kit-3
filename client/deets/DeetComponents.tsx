@@ -42,12 +42,13 @@ export const DeetCardType = ({
     throw new Error('Expected owner for non-owned deets');
   }
 
+  const text = (deet.isPrimary ? 'Primary ' : '') + deetMap[deet.type].text;
+
   return isOwner ? (
-    <Card.Meta>{deetMap[deet.type].text}</Card.Meta>
+    <Card.Meta>{text}</Card.Meta>
   ) : (
     <Card.Meta>
-      <span title={deet.owner!.username}>{deet.owner!.fullName}</span>'s{' '}
-      {deetMap[deet.type].text}
+      <span title={deet.owner!.username}>{deet.owner!.fullName}</span>'s {text}
     </Card.Meta>
   );
 };

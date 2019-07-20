@@ -17,6 +17,11 @@ import {
   CurrentUserDeetsDocument,
 } from 'generated/generated-types';
 
+type Variables =
+  | UpsertAddressMutationVariables
+  | UpsertPhoneNumberMutationVariables
+  | UpsertEmailAddressMutationVariables;
+
 export const DEET_TYPES = {
   address: {
     key: 'address',
@@ -130,8 +135,12 @@ function DeetCreationModal({
     },
   });
 
-  const submitForm = async (variables: Object) => {
+  const submitForm = async (variables: Variables) => {
     setLoading(true);
+    if (!variables.isPrimary) {
+      variables.isPrimary = false;
+    }
+
     try {
       switch (creatingType) {
         case 'address':

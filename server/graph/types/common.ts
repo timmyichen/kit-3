@@ -1,4 +1,4 @@
-import { GraphQLNonNull, GraphQLString } from 'graphql';
+import { GraphQLNonNull, GraphQLString, GraphQLBoolean } from 'graphql';
 import deetTypeType from './deetTypeType';
 
 export const commonDeetFields = () => ({
@@ -13,6 +13,10 @@ export const commonDeetFields = () => ({
   type: {
     type: new GraphQLNonNull(deetTypeType),
     resolve: (obj: any) => obj.type,
+  },
+  isPrimary: {
+    type: new GraphQLNonNull(GraphQLBoolean),
+    resolve: (obj: any) => obj.is_primary,
   },
 });
 

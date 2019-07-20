@@ -94,8 +94,6 @@ export default {
       allDeets[result.deet_id][result.getType()] = result.get({ simple: true });
     }
 
-    console.log(Object.values(allDeets));
-
     return {
       ...paginatedDeets,
       // lodash orderby desc sucks: https://github.com/lodash/lodash/issues/3285

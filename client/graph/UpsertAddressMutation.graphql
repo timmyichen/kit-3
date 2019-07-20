@@ -11,6 +11,7 @@ mutation upsertAddress(
   $state: String!
   $postalCode: String!
   $countryCode: String!
+  $isPrimary: Boolean!
 ) {
   upsertAddress(
     deetId: $deetId
@@ -22,6 +23,7 @@ mutation upsertAddress(
     state: $state
     postalCode: $postalCode
     countryCode: $countryCode
+    isPrimary: $isPrimary
   ) {
     ...Address
     owner {

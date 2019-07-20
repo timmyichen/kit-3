@@ -55,6 +55,11 @@ export default class Deets extends Model<Deets> {
   @Column(requiredString())
   label: string;
 
+  @AllowNull(false)
+  @Default(false)
+  @Column
+  is_primary: boolean;
+
   @CreatedAt
   created_at: Date;
 
