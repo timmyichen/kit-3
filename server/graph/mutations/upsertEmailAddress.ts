@@ -59,10 +59,15 @@ export default {
 
       await db.transaction(async (transaction: any) => {
         try {
-          if (deet.is_primary !== isPrimary) {
+          if (isPrimary) {
             await Deets.update(
               { is_primary: false },
-              { where: { owner_id: user.id }, transaction },
+              {
+                where: { owner_id: user.id, type: 'email_address' },
+                transaction,
+                // @ts-ignore silent not recognized for some reason
+                silent: true,
+              },
             );
           }
 
@@ -111,7 +116,12 @@ export default {
       if (isPrimary) {
         await Deets.update(
           { is_primary: false },
-          { where: { owner_id: user.id }, transaction },
+          {
+            where: { owner_id: user.id, type: 'email_address' },
+            transaction,
+            // @ts-ignore silent not recognized for some reason
+            silent: true,
+          },
         );
       }
 

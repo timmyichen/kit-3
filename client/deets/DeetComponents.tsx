@@ -97,12 +97,9 @@ export const DeetCardFooter = ({
   isOwner: boolean;
 }) => (
   <Card.Content extra>
-    {isOwner ? (
-      <OwnedDeetCardActions deet={deet} />
-    ) : (
-      <div>
-        Last updated {new Date(parseInt(deet.updatedAt, 10)).toISOString()}
-      </div>
-    )}
+    <div>
+      Last updated {new Date(parseInt(deet.updatedAt, 10)).toISOString()}
+    </div>
+    {isOwner && <OwnedDeetCardActions deet={deet} />}
   </Card.Content>
 );

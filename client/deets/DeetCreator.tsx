@@ -16,6 +16,7 @@ import {
   UpsertEmailAddressMutationVariables,
   CurrentUserDeetsDocument,
 } from 'generated/generated-types';
+import updatePrimaryDeet from 'client/lib/updatePrimaryDeet';
 
 type Variables =
   | UpsertAddressMutationVariables
@@ -101,39 +102,9 @@ function DeetCreationModal({
     setCreatingType(value);
   };
 
-  const upsertAddress = useUpsertAddressMutation({
-    update: (cache, { data }) => {
-      postMutationUpdateCache<{ userDeets: Array<Deet> }, Deet>({
-        cache,
-        query,
-        fieldName: 'userDeets',
-        type: 'unshift',
-        targetObj: data!.upsertAddress,
-      });
-    },
-  });
-  const upsertPhoneNumber = useUpsertPhoneNumberMutation({
-    update: (cache, { data }) => {
-      postMutationUpdateCache<{ userDeets: Array<Deet> }, Deet>({
-        cache,
-        query,
-        fieldName: 'userDeets',
-        type: 'unshift',
-        targetObj: data!.upsertPhoneNumber,
-      });
-    },
-  });
-  const upsertEmailAddress = useUpsertEmailAddressMutation({
-    update: (cache, { data }) => {
-      postMutationUpdateCache<{ userDeets: Array<Deet> }, Deet>({
-        cache,
-        query,
-        fieldName: 'userDeets',
-        type: 'unshift',
-        targetObj: data!.upsertEmailAddress,
-      });
-    },
-  });
+  const upsertAddress = useUpsertAddressMutation();
+  const upsertPhoneNumber = useUpsertPhoneNumberMutation();
+  const upsertEmailAddress = useUpsertEmailAddressMutation();
 
   const submitForm = async (variables: Variables) => {
     setLoading(true);
@@ -147,18 +118,54 @@ function DeetCreationModal({
           const addressVars = variables as UpsertAddressMutationVariables;
           await upsertAddress({
             variables: addressVars,
+            update: (cache, { data }) => {
+              postMutationUpdateCache<{ userDeets: Array<Deet> }, Deet>({
+                cache,
+                query,
+                fieldName: 'userDeets',
+                type: 'unshift',
+                targetObj: data!.upsertAddress,
+              });
+              if (variables.isPrimary) {
+                updatePrimaryDeet(cache, data, 'upsertAddress');
+              }
+            },
           });
           break;
         case 'phone_number':
           const phoneVars = variables as UpsertPhoneNumberMutationVariables;
           await upsertPhoneNumber({
             variables: phoneVars,
+            update: (cache, { data }) => {
+              postMutationUpdateCache<{ userDeets: Array<Deet> }, Deet>({
+                cache,
+                query,
+                fieldName: 'userDeets',
+                type: 'unshift',
+                targetObj: data!.upsertPhoneNumber,
+              });
+              if (variables.isPrimary) {
+                updatePrimaryDeet(cache, data, 'upsertPhoneNumber');
+              }
+            },
           });
           break;
         case 'email_address':
           const emailVars = variables as UpsertEmailAddressMutationVariables;
           await upsertEmailAddress({
             variables: emailVars,
+            update: (cache, { data }) => {
+              postMutationUpdateCache<{ userDeets: Array<Deet> }, Deet>({
+                cache,
+                query,
+                fieldName: 'userDeets',
+                type: 'unshift',
+                targetObj: data!.upsertEmailAddress,
+              });
+              if (variables.isPrimary) {
+                updatePrimaryDeet(cache, data, 'upsertEmailAddress');
+              }
+            },
           });
           break;
         default:

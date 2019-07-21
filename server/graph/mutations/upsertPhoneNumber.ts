@@ -48,7 +48,7 @@ export default {
       const deet = await Deets.findByPk(args.deetId);
 
       if (!deet || deet.owner_id !== user.id) {
-        throw new UserInputError('Email address not found');
+        throw new UserInputError('Phone number not found');
       }
 
       const entry = await deet.getDeet({ where: { deet_id: deet.id } });
@@ -61,10 +61,15 @@ export default {
 
       await db.transaction(async (transaction: any) => {
         try {
-          if (deet.is_primary !== isPrimary) {
+          if (isPrimary) {
             await Deets.update(
               { is_primary: false },
-              { where: { owner_id: user.id }, transaction },
+              {
+                where: { owner_id: user.id, type: 'phone_number' },
+                transaction,
+                // @ts-ignore silent not recognized for some reason
+                silent: true,
+              },
             );
           }
 
@@ -114,7 +119,12 @@ export default {
       if (isPrimary) {
         await Deets.update(
           { is_primary: false },
-          { where: { owner_id: user.id }, transaction },
+          {
+            where: { owner_id: user.id, type: 'phone_number' },
+            transaction,
+            // @ts-ignore silent not recognized for some reason
+            silent: true,
+          },
         );
       }
 

@@ -27,7 +27,9 @@ function CurrentUserDeets() {
     );
   }
 
-  const deetCards = deets.userDeets.map((item: Deet) => (
+  const sortedDeets = deets.userDeets.sort(a => (a.isPrimary ? -1 : 1));
+
+  const deetCards = sortedDeets.map((item: Deet) => (
     <DeetCard key={`current-user-deet-${item.id}`} deet={item} isOwner />
   ));
 

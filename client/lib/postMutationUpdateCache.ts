@@ -24,6 +24,8 @@ function postMutationUpdateCache<QueryType, ObjectType>({
     return;
   }
 
+  console.log(q);
+
   if (q) {
     if (!(fieldName in q)) {
       return console.error(`Cannot find ${fieldName} in ${JSON.stringify(q)}`);
@@ -59,6 +61,8 @@ function postMutationUpdateCache<QueryType, ObjectType>({
     } else {
       (copy as any)[fieldName] = arr;
     }
+
+    console.log(copy);
     cache.writeQuery({
       ...query,
       data: copy,
