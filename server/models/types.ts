@@ -6,7 +6,8 @@ export interface User {
   password: string;
   email: string;
   settings: Object;
-  birthday?: Date;
+  birthday_date?: Date;
+  birthday_year: Date;
   created_at: Date;
   updated_at: Date;
   deleted_at?: Date;

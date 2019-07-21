@@ -69,7 +69,10 @@ export default class Users extends Model<Users> {
   settings: Object;
 
   @Column
-  birthday: Date;
+  birthday_date: Date;
+
+  @Column
+  birthday_year: number;
 
   @CreatedAt
   created_at: Date;
