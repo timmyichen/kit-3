@@ -16,7 +16,7 @@ interface Args {
 }
 
 export default {
-  description: 'Unblock a user',
+  description: 'Update the currently authed user',
   type: new GraphQLNonNull(userType),
   args: {
     passwordVerification: { type: new GraphQLNonNull(GraphQLString) },

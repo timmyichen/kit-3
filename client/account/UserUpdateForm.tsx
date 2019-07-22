@@ -123,24 +123,21 @@ function UserUpdateForm() {
             }
             type="password"
           />
-          <Button
-            type="submit"
-            disabled={loading}
-            color="green"
-            onClick={onSubmit}
-          >
-            Save
-          </Button>
         </Form.Field>
+        <Button
+          type="submit"
+          disabled={loading}
+          color="green"
+          onClick={onSubmit}
+        >
+          Save
+        </Button>
       </Form>
       <style jsx>{`
         .user-update-form-wrapper {
           padding-top: 30px;
           max-width: 400px;
           margin: 0 auto;
-        }
-        .user-update-form-wrapper :global(button) {
-          margin-top: 15px;
         }
         .user-update-form-wrapper :global(.names > div) {
           flex-grow: 1 !important;

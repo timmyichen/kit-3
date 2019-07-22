@@ -106,8 +106,10 @@ export type RootMutation = {
   deleteDeet: Deet;
   /** Update permissions for shared */
   updateSharedPermissions?: Maybe<Array<Maybe<User>>>;
-  /** Unblock a user */
+  /** Update the currently authed user */
   updateUser: User;
+  /** Update the users password */
+  updatePassword: Scalars['Boolean'];
 };
 
 export type RootMutationRequestFriendArgs = {
@@ -180,6 +182,11 @@ export type RootMutationUpdateUserArgs = {
   givenName: Scalars['String'];
   familyName: Scalars['String'];
   birthday?: Maybe<Scalars['String']>;
+};
+
+export type RootMutationUpdatePasswordArgs = {
+  passwordVerification: Scalars['String'];
+  newPassword: Scalars['String'];
 };
 
 export type RootQuery = {
@@ -459,6 +466,16 @@ export type UnblockUserMutationVariables = {
 export type UnblockUserMutation = { __typename?: 'RootMutation' } & {
   unblockUser: { __typename?: 'User' } & OtherUserFragment;
 };
+
+export type UpdatePasswordMutationVariables = {
+  newPassword: Scalars['String'];
+  passwordVerification: Scalars['String'];
+};
+
+export type UpdatePasswordMutation = { __typename?: 'RootMutation' } & Pick<
+  RootMutation,
+  'updatePassword'
+>;
 
 export type UpdateSharedPermissionsMutationVariables = {
   deetId: Scalars['Int'];
@@ -1471,6 +1488,78 @@ export function useUnblockUserMutation(
 }
 export type UnblockUserMutationHookResult = ReturnType<
   typeof useUnblockUserMutation
+>;
+export const UpdatePasswordDocument = gql`
+  mutation updatePassword(
+    $newPassword: String!
+    $passwordVerification: String!
+  ) {
+    updatePassword(
+      newPassword: $newPassword
+      passwordVerification: $passwordVerification
+    )
+  }
+`;
+export type UpdatePasswordMutationFn = ReactApollo.MutationFn<
+  UpdatePasswordMutation,
+  UpdatePasswordMutationVariables
+>;
+export type UpdatePasswordComponentProps = Omit<
+  ReactApollo.MutationProps<
+    UpdatePasswordMutation,
+    UpdatePasswordMutationVariables
+  >,
+  'mutation'
+>;
+
+export const UpdatePasswordComponent = (
+  props: UpdatePasswordComponentProps,
+) => (
+  <ReactApollo.Mutation<UpdatePasswordMutation, UpdatePasswordMutationVariables>
+    mutation={UpdatePasswordDocument}
+    {...props}
+  />
+);
+
+export type UpdatePasswordProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<
+    UpdatePasswordMutation,
+    UpdatePasswordMutationVariables
+  >
+> &
+  TChildProps;
+export function withUpdatePassword<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    UpdatePasswordMutation,
+    UpdatePasswordMutationVariables,
+    UpdatePasswordProps<TChildProps>
+  >,
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    UpdatePasswordMutation,
+    UpdatePasswordMutationVariables,
+    UpdatePasswordProps<TChildProps>
+  >(UpdatePasswordDocument, {
+    alias: 'withUpdatePassword',
+    ...operationOptions,
+  });
+}
+
+export function useUpdatePasswordMutation(
+  baseOptions?: ReactApolloHooks.MutationHookOptions<
+    UpdatePasswordMutation,
+    UpdatePasswordMutationVariables
+  >,
+) {
+  return ReactApolloHooks.useMutation<
+    UpdatePasswordMutation,
+    UpdatePasswordMutationVariables
+  >(UpdatePasswordDocument, baseOptions);
+}
+export type UpdatePasswordMutationHookResult = ReturnType<
+  typeof useUpdatePasswordMutation
 >;
 export const UpdateSharedPermissionsDocument = gql`
   mutation updateSharedPermissions(
