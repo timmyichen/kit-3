@@ -1,7 +1,7 @@
-import { User } from 'client/types';
+import { CurrentUser } from 'client/types';
 import { useCtxDispatch } from './ContextProvider';
 
-export default ({ user }: { user: User }) => {
+export default ({ user }: { user: CurrentUser }) => {
   const dispatch = useCtxDispatch();
 
   dispatch({

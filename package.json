@@ -32,6 +32,7 @@
     "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.5.4",
     "body-parser": "^1.18.3",
+    "camelize": "^1.0.0",
     "classnames": "^2.2.6",
     "connect-session-sequelize": "^6.0.0",
     "dataloader": "^1.4.0",

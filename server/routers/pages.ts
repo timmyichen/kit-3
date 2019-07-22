@@ -24,6 +24,17 @@ router.getAsync(
 );
 
 router.getAsync(
+  '/account',
+  async (req: express.Request, res: express.Response) => {
+    if (!req.user) {
+      res.redirect('/login');
+      return;
+    }
+    nextjs.render(req, res, '/account');
+  },
+);
+
+router.getAsync(
   ['/friends', '/friends/:slug'],
   async (req: express.Request, res: express.Response) => {
     if (!req.user) {

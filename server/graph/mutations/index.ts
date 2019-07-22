@@ -10,6 +10,7 @@ import upsertEmailAddress from './upsertEmailAddress';
 import upsertPhoneNumber from './upsertPhoneNumber';
 import deleteDeet from './deleteDeet';
 import updateSharedPermissions from './updateSharedPermissions';
+import updateUser from './updateUser';
 
 export default new GraphQLObjectType({
   name: 'RootMutation',
@@ -26,5 +27,6 @@ export default new GraphQLObjectType({
     upsertPhoneNumber,
     deleteDeet,
     updateSharedPermissions,
+    updateUser,
   }),
 });

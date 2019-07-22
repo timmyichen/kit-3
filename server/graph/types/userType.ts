@@ -16,6 +16,7 @@ import { timestamps } from './common';
 import { User } from 'server/models/types';
 import { AuthenticationError, UserInputError } from 'apollo-server';
 import { ReqWithLoader } from 'server/lib/loader';
+import * as express from 'express';
 
 export default new GraphQLObjectType({
   name: 'User',
@@ -31,6 +32,64 @@ export default new GraphQLObjectType({
         user.family_name
           ? user.given_name + ' ' + user.family_name
           : user.given_name,
+    },
+    givenName: {
+      type: new GraphQLNonNull(GraphQLString),
+      resolve: (user: User) => user.given_name,
+    },
+    familyName: {
+      type: new GraphQLNonNull(GraphQLString),
+      resolve: (user: User) => user.family_name,
+    },
+    email: {
+      type: new GraphQLNonNull(GraphQLString),
+      resolve: (user: User, _, req: express.Request) => {
+        if (req.user && user.id === req.user.id) {
+          return req.user.email;
+        }
+
+        throw new AuthenticationError('Not allowed');
+      },
+    },
+    birthdayDate: {
+      type: GraphQLString,
+      resolve: async (user: User, _, req: ReqWithLoader) => {
+        if (!req.user) {
+          return null;
+        }
+
+        const isFriend = await req
+          .loader(Friendships)
+          .loadBy('first_user', user.id, {
+            second_user: req.user.id,
+          });
+
+        if (isFriend) {
+          return user.birthday_date;
+        }
+
+        return null;
+      },
+    },
+    birthdayYear: {
+      type: GraphQLString,
+      resolve: async (user: User, _, req: ReqWithLoader) => {
+        if (!req.user) {
+          return null;
+        }
+
+        const isFriend = await req
+          .loader(Friendships)
+          .loadBy('first_user', user.id, {
+            second_user: req.user.id,
+          });
+
+        if (isFriend) {
+          return user.birthday_year;
+        }
+
+        return null;
+      },
     },
     username: {
       type: new GraphQLNonNull(GraphQLString),

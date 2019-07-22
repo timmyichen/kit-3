@@ -22,7 +22,7 @@ function reducer(state: ContextState, action: any) {
     case 'LOAD_USER':
       return {
         ...state,
-        user: action.user,
+        currentUser: action.user,
       };
     default:
       return state;

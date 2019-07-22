@@ -3,6 +3,7 @@ import App, { Container } from 'next/app';
 import { ApolloProvider } from 'react-apollo';
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
 import Head from 'next/head';
+import camelize from 'camelize';
 import Header from 'client/components/Header';
 import client from 'client/lib/apollo';
 import { ContextProvider } from 'client/components/ContextProvider';
@@ -14,7 +15,7 @@ class MyApp extends App {
   static async getInitialProps({ Component, ctx }: any) {
     let user;
     if (ctx.req && ctx.req.user) {
-      user = ctx.req.user;
+      user = camelize(ctx.req.user);
     } else if (ctx.req) {
       const baseUrl = `${ctx.req.protocol}://${ctx.req.get('Host')}`;
       const response = await fetch(baseUrl + '/data/user_info');

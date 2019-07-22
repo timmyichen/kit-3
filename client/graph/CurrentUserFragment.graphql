@@ -1,0 +1,10 @@
+fragment CurrentUser on User {
+  id
+  username
+  givenName
+  familyName
+  email
+  birthdayDate
+  birthdayYear
+  __typename
+}

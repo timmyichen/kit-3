@@ -7,7 +7,7 @@ export interface User {
   email: string;
   settings: Object;
   birthday_date?: Date;
-  birthday_year: Date;
+  birthday_year?: Date;
   created_at: Date;
   updated_at: Date;
   deleted_at?: Date;

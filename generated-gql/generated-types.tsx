@@ -106,6 +106,8 @@ export type RootMutation = {
   deleteDeet: Deet;
   /** Update permissions for shared */
   updateSharedPermissions?: Maybe<Array<Maybe<User>>>;
+  /** Unblock a user */
+  updateUser: User;
 };
 
 export type RootMutationRequestFriendArgs = {
@@ -172,6 +174,14 @@ export type RootMutationUpdateSharedPermissionsArgs = {
   userIdsToRemove?: Maybe<Array<Maybe<Scalars['Int']>>>;
 };
 
+export type RootMutationUpdateUserArgs = {
+  passwordVerification: Scalars['String'];
+  email: Scalars['String'];
+  givenName: Scalars['String'];
+  familyName: Scalars['String'];
+  birthday?: Maybe<Scalars['String']>;
+};
+
 export type RootQuery = {
   __typename?: 'RootQuery';
   /** The currently authed user */
@@ -227,6 +237,11 @@ export type User = {
   __typename?: 'User';
   id: Scalars['Int'];
   fullName: Scalars['String'];
+  givenName: Scalars['String'];
+  familyName: Scalars['String'];
+  email: Scalars['String'];
+  birthdayDate?: Maybe<Scalars['String']>;
+  birthdayYear?: Maybe<Scalars['String']>;
   username: Scalars['String'];
   isFriend: Scalars['Boolean'];
   isRequested: Scalars['Boolean'];
@@ -311,6 +326,17 @@ export type CurrentUserDeetsQuery = { __typename?: 'RootQuery' } & {
     EmailAddressFragment | AddressFragment | PhoneNumberFragment
   >;
 };
+
+export type CurrentUserFragment = { __typename: 'User' } & Pick<
+  User,
+  | 'id'
+  | 'username'
+  | 'givenName'
+  | 'familyName'
+  | 'email'
+  | 'birthdayDate'
+  | 'birthdayYear'
+>;
 
 export type DeetPermsQueryVariables = {
   searchQuery?: Maybe<Scalars['String']>;
@@ -448,6 +474,18 @@ export type UpdateSharedPermissionsMutation = {
   >;
 };
 
+export type UpdateUserMutationVariables = {
+  email: Scalars['String'];
+  passwordVerification: Scalars['String'];
+  givenName: Scalars['String'];
+  familyName: Scalars['String'];
+  birthday?: Maybe<Scalars['String']>;
+};
+
+export type UpdateUserMutation = { __typename?: 'RootMutation' } & {
+  updateUser: { __typename?: 'User' } & CurrentUserFragment;
+};
+
 export type UpsertAddressMutationVariables = {
   deetId?: Maybe<Scalars['Int']>;
   notes: Scalars['String'];
@@ -522,6 +560,18 @@ export const BaseUserFragmentDoc = gql`
     id
     username
     fullName
+    __typename
+  }
+`;
+export const CurrentUserFragmentDoc = gql`
+  fragment CurrentUser on User {
+    id
+    username
+    givenName
+    familyName
+    email
+    birthdayDate
+    birthdayYear
     __typename
   }
 `;
@@ -1501,6 +1551,79 @@ export function useUpdateSharedPermissionsMutation(
 }
 export type UpdateSharedPermissionsMutationHookResult = ReturnType<
   typeof useUpdateSharedPermissionsMutation
+>;
+export const UpdateUserDocument = gql`
+  mutation updateUser(
+    $email: String!
+    $passwordVerification: String!
+    $givenName: String!
+    $familyName: String!
+    $birthday: String
+  ) {
+    updateUser(
+      email: $email
+      passwordVerification: $passwordVerification
+      givenName: $givenName
+      familyName: $familyName
+      birthday: $birthday
+    ) {
+      ...CurrentUser
+    }
+  }
+  ${CurrentUserFragmentDoc}
+`;
+export type UpdateUserMutationFn = ReactApollo.MutationFn<
+  UpdateUserMutation,
+  UpdateUserMutationVariables
+>;
+export type UpdateUserComponentProps = Omit<
+  ReactApollo.MutationProps<UpdateUserMutation, UpdateUserMutationVariables>,
+  'mutation'
+>;
+
+export const UpdateUserComponent = (props: UpdateUserComponentProps) => (
+  <ReactApollo.Mutation<UpdateUserMutation, UpdateUserMutationVariables>
+    mutation={UpdateUserDocument}
+    {...props}
+  />
+);
+
+export type UpdateUserProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<UpdateUserMutation, UpdateUserMutationVariables>
+> &
+  TChildProps;
+export function withUpdateUser<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    UpdateUserMutation,
+    UpdateUserMutationVariables,
+    UpdateUserProps<TChildProps>
+  >,
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    UpdateUserMutation,
+    UpdateUserMutationVariables,
+    UpdateUserProps<TChildProps>
+  >(UpdateUserDocument, {
+    alias: 'withUpdateUser',
+    ...operationOptions,
+  });
+}
+
+export function useUpdateUserMutation(
+  baseOptions?: ReactApolloHooks.MutationHookOptions<
+    UpdateUserMutation,
+    UpdateUserMutationVariables
+  >,
+) {
+  return ReactApolloHooks.useMutation<
+    UpdateUserMutation,
+    UpdateUserMutationVariables
+  >(UpdateUserDocument, baseOptions);
+}
+export type UpdateUserMutationHookResult = ReturnType<
+  typeof useUpdateUserMutation
 >;
 export const UpsertAddressDocument = gql`
   mutation upsertAddress(

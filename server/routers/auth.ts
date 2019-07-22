@@ -3,6 +3,7 @@ import * as bluebird from 'bluebird';
 import * as asyncRouter from 'express-router-async';
 import * as passport from 'passport';
 import * as passportLocal from 'passport-local';
+import camelize from 'camelize';
 import * as validator from 'validator';
 import { Users } from 'server/models';
 const bcrypt = bluebird.promisifyAll(require('bcrypt-nodejs'));
@@ -61,7 +62,7 @@ function init() {
         passReqToCallback: true,
       },
       (req: express.Request, email: string, password: string, done: any) => {
-        const { givenName, familyName, username, birthday } = req.body;
+        const { givenName, familyName, username } = req.body;
 
         if (!email || !password || !username || !givenName) {
           return done(null, false, { message: 'missing required field' });
@@ -77,7 +78,6 @@ function init() {
               given_name: givenName,
               family_name: familyName,
               username: username.toLowerCase(),
-              birthday,
               email: email.toLowerCase(),
               password: hash,
             });
@@ -154,7 +154,7 @@ function init() {
   router.get(
     '/data/user_info',
     (req: express.Request, res: express.Response) => {
-      res.json(req.user || { error: 'not logged in' });
+      res.json(camelize(req.user) || { error: 'not logged in' });
     },
   );
 

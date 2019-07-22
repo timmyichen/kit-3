@@ -16,6 +16,19 @@ export interface UserSearch extends User {
   isBlocked: boolean;
 }
 
+export interface CurrentUser {
+  id: number;
+  username: string;
+  email: string;
+  familyName: string;
+  givenName: string;
+  birthdayDate?: Date;
+  birthdayYear?: number;
+  settings: Object;
+  updatedAt: string;
+  createdAt: string;
+}
+
 export type DeetTypes = 'address' | 'email_address' | 'phone_number';
 export type ApolloDeetTypes =
   | 'PhoneNumberDeet'
@@ -53,10 +66,6 @@ export interface PhoneNumberDeet extends BaseDeet {
 
 export type Deet = AddressDeet | EmailAddressDeet | PhoneNumberDeet;
 
-export interface AuthedUser extends User {
-  email: string;
-}
-
 export type MessageType = 'error' | 'confirm';
 
 export interface Message {
@@ -65,7 +74,7 @@ export interface Message {
 }
 
 export interface ContextState {
-  currentUser: AuthedUser | null;
+  currentUser: CurrentUser | null;
   modal: React.ReactNode | null;
   message: Message | null;
 }

@@ -6,7 +6,7 @@ import userType from '../types/userType';
 
 export default {
   description: 'Unblock a user',
-  type: GraphQLNonNull(userType),
+  type: new GraphQLNonNull(userType),
   args: {
     targetUserId: { type: new GraphQLNonNull(GraphQLInt) },
   },
