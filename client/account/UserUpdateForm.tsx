@@ -12,38 +12,57 @@ interface AccountFields {
   passwordVerification: string;
 }
 
+const emptyState = {
+  birthday: null,
+  email: '',
+  familyName: '',
+  givenName: '',
+  birthdayDate: null,
+  birthdayYear: null,
+  passwordVerification: '',
+};
+
 const pad = (num: number) => (num < 10 ? '0' + num : '' + num);
 
 function UserUpdateForm() {
-  const { currentUser } = useCtxState();
+  const currentUserState = useCtxState().currentUser;
+  let currentUser = currentUserState;
+
+  React.useEffect(() => {
+    if (!currentUserState) {
+      return;
+    }
+
+    let birthday;
+    if (currentUserState.birthdayDate) {
+      const bdayAsDate = new Date(currentUserState.birthdayDate);
+      if (isNaN(bdayAsDate.getMonth()) === false) {
+        birthday =
+          currentUserState.birthdayYear +
+          '-' +
+          pad(bdayAsDate.getMonth()) +
+          '-' +
+          pad(bdayAsDate.getDate());
+      }
+    }
+
+    setFields({
+      email: currentUserState.email,
+      familyName: currentUserState.familyName,
+      givenName: currentUserState.givenName,
+      passwordVerification: '',
+      birthday,
+    });
+  }, [currentUserState]);
+
+  const [fields, setFields] = React.useState<AccountFields>(emptyState);
+  const [loading, setLoading] = React.useState<boolean>(false);
+
+  const updateUser = useUpdateUserMutation();
 
   if (!currentUser) {
     return <Loader />;
   }
-
-  const updateUser = useUpdateUserMutation();
-
-  let birthday;
-  if (currentUser.birthdayDate) {
-    const bdayAsDate = new Date(currentUser.birthdayDate);
-    if (isNaN(bdayAsDate.getMonth()) === false) {
-      birthday =
-        currentUser.birthdayYear +
-        '-' +
-        pad(bdayAsDate.getMonth()) +
-        '-' +
-        pad(bdayAsDate.getDate());
-    }
-  }
-
-  const [fields, setFields] = React.useState<AccountFields>({
-    email: currentUser.email,
-    familyName: currentUser.familyName,
-    givenName: currentUser.givenName,
-    passwordVerification: '',
-    birthday,
-  });
-  const [loading, setLoading] = React.useState<boolean>(false);
 
   const setValue = (field: keyof AccountFields, value: any) => {
     const updatedFields = fields;

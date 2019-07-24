@@ -3,7 +3,7 @@ import * as bluebird from 'bluebird';
 import * as asyncRouter from 'express-router-async';
 import * as passport from 'passport';
 import * as passportLocal from 'passport-local';
-import camelize from 'camelize';
+import camelize = require('camelize');
 import * as validator from 'validator';
 import { Users } from 'server/models';
 const bcrypt = bluebird.promisifyAll(require('bcrypt-nodejs'));

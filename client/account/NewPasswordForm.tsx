@@ -7,10 +7,6 @@ import { useUpdatePasswordMutation } from 'generated/generated-types';
 function NewPasswordForm() {
   const { currentUser } = useCtxState();
 
-  if (!currentUser) {
-    return <Loader />;
-  }
-
   const updatePassword = useUpdatePasswordMutation();
 
   const [passwordVerification, setPasswordVerification] = React.useState<
@@ -20,6 +16,10 @@ function NewPasswordForm() {
   const [newPasswordVerify, setNewPasswordVerify] = React.useState<string>('');
 
   const [loading, setLoading] = React.useState<boolean>(false);
+
+  if (!currentUser) {
+    return <Loader />;
+  }
 
   const onSubmit = async () => {
     setLoading(true);
