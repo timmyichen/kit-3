@@ -205,6 +205,8 @@ export type RootQuery = {
   accessibleDeets: SharedDeetsPagination;
   /** A users friends */
   pendingFriendRequests: Array<Maybe<User>>;
+  /** Get all of a users todos */
+  userTodos: UserTodos;
 };
 
 export type RootQuerySearchUsersArgs = {
@@ -262,6 +264,16 @@ export type User = {
 /** A user of the platform */
 export type UserHasAccessToDeetArgs = {
   deetId: Scalars['Int'];
+};
+
+/** A phone number deet */
+export type UserTodos = {
+  __typename?: 'UserTodos';
+  hasFriends: Scalars['Boolean'];
+  hasDeets: Scalars['Boolean'];
+  hasPrimaryAddress: Scalars['Boolean'];
+  hasPrimaryPhoneNumber: Scalars['Boolean'];
+  hasPrimaryEmailAddress: Scalars['Boolean'];
 };
 export type AcceptFriendRequestMutationVariables = {
   targetUserId: Scalars['Int'];
@@ -555,6 +567,19 @@ export type UserAccessFragment = { __typename: 'User' } & Pick<
   User,
   'id' | 'fullName' | 'username' | 'hasAccessToDeet'
 >;
+
+export type UserTodosQueryVariables = {};
+
+export type UserTodosQuery = { __typename?: 'RootQuery' } & {
+  userTodos: { __typename?: 'UserTodos' } & Pick<
+    UserTodos,
+    | 'hasFriends'
+    | 'hasDeets'
+    | 'hasPrimaryAddress'
+    | 'hasPrimaryPhoneNumber'
+    | 'hasPrimaryEmailAddress'
+  >;
+};
 export const AddressFragmentDoc = gql`
   fragment Address on AddressDeet {
     id
@@ -1978,3 +2003,58 @@ export function useUpsertPhoneNumberMutation(
 export type UpsertPhoneNumberMutationHookResult = ReturnType<
   typeof useUpsertPhoneNumberMutation
 >;
+export const UserTodosDocument = gql`
+  query userTodos {
+    userTodos {
+      hasFriends
+      hasDeets
+      hasPrimaryAddress
+      hasPrimaryPhoneNumber
+      hasPrimaryEmailAddress
+    }
+  }
+`;
+export type UserTodosComponentProps = Omit<
+  ReactApollo.QueryProps<UserTodosQuery, UserTodosQueryVariables>,
+  'query'
+>;
+
+export const UserTodosComponent = (props: UserTodosComponentProps) => (
+  <ReactApollo.Query<UserTodosQuery, UserTodosQueryVariables>
+    query={UserTodosDocument}
+    {...props}
+  />
+);
+
+export type UserTodosProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<UserTodosQuery, UserTodosQueryVariables>
+> &
+  TChildProps;
+export function withUserTodos<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    UserTodosQuery,
+    UserTodosQueryVariables,
+    UserTodosProps<TChildProps>
+  >,
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    UserTodosQuery,
+    UserTodosQueryVariables,
+    UserTodosProps<TChildProps>
+  >(UserTodosDocument, {
+    alias: 'withUserTodos',
+    ...operationOptions,
+  });
+}
+
+export function useUserTodosQuery(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<UserTodosQueryVariables>,
+) {
+  return ReactApolloHooks.useQuery<UserTodosQuery, UserTodosQueryVariables>(
+    UserTodosDocument,
+    baseOptions,
+  );
+}
+export type UserTodosQueryHookResult = ReturnType<typeof useUserTodosQuery>;

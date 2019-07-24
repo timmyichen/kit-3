@@ -49,8 +49,8 @@ export default {
 
     const { email, givenName, familyName } = args;
 
-    let birthdayDate;
-    let birthdayYear;
+    let birthdayDate = null;
+    let birthdayYear = null;
     if (args.birthday) {
       const date = validator.toDate(args.birthday);
       if (!date || validator.isAfter(args.birthday)) {

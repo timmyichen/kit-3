@@ -40,9 +40,9 @@ function UserUpdateForm() {
         birthday =
           currentUserState.birthdayYear +
           '-' +
-          pad(bdayAsDate.getMonth()) +
+          pad(bdayAsDate.getMonth() + 1) +
           '-' +
-          pad(bdayAsDate.getDate());
+          pad(bdayAsDate.getDate() + 1);
       }
     }
 
@@ -74,6 +74,7 @@ function UserUpdateForm() {
   };
 
   const onSubmit = async () => {
+    console.log(fields);
     setLoading(true);
     try {
       await updateUser({ variables: fields });

@@ -1,0 +1,9 @@
+query userTodos {
+  userTodos {
+    hasFriends
+    hasDeets
+    hasPrimaryAddress
+    hasPrimaryPhoneNumber
+    hasPrimaryEmailAddress
+  }
+}
