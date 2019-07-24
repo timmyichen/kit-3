@@ -14,7 +14,7 @@ function Todos() {
   if (loading || !data || !currentUser) {
     content = <Loader />;
   } else {
-    const shouldUpdateBirthday = !currentUser.birthdayDate;
+    const hasBirthday = !!currentUser.birthdayDate;
     const {
       hasFriends,
       hasDeets,
@@ -23,9 +23,20 @@ function Todos() {
       hasPrimaryEmailAddress,
     } = data.userTodos;
 
+    if (
+      hasBirthday &&
+      hasFriends &&
+      hasDeets &&
+      hasPrimaryAddress &&
+      hasPrimaryEmailAddress &&
+      hasPrimaryPhoneNumber
+    ) {
+      return null;
+    }
+
     content = (
       <div className="content">
-        {shouldUpdateBirthday && (
+        {!hasBirthday && (
           <div className="reminder">
             You don't have a birthday set.{' '}
             <Link href="/account">
