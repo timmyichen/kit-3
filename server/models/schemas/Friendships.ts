@@ -1,4 +1,11 @@
-import { Table, Column, Model, PrimaryKey } from 'sequelize-typescript';
+import {
+  Table,
+  Column,
+  Model,
+  PrimaryKey,
+  BelongsTo,
+} from 'sequelize-typescript';
+import Users from './Users';
 
 @Table({
   tableName: 'friendships',
@@ -24,4 +31,7 @@ export default class Friendships extends Model<Friendships> {
     },
   })
   second_user: number;
+
+  @BelongsTo(() => Users, 'second_user')
+  friend: Users;
 }

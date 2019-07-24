@@ -32,6 +32,32 @@ export type AddressDeet = {
   updatedAt: Scalars['String'];
 };
 
+/** A user of the platform */
+export type BirthdayUser = {
+  __typename?: 'BirthdayUser';
+  id: Scalars['Int'];
+  fullName: Scalars['String'];
+  givenName: Scalars['String'];
+  familyName: Scalars['String'];
+  email: Scalars['String'];
+  birthdayDate?: Maybe<Scalars['String']>;
+  birthdayYear?: Maybe<Scalars['String']>;
+  username: Scalars['String'];
+  isFriend: Scalars['Boolean'];
+  isRequested: Scalars['Boolean'];
+  hasRequestedUser: Scalars['Boolean'];
+  isBlocked: Scalars['Boolean'];
+  hasAccessToDeet: Scalars['Boolean'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  birthday: Scalars['String'];
+};
+
+/** A user of the platform */
+export type BirthdayUserHasAccessToDeetArgs = {
+  deetId: Scalars['Int'];
+};
+
 export type Deet = EmailAddressDeet | PhoneNumberDeet | AddressDeet;
 
 export enum DeetType {
@@ -207,6 +233,8 @@ export type RootQuery = {
   pendingFriendRequests: Array<Maybe<User>>;
   /** Get all of a users todos */
   userTodos: UserTodos;
+  /** Get all users with upcoming birthdays */
+  upcomingBirthdays: Array<BirthdayUser>;
 };
 
 export type RootQuerySearchUsersArgs = {
@@ -232,6 +260,10 @@ export type RootQueryAccessibleDeetsArgs = {
 
 export type RootQueryPendingFriendRequestsArgs = {
   count?: Maybe<Scalars['Int']>;
+};
+
+export type RootQueryUpcomingBirthdaysArgs = {
+  days?: Maybe<Scalars['Int']>;
 };
 
 /** Pagination for SharedDeets */
@@ -477,6 +509,19 @@ export type UnblockUserMutationVariables = {
 
 export type UnblockUserMutation = { __typename?: 'RootMutation' } & {
   unblockUser: { __typename?: 'User' } & OtherUserFragment;
+};
+
+export type UpcomingBirthdaysQueryVariables = {
+  days?: Maybe<Scalars['Int']>;
+};
+
+export type UpcomingBirthdaysQuery = { __typename?: 'RootQuery' } & {
+  upcomingBirthdays: Array<
+    { __typename?: 'BirthdayUser' } & Pick<
+      BirthdayUser,
+      'id' | 'username' | 'fullName' | 'birthday'
+    >
+  >;
 };
 
 export type UpdatePasswordMutationVariables = {
@@ -1513,6 +1558,69 @@ export function useUnblockUserMutation(
 }
 export type UnblockUserMutationHookResult = ReturnType<
   typeof useUnblockUserMutation
+>;
+export const UpcomingBirthdaysDocument = gql`
+  query upcomingBirthdays($days: Int) {
+    upcomingBirthdays(days: $days) {
+      id
+      username
+      fullName
+      birthday
+    }
+  }
+`;
+export type UpcomingBirthdaysComponentProps = Omit<
+  ReactApollo.QueryProps<
+    UpcomingBirthdaysQuery,
+    UpcomingBirthdaysQueryVariables
+  >,
+  'query'
+>;
+
+export const UpcomingBirthdaysComponent = (
+  props: UpcomingBirthdaysComponentProps,
+) => (
+  <ReactApollo.Query<UpcomingBirthdaysQuery, UpcomingBirthdaysQueryVariables>
+    query={UpcomingBirthdaysDocument}
+    {...props}
+  />
+);
+
+export type UpcomingBirthdaysProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<UpcomingBirthdaysQuery, UpcomingBirthdaysQueryVariables>
+> &
+  TChildProps;
+export function withUpcomingBirthdays<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    UpcomingBirthdaysQuery,
+    UpcomingBirthdaysQueryVariables,
+    UpcomingBirthdaysProps<TChildProps>
+  >,
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    UpcomingBirthdaysQuery,
+    UpcomingBirthdaysQueryVariables,
+    UpcomingBirthdaysProps<TChildProps>
+  >(UpcomingBirthdaysDocument, {
+    alias: 'withUpcomingBirthdays',
+    ...operationOptions,
+  });
+}
+
+export function useUpcomingBirthdaysQuery(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<
+    UpcomingBirthdaysQueryVariables
+  >,
+) {
+  return ReactApolloHooks.useQuery<
+    UpcomingBirthdaysQuery,
+    UpcomingBirthdaysQueryVariables
+  >(UpcomingBirthdaysDocument, baseOptions);
+}
+export type UpcomingBirthdaysQueryHookResult = ReturnType<
+  typeof useUpcomingBirthdaysQuery
 >;
 export const UpdatePasswordDocument = gql`
   mutation updatePassword(

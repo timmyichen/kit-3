@@ -1,0 +1,8 @@
+query upcomingBirthdays($days: Int) {
+  upcomingBirthdays(days: $days) {
+    id
+    username
+    fullName
+    birthday
+  }
+}
