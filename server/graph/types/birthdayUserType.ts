@@ -14,12 +14,8 @@ export default new GraphQLObjectType({
           throw new ApolloError('no birthday found');
         }
 
-        const birthday = new Date(user.birthday_date);
-        return [
-          user.birthday_year,
-          birthday.getMonth() + 1,
-          birthday.getDate() + 1,
-        ].join('-');
+        const [_, month, date] = user.birthday_date.split('-');
+        return [user.birthday_year, month, date].join('-');
       },
     },
   }),

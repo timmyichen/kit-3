@@ -34,10 +34,13 @@ const getDateRanges = (days: number): Array<DateRange> => {
     date: d.getDate(),
   };
 
-  if (ending.month < today.month) {
+  if (
+    ending.month < today.month ||
+    (ending.month === today.month && ending.date < today.date)
+  ) {
     // looped past year
     return [
-      { start: today, end: { month: 11, date: 30 } },
+      { start: today, end: { month: 11, date: 31 } },
       { start: { month: 0, date: 0 }, end: ending },
     ];
   }

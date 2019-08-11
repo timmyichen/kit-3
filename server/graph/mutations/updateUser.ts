@@ -52,10 +52,13 @@ export default {
     let birthdayDate = null;
     let birthdayYear = null;
     if (args.birthday) {
-      const date = validator.toDate(args.birthday);
-      if (!date || validator.isAfter(args.birthday)) {
+      if (!validator.toDate(args.birthday)) {
         throw new UserInputError('Invalid birthday date');
       }
+      const [year, month, day] = args.birthday
+        .split('-')
+        .map(s => parseInt(s, 10));
+      const date = new Date(Date.UTC(year, month, day));
       birthdayYear = date.getFullYear();
       birthdayDate = date;
       birthdayDate.setFullYear(1234);

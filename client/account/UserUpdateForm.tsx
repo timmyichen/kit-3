@@ -74,7 +74,6 @@ function UserUpdateForm() {
   };
 
   const onSubmit = async () => {
-    console.log(fields);
     setLoading(true);
     try {
       await updateUser({ variables: fields });
