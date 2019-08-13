@@ -4,8 +4,16 @@ import nextjs from 'server/lib/next';
 
 const router = asyncRouter();
 
+const pages = ['about', 'contact'];
+
 router.get('/', (req: express.Request, res: express.Response) => {
   nextjs.render(req, res, '/');
+});
+
+pages.forEach(page => {
+  router.get(`/${page}`, (req: express.Request, res: express.Response) => {
+    nextjs.render(req, res, `/${page}`);
+  });
 });
 
 router.get('/login', (req: express.Request, res: express.Response) => {

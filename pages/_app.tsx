@@ -65,6 +65,8 @@ class MyApp extends App {
                 <style jsx>{`
                   .page-wrapper {
                     margin-bottom: 60px;
+                    min-height: calc(100vh - 120px);
+                    height: 100%;
                   }
                   .root-wrapper {
                     position: relative;

@@ -32,7 +32,7 @@ export default () => (
         padding: none;
         border: none;
       }
-      .index :global(.heading) {
+      .index .heading {
         position: relative;
         display: flex;
         background: url('/images/marketing/letters.jpg') no-repeat center center
@@ -43,7 +43,7 @@ export default () => (
         align-items: center;
         flex-direction: column;
       }
-      .index :global(.heading) .overlay {
+      .index .heading .overlay {
         width: 100%;
         height: 100%;
         position: absolute;
@@ -51,11 +51,11 @@ export default () => (
         top: 0;
         background-color: hsla(0, 0%, 0%, 0.55);
       }
-      .index :global(.heading) .title {
+      .index .heading .title {
         z-index: 1;
         color: #fff;
       }
-      .index :global(.heading) h1 {
+      .index .heading h1 {
         font-size: 72px;
         text-align: center;
       }
