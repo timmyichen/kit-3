@@ -20,7 +20,7 @@ export default () => (
         <Link href="/signup">
           <a>
             <Button primary size="massive">
-              Join
+              Sign Up
             </Button>
           </a>
         </Link>

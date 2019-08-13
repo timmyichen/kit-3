@@ -1,12 +1,15 @@
 import * as React from 'react';
 import { Icon } from 'semantic-ui-react';
+import colors from 'client/styles/colors';
 
 export default () => (
   <div className="contact-wrapper">
     <div className="overlay" />
     <h1>Keep in Touch with us!</h1>
     <h3>
-      <Icon name="mail outline" />{' '}
+      <span>
+        <Icon name="mail outline" />
+      </span>
       <a href="mailto:please@kit-with.me">please@kit-with.me</a>
     </h3>
     <style jsx>{`
@@ -30,6 +33,18 @@ export default () => (
       h3 {
         font-size: 40px;
         z-index: 1;
+        display: flex;
+        align-items: center;
+      }
+      h3 > span {
+        background-color: ${colors.yellow};
+        padding: 8px;
+        color: #000;
+        border-radius: 40px;
+        margin-right: 15px;
+      }
+      h3 > span > :global(i) {
+        margin: 0;
       }
       .overlay {
         width: 100%;
