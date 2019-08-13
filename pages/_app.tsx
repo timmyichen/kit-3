@@ -10,6 +10,7 @@ import { ContextProvider } from 'client/components/ContextProvider';
 import Page from 'client/components/Page';
 import UserLoader from 'client/components/UserLoader';
 import fetch from 'isomorphic-fetch';
+import Footer from 'client/components/Footer';
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }: any) {
@@ -54,8 +55,29 @@ class MyApp extends App {
             <ApolloHooksProvider client={client}>
               <UserLoader user={pageProps.user} />
               <Page>
-                <Header isAuthed={!!pageProps.user} />
-                <Component {...pageProps} />
+                <div className="root-wrapper">
+                  <Header isAuthed={!!pageProps.user} />
+                  <div className="page-wrapper">
+                    <Component {...pageProps} />
+                  </div>
+                  <Footer />
+                </div>
+                <style jsx>{`
+                  .page-wrapper {
+                    margin-bottom: 60px;
+                  }
+                  .root-wrapper {
+                    position: relative;
+                    height: 100%;
+                    min-height: 100vh;
+                  }
+                  :global(.main-footer) {
+                    position: absolute;
+                    bottom: 0;
+                    height: 60px;
+                    width: 100%;
+                  }
+                `}</style>
               </Page>
             </ApolloHooksProvider>
           </ApolloProvider>
