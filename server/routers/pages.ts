@@ -4,7 +4,7 @@ import nextjs from 'server/lib/next';
 
 const router = asyncRouter();
 
-const pages = ['about', 'contact'];
+const pages = ['about', 'contact', 'terms', 'privacy'];
 
 router.get('/', (req: express.Request, res: express.Response) => {
   nextjs.render(req, res, '/');
