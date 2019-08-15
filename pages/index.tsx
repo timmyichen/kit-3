@@ -49,7 +49,7 @@ export default () => (
         position: absolute;
         left: 0;
         top: 0;
-        background-color: hsla(0, 0%, 0%, 0.55);
+        background-color: hsla(0, 0%, 0%, 0.75);
       }
       .index .heading .title {
         z-index: 1;

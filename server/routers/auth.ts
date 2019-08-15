@@ -32,17 +32,17 @@ function init() {
       promise
         .then((user: any) => {
           if (!user) {
-            return done(undefined, false, { message: 'Login failed' });
+            return done(null, false, { message: 'Login failed' });
           }
 
           bcrypt
             .compareAsync(password, user.password)
             .then((isValid: boolean) => {
               if (!isValid) {
-                return done(undefined, false, { message: 'Login failed' });
+                return done(null, false, { message: 'Login failed' });
               }
 
-              return done(undefined, user);
+              return done(null, user);
             })
             .catch((e: any) => {
               done(e);
@@ -120,29 +120,71 @@ function init() {
 
   router.post(
     '/login',
-    passport.authenticate('local-login', {
-      session: true,
-      failureRedirect: '/ohno',
-    }),
-    (_: any, res: express.Response) => {
-      return res.redirect('/dashboard');
+    (
+      req: express.Request,
+      res: express.Response,
+      next: express.NextFunction,
+    ) => {
+      passport.authenticate(
+        'local-login',
+        {
+          session: true,
+          failWithError: true,
+        },
+        (err, user, info) => {
+          if (err) {
+            // this should never happen
+            throw new Error(err.message);
+          }
+
+          if (!user) {
+            return res.status(400).json({ success: false, ...info });
+          }
+
+          req.login(user, err => {
+            if (err) {
+              return res.status(500).send('Unknown error in auth');
+            }
+
+            return res.json({ success: true });
+          });
+        },
+      )(req, res, next);
     },
   );
 
   router.post(
     '/signup',
-    passport.authenticate('local-signup', {
-      session: true,
-      failureRedirect: '/ohno',
-    }),
-    (req: express.Request, res: express.Response) => {
-      req.login(req.user, err => {
-        if (err) {
-          return res.status(500).send('Unknown error in auth');
-        }
+    (
+      req: express.Request,
+      res: express.Response,
+      next: express.NextFunction,
+    ) => {
+      passport.authenticate(
+        'local-signup',
+        {
+          session: true,
+          failWithError: true,
+        },
+        (err, user, info) => {
+          if (err) {
+            // this should never happen
+            throw new Error(err.message);
+          }
 
-        return res.redirect('/dashboard');
-      });
+          if (!user) {
+            return res.status(400).json({ success: false, ...info });
+          }
+
+          req.login(user, err => {
+            if (err) {
+              return res.status(500).send('Unknown error in auth');
+            }
+
+            return res.json({ success: true });
+          });
+        },
+      )(req, res, next);
     },
   );
 
