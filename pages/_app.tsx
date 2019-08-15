@@ -11,6 +11,7 @@ import Page from 'client/components/Page';
 import UserLoader from 'client/components/UserLoader';
 import fetch from 'isomorphic-fetch';
 import Footer from 'client/components/Footer';
+import MessageRoll from 'client/components/MessageRoll';
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }: any) {
@@ -56,6 +57,7 @@ class MyApp extends App {
               <UserLoader user={pageProps.user} />
               <Page>
                 <div className="root-wrapper">
+                  <MessageRoll />
                   <Header isAuthed={!!pageProps.user} />
                   <div className="page-wrapper">
                     <Component {...pageProps} />

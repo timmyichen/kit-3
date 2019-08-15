@@ -13,11 +13,14 @@ export default () => {
 
   const router = useRouter();
 
-  const onSubmit = async () => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setLoading(true);
 
+    let res;
+    console.log('trying');
     try {
-      await fetch('/login', {
+      res = await fetch('/login', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -25,9 +28,19 @@ export default () => {
         },
         body: JSON.stringify({ email, password }),
       });
+
+      if (!res.ok) {
+        const body = await res.json();
+        throw new Error(body.message);
+      }
     } catch (e) {
       setLoading(false);
-      console.log(e.message);
+      dispatch({
+        type: 'ADD_MESSAGE',
+        messageType: 'error',
+        time: 4000,
+        content: e.message,
+      });
       return;
     }
 
@@ -38,7 +51,7 @@ export default () => {
 
   return (
     <div>
-      <Form onSubmit={onSubmit}>
+      <Form onSubmit={onSubmit} method="POST">
         <Form.Field>
           <label>Email</label>
           <input

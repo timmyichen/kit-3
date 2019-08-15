@@ -1,7 +1,10 @@
 import * as React from 'react';
+import classnames from 'classnames';
 import { Button, Checkbox, Form } from 'semantic-ui-react';
 import { useRouter } from 'next/router';
 import fetch from 'isomorphic-fetch';
+import { useCtxDispatch } from 'client/components/ContextProvider';
+import colors from 'client/styles/colors';
 
 export default () => {
   const [givenName, setGivenName] = React.useState<string>('');
@@ -11,19 +14,22 @@ export default () => {
   const [password, setPassword] = React.useState<string>('');
   const [loading, setLoading] = React.useState<boolean>(false);
   const [termsAgreement, setTermsAgreement] = React.useState<boolean>(false);
+  const [highlightTerms, setHighlightTerms] = React.useState<boolean>(false);
 
   const router = useRouter();
+  const dispatch = useCtxDispatch();
 
-  const onSubmit = async () => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (!termsAgreement) {
-      console.log('you must agree to our shit');
+      setHighlightTerms(true);
       return;
     }
 
     setLoading(true);
 
     try {
-      await fetch('/signup', {
+      const res = await fetch('/signup', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -37,9 +43,19 @@ export default () => {
           password,
         }),
       });
+
+      if (!res.ok) {
+        const body = await res.json();
+        throw new Error(body.message);
+      }
     } catch (e) {
       setLoading(false);
-      console.log(e.message);
+      dispatch({
+        type: 'ADD_MESSAGE',
+        messageType: 'error',
+        time: 4000,
+        content: e.message,
+      });
       return;
     }
 
@@ -50,7 +66,7 @@ export default () => {
 
   return (
     <div className="signup-wrapper">
-      <Form>
+      <Form onSubmit={onSubmit} method="POST">
         <Form.Field>
           <label>First Name (Given Name)</label>
           <input
@@ -104,12 +120,16 @@ export default () => {
         </Form.Field>
         <Form.Field>
           <Checkbox
-            onChange={() => setTermsAgreement(!termsAgreement)}
+            className={classnames('checkbox', { highlight: highlightTerms })}
+            onChange={() => {
+              setTermsAgreement(!termsAgreement);
+              setHighlightTerms(false);
+            }}
             label="I agree to the Terms and Conditions"
             required
           />
         </Form.Field>
-        <Button disabled={loading} type="submit" onClick={onSubmit}>
+        <Button disabled={loading} type="submit">
           Sign Up
         </Button>
       </Form>
@@ -117,6 +137,13 @@ export default () => {
         .signup-wrapper :global(.ui.form) {
           max-width: 400px;
           margin: 50px auto;
+        }
+        .signup-wrapper :global(.checkbox) {
+          border: 1px solid transparent;
+          padding: 5px;
+        }
+        .signup-wrapper :global(.highlight) {
+          border: 2px solid ${colors.red};
         }
       `}</style>
     </div>

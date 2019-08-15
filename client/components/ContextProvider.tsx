@@ -1,4 +1,5 @@
 import * as React from 'react';
+import uuid from 'uuid/v4';
 import { ContextState } from 'client/types';
 
 const StateContext = React.createContext<ContextState | undefined>(undefined);
@@ -6,13 +7,23 @@ const DispatchContext = React.createContext<any>(undefined);
 
 function reducer(state: ContextState, action: any) {
   switch (action.type) {
-    case 'SET_MESSAGE':
+    case 'ADD_MESSAGE':
       return {
         ...state,
-        message: {
-          type: action.type,
-          content: action.content,
-        },
+        messages: [
+          ...state.messages,
+          {
+            id: uuid(),
+            type: action.messageType,
+            content: action.content,
+            time: action.time,
+          },
+        ],
+      };
+    case 'REMOVE_MESSAGE':
+      return {
+        ...state,
+        messages: state.messages.filter(m => m.id !== action.id),
       };
     case 'SET_MODAL':
       return {
@@ -35,7 +46,7 @@ function reducer(state: ContextState, action: any) {
 }
 
 const initialState = {
-  message: null,
+  messages: [],
   modal: null,
   currentUser: null,
 };
@@ -66,7 +77,7 @@ export function useCtxDispatch() {
   const context = React.useContext(DispatchContext);
 
   if (context === undefined) {
-    throw new Error('useDispatch must be used within a CountProvider');
+    throw new Error('useDispatch must be used within a ContextProvider');
   }
 
   return context;

@@ -66,17 +66,19 @@ export interface PhoneNumberDeet extends BaseDeet {
 
 export type Deet = AddressDeet | EmailAddressDeet | PhoneNumberDeet;
 
-export type MessageType = 'error' | 'confirm';
+export type MessageType = 'error' | 'confirm' | 'info';
 
 export interface Message {
+  id: string;
   type: MessageType;
   content: React.ReactNode;
+  time: number;
 }
 
 export interface ContextState {
   currentUser: CurrentUser | null;
   modal: React.ReactNode | null;
-  message: Message | null;
+  messages: Array<Message>;
 }
 
 export interface PaginationResponse<T> {
