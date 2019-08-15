@@ -17,10 +17,8 @@ export default () => {
     e.preventDefault();
     setLoading(true);
 
-    let res;
-    console.log('trying');
     try {
-      res = await fetch('/login', {
+      const res = await fetch('/login', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
