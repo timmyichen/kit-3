@@ -24,6 +24,11 @@ function reducer(state: ContextState, action: any) {
         ...state,
         currentUser: action.user,
       };
+    case 'CLEAR_USER':
+      return {
+        ...state,
+        currentUser: null,
+      };
     default:
       return state;
   }

@@ -121,28 +121,33 @@ interface NavProps {
 }
 
 function HeaderNavLink({ label, href, currentPath, noCSR }: NavProps) {
-  return (
-    <Link href={href}>
-      <div className={classnames('nav-link', { active: currentPath === href })}>
-        {noCSR ? <a href={href}>{label}</a> : <a>{label}</a>}
-        <style jsx>{`
-          .nav-link {
-            height: 100%;
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-          }
-          .nav-link a {
-            color: white;
-          }
-          .active,
-          .nav-link:hover {
-            background: rgba(0, 0, 0, 0.2);
-          }
-        `}</style>
-      </div>
-    </Link>
+  const link = (
+    <div className={classnames('nav-link', { active: currentPath === href })}>
+      {noCSR ? <a href={href}>{label}</a> : <a>{label}</a>}
+      <style jsx>{`
+        .nav-link {
+          height: 100%;
+          padding: 10px 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+        }
+        .nav-link a {
+          color: white;
+        }
+        .active,
+        .nav-link:hover {
+          background: rgba(0, 0, 0, 0.2);
+        }
+      `}</style>
+    </div>
   );
+
+  if (noCSR) {
+    console.log('no thx csr');
+    return link;
+  }
+
+  return <Link href={href}>{link}</Link>;
 }
