@@ -44,6 +44,9 @@ function MessageRoll() {
           top: 80px;
           right: 20px;
         }
+        .message-roll-wrapper :global(.ui.message) {
+          z-index: 999;
+        }
         .message-roll-wrapper :global(.ui.message > p) {
           margin-top: 0px !important;
           margin-right: 15px;
@@ -77,7 +80,7 @@ function Msg({
   }
 
   return (
-    <Message color={color} onDismiss={onDismiss}>
+    <Message color={color} onDismiss={() => onDismiss(msg.id)}>
       <p>{content}</p>
     </Message>
   );

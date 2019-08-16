@@ -3,9 +3,12 @@ import { useCtxState } from 'client/components/ContextProvider';
 import { Form, Header, Input, Button } from 'semantic-ui-react';
 import Loader from 'client/components/Loader';
 import { useUpdatePasswordMutation } from 'generated/generated-types';
+import useMessages from 'client/hooks/useMessages';
 
 function NewPasswordForm() {
   const { currentUser } = useCtxState();
+
+  const { showError, showConfirm } = useMessages({ length: 4000 });
 
   const updatePassword = useUpdatePasswordMutation();
 
@@ -29,9 +32,10 @@ function NewPasswordForm() {
       });
     } catch (e) {
       setLoading(false);
-      throw e;
+      return showError(e.message);
     }
 
+    showConfirm('Password updated');
     setLoading(false);
     setPasswordVerification('');
     setNewPassword('');

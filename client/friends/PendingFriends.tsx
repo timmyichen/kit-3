@@ -16,9 +16,11 @@ import {
   PendingFriendRequestsQuery,
   FriendsQuery,
 } from 'generated/generated-types';
+import useMessages from 'client/hooks/useMessages';
 
 const PendingFriends = ({ colCount }: { colCount: number }) => {
   const dispatch = useCtxDispatch();
+  const { showError, showConfirm } = useMessages({ length: 4000 });
   const acceptFriendRequest = useAcceptFriendRequestMutation({
     update: (cache, { data }: FetchResult<any>) => {
       postMutationUpdateCache<PendingFriendRequestsQuery, User>({
@@ -76,8 +78,9 @@ const PendingFriends = ({ colCount }: { colCount: number }) => {
       acceptFriendRequest({ variables: { targetUserId: user.id } });
     } catch (e) {
       setLoading(false);
-      throw e;
+      return showError(e.message);
     }
+    showConfirm(`${user.fullName} is now your friend`);
     setLoading(false);
   };
 

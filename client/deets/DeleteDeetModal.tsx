@@ -8,12 +8,15 @@ import {
   useDeleteDeetMutation,
   CurrentUserDeetsDocument,
 } from 'generated/generated-types';
+import useMessages from 'client/hooks/useMessages';
 
 interface Props {
   deet: Deet;
 }
 
 export default function DeleteDeetModal({ deet }: Props) {
+  const { showError, showConfirm } = useMessages({ length: 4000 });
+
   const deleteDeet = useDeleteDeetMutation({
     update: (cache, { data }) => {
       postMutationUpdateCache<{ userDeets: Array<Deet> }, Deet>({
@@ -34,8 +37,9 @@ export default function DeleteDeetModal({ deet }: Props) {
       await deleteDeet({ variables: { deetId: deet.id } });
     } catch (e) {
       setDeleting(false);
-      throw e;
+      return showError(e.message);
     }
+    showConfirm('Deet deleted');
     closeModal(dispatch);
   };
 

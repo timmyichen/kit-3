@@ -8,6 +8,7 @@ import {
   useUpdateSharedPermissionsMutation,
   useDeetPermsQuery,
 } from 'generated/generated-types';
+import useMessages from 'client/hooks/useMessages';
 
 interface Props {
   deet: Deet;
@@ -20,6 +21,7 @@ interface Permission {
 
 const DeetSharingModal = ({ deet }: Props) => {
   const dispatch = useCtxDispatch();
+  const { showError, showConfirm } = useMessages({ length: 4000 });
   const [saving, setSaving] = React.useState<boolean>(false);
   // const [search, setSearch] = React.useState<string>('');
   const [search] = React.useState<string>('');
@@ -51,8 +53,9 @@ const DeetSharingModal = ({ deet }: Props) => {
       });
     } catch (e) {
       setSaving(false);
-      throw e;
+      return showError(e.message);
     }
+    showConfirm('Updated sharing settings');
     closeModal(dispatch);
   };
 

@@ -19,6 +19,7 @@ import {
   UpsertPhoneNumberMutationVariables,
   UpsertEmailAddressMutationVariables,
 } from 'generated/generated-types';
+import useMessages from 'client/hooks/useMessages';
 
 interface Props {
   deet: Deet;
@@ -27,6 +28,7 @@ interface Props {
 export function EditDeetModal({ deet }: Props) {
   const [saving, setSaving] = React.useState<boolean>(false);
   const dispatch = useCtxDispatch();
+  const { showError, showConfirm } = useMessages({ length: 4000 });
 
   const onCloseModal = () => closeModal(dispatch);
 
@@ -61,9 +63,10 @@ export function EditDeetModal({ deet }: Props) {
       }
     } catch (e) {
       setSaving(false);
-      throw e;
+      return showError(e.message);
     }
 
+    showConfirm('Deet saved');
     setSaving(false);
     onCloseModal();
   };

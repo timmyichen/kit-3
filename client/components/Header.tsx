@@ -145,7 +145,6 @@ function HeaderNavLink({ label, href, currentPath, noCSR }: NavProps) {
   );
 
   if (noCSR) {
-    console.log('no thx csr');
     return link;
   }
 

@@ -17,6 +17,7 @@ import {
   CurrentUserDeetsDocument,
 } from 'generated/generated-types';
 import updatePrimaryDeet from 'client/lib/updatePrimaryDeet';
+import useMessages from 'client/hooks/useMessages';
 
 type Variables =
   | UpsertAddressMutationVariables
@@ -97,6 +98,7 @@ function DeetCreationModal({
   loading,
 }: ModalProps) {
   const [creatingType, setCreatingType] = React.useState<DeetTypes>('address');
+  const { showError, showConfirm } = useMessages({ length: 4000 });
 
   const changeType = (_: any, { value }: { value: DeetTypes }) => {
     setCreatingType(value);
@@ -173,9 +175,10 @@ function DeetCreationModal({
       }
     } catch (e) {
       setLoading(false);
-      throw e;
+      return showError(e.message);
     }
 
+    showConfirm(`${DEET_TYPES[creatingType].text} created`);
     setLoading(false);
     closeCreationModal();
   };

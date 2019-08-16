@@ -9,12 +9,14 @@ import {
   useRemoveFriendMutation,
   useRequestFriendMutation,
 } from 'generated/generated-types';
+import useMessages from 'client/hooks/useMessages';
 interface Props {
   user: UserSearch;
 }
 
 function SearchUserCard({ user }: Props) {
   const [loading, setLoading] = React.useState<boolean>(false);
+  const { showError, showConfirm } = useMessages({ length: 4000 });
 
   const requestFriend = useRequestFriendMutation();
   const removeFriend = useRemoveFriendMutation();
@@ -23,14 +25,15 @@ function SearchUserCard({ user }: Props) {
   const rescindRequest = useRescindFriendRequestMutation();
   const acceptRequest = useAcceptFriendRequestMutation();
 
-  const doAction = (action: () => void) => async () => {
+  const doAction = (action: () => void, successMessage: string) => async () => {
     setLoading(true);
     try {
       await action();
     } catch (e) {
       setLoading(false);
-      throw e;
+      return showError(e.message);
     }
+    showConfirm(successMessage);
     setLoading(false);
   };
 
@@ -42,7 +45,10 @@ function SearchUserCard({ user }: Props) {
         <Button
           basic
           color="black"
-          onClick={doAction(() => unblockUser({ variables }))}
+          onClick={doAction(
+            () => unblockUser({ variables }),
+            `Unblocked ${u.fullName}`,
+          )}
         >
           Unblock
         </Button>
@@ -51,19 +57,24 @@ function SearchUserCard({ user }: Props) {
 
     let action: (o: Object) => void;
     let label = '';
+    let successMessage;
 
     if (u.hasRequestedUser) {
       label = 'Accept Request';
       action = acceptRequest;
+      successMessage = `Accepted ${u.fullName}`;
     } else if (u.isFriend) {
       label = 'Remove Friend';
       action = removeFriend;
+      successMessage = `Removed ${u.fullName}`;
     } else if (u.isRequested) {
       label = 'Rescind Request';
       action = rescindRequest;
+      successMessage = `Rescinded Request for ${u.fullName}`;
     } else {
       label = 'Add Friend';
       action = requestFriend;
+      successMessage = `Requested ${u.fullName}`;
     }
 
     return (
@@ -72,7 +83,7 @@ function SearchUserCard({ user }: Props) {
           disabled={loading}
           basic
           color="green"
-          onClick={doAction(() => action({ variables }))}
+          onClick={doAction(() => action({ variables }), successMessage)}
         >
           {label}
         </Button>
@@ -80,7 +91,10 @@ function SearchUserCard({ user }: Props) {
           disabled={loading}
           basic
           color="black"
-          onClick={doAction(() => blockUser({ variables }))}
+          onClick={doAction(
+            () => blockUser({ variables }),
+            `Blocked ${u.fullName}`,
+          )}
         >
           Block
         </Button>

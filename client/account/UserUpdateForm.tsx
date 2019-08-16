@@ -3,6 +3,7 @@ import { useCtxState } from 'client/components/ContextProvider';
 import { Form, Header, Input, Button } from 'semantic-ui-react';
 import { useUpdateUserMutation } from 'generated/generated-types';
 import Loader from 'client/components/Loader';
+import useMessages from 'client/hooks/useMessages';
 
 interface AccountFields {
   birthday?: string | null;
@@ -27,6 +28,8 @@ const pad = (num: number) => (num < 10 ? '0' + num : '' + num);
 function UserUpdateForm() {
   const currentUserState = useCtxState().currentUser;
   let currentUser = currentUserState;
+
+  const { showError, showConfirm } = useMessages({ length: 4000 });
 
   React.useEffect(() => {
     if (!currentUserState) {
@@ -79,9 +82,10 @@ function UserUpdateForm() {
       await updateUser({ variables: fields });
     } catch (e) {
       setLoading(false);
-      throw e;
+      return showError(e.message);
     }
 
+    showConfirm('Updated profile');
     setLoading(false);
     setFields(prevState => ({
       ...prevState,

@@ -6,6 +6,7 @@ import { useCtxDispatch } from './ContextProvider';
 import { DataProxy } from 'apollo-cache';
 import { FetchResult } from 'react-apollo';
 import { useBlockUserMutation } from 'generated/generated-types';
+import useMessages from 'client/hooks/useMessages';
 
 interface BlockModalProps {
   user: User;
@@ -16,6 +17,7 @@ export default function BlockUserModal({ user, update }: BlockModalProps) {
   const blockUser = useBlockUserMutation({ update });
   const [blocking, setBlocking] = React.useState<boolean>(false);
   const dispatch = useCtxDispatch();
+  const { showError, showConfirm } = useMessages({ length: 4000 });
 
   const onBlockUser = async () => {
     setBlocking(true);
@@ -23,8 +25,10 @@ export default function BlockUserModal({ user, update }: BlockModalProps) {
       await blockUser({ variables: { targetUserId: user.id } });
     } catch (e) {
       setBlocking(false);
-      throw e;
+      return showError(e.message);
     }
+
+    showConfirm(`User blocked: ${user.username}`);
     closeModal(dispatch);
   };
 

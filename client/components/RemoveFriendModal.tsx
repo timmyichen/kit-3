@@ -6,6 +6,7 @@ import { useCtxDispatch } from './ContextProvider';
 import { DataProxy } from 'apollo-cache';
 import { FetchResult } from 'react-apollo';
 import { useRemoveFriendMutation } from 'generated/generated-types';
+import useMessages from 'client/hooks/useMessages';
 
 interface RemoveModalProps {
   user: User;
@@ -16,6 +17,7 @@ export default function RemoveFriendModal({ user, update }: RemoveModalProps) {
   const removeFriend = useRemoveFriendMutation({ update });
   const [removing, setRemoving] = React.useState<boolean>(false);
   const dispatch = useCtxDispatch();
+  const { showError, showConfirm } = useMessages({ length: 4000 });
 
   const onRemoveFriend = async () => {
     setRemoving(true);
@@ -23,8 +25,9 @@ export default function RemoveFriendModal({ user, update }: RemoveModalProps) {
       await removeFriend({ variables: { targetUserId: user.id } });
     } catch (e) {
       setRemoving(false);
-      throw e;
+      return showError(e.message);
     }
+    showConfirm(`Removed friend: ${user.username}`);
     closeModal(dispatch);
   };
 
