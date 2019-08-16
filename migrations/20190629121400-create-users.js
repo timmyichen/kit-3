@@ -58,13 +58,13 @@ module.exports = {
       updated_at: Sequelize.DATE,
       deleted_at: Sequelize.DATE,
     })
-    .then(() => queryInterface.sequelize.query(`
-      CREATE UNIQUE INDEX user_username ON users (username) WHERE deleted_at IS NOT NULL;
+      .then(() => queryInterface.sequelize.query(`
+      CREATE UNIQUE INDEX user_username ON users (username) WHERE deleted_at IS NULL;
     `))
-    .then(() => queryInterface.sequelize.query(`
-      CREATE UNIQUE INDEX user_email ON users (email) WHERE deleted_at IS NOT NULL;
+      .then(() => queryInterface.sequelize.query(`
+      CREATE UNIQUE INDEX user_email ON users (email) WHERE deleted_at IS NULL;
     `))
-    .then(() => queryInterface.sequelize.query(`
+      .then(() => queryInterface.sequelize.query(`
       CREATE INDEX user_birthday ON users (birthday);
     `));
   },
@@ -73,12 +73,12 @@ module.exports = {
     return queryInterface.sequelize.query(`
       DROP INDEX IF EXISTS user_username
     `)
-    .then(() => queryInterface.sequelize.query(`
+      .then(() => queryInterface.sequelize.query(`
       DROP INDEX IF EXISTS user_email
     `))
-    .then(() => queryInterface.sequelize.query(`
+      .then(() => queryInterface.sequelize.query(`
       DROP INDEX IF EXISTS user_birthday
     `))
-    .then(() => queryInterface.dropTable('users'))
+      .then(() => queryInterface.dropTable('users'))
   }
 };

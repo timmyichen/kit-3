@@ -6,6 +6,7 @@ import {
   CreatedAt,
   UpdatedAt,
   DeletedAt,
+  Unique,
 } from 'sequelize-typescript';
 import { requiredString } from 'server/lib/model';
 
@@ -38,6 +39,7 @@ export default class Users extends Model<Users> {
   })
   family_name: string;
 
+  @Unique
   @Column({
     ...requiredString({
       validate: {
@@ -52,6 +54,7 @@ export default class Users extends Model<Users> {
   })
   password: string;
 
+  @Unique
   @Column({
     ...requiredString({
       validate: {

@@ -52,6 +52,21 @@ nextjs.nextApp.prepare().then(async () => {
   app.use(express.static('public'));
   app.use(passport.initialize());
   app.use(passport.session());
+  app.use(
+    (
+      err: Error,
+      req: express.Request,
+      res: express.Response,
+      next: express.NextFunction,
+    ) => {
+      if (err) {
+        req.logout();
+        return res.redirect('/');
+      }
+
+      next();
+    },
+  );
 
   app.use(auth());
   app.use(PagesRouter);

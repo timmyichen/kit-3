@@ -61,7 +61,12 @@ function init() {
         usernameField: 'email',
         passReqToCallback: true,
       },
-      (req: express.Request, email: string, password: string, done: any) => {
+      async (
+        req: express.Request,
+        email: string,
+        password: string,
+        done: any,
+      ) => {
         const { givenName, familyName, username } = req.body;
 
         if (!email || !password || !username || !givenName) {
@@ -86,9 +91,15 @@ function init() {
             return done(null, user);
           })
           .catch((e: any) => {
-            if (e.name === 'ValidationError') {
+            console.log(e.name);
+            console.log(e.message);
+            if (e.name === 'SequelizeUniqueConstraintError') {
               return done(null, false, {
-                message: 'A user with that email exists.',
+                message: 'A user with that email or username exists.',
+              });
+            } else if (e.name === 'SequelizeValidationError') {
+              return done(null, false, {
+                message: 'Validation failed',
               });
             }
 
