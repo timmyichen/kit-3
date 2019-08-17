@@ -7,12 +7,9 @@ import Todos from 'client/dashboard/Todos';
 function DashboardPage() {
   return (
     <div className="dashboard-page-wrapper">
-      <Header as="h1">Keep in Touch</Header>
-      <div>
-        <Todos />
-        <RecentlyUpdatedDeets />
-        <UpcomingBirthdays />
-      </div>
+      <Todos />
+      <RecentlyUpdatedDeets />
+      <UpcomingBirthdays />
       <style jsx>{`
         .dashboard-page-wrapper {
           padding: 30px;

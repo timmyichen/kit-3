@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Header, Button } from 'semantic-ui-react';
+import { Header, Button, Message } from 'semantic-ui-react';
 import { useAccessibleDeetsQuery } from 'generated/generated-types';
 import Loader from 'client/components/Loader';
 import { splitColumns, isBrowser } from 'client/lib/dom';
@@ -54,7 +54,9 @@ function RecentlyUpdatedDeets() {
       </>
     );
   } else {
-    content = 'No deets found. Get some deets from friends!';
+    content = (
+      <Message info>No deets found. Get some deets from friends!</Message>
+    );
   }
 
   return (
@@ -66,7 +68,7 @@ function RecentlyUpdatedDeets() {
           margin-top: 30px;
         }
         .recently-updated-deets {
-          margin-top: 30px;
+          margin: 30px 0 0 10px;
         }
         .recently-updated-deets :global(.deet-item) {
           display: inline-block;
