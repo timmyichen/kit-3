@@ -28,7 +28,6 @@ const DeetSharingModal = ({ deet }: Props) => {
   const [changedPerms, setChangedPerms] = React.useState<Array<Permission>>([]);
   const updateSharingPermissions = useUpdateSharedPermissionsMutation();
   const { data, loading } = useDeetPermsQuery({
-    fetchPolicy: 'network-only',
     variables: {
       searchQuery: search,
       count: 20,
@@ -40,7 +39,7 @@ const DeetSharingModal = ({ deet }: Props) => {
   const onSave = async () => {
     setSaving(true);
     try {
-      await updateSharingPermissions({
+      const res = await updateSharingPermissions({
         variables: {
           deetId: deet.id,
           userIdsToAdd: changedPerms

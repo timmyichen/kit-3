@@ -84,10 +84,10 @@ export default {
       ]),
     );
 
-    const users = await Promise.all(
-      usersToAdd.map(u => loader(Users).loadBy('id', u.first_user)),
+    const affectedUsers = await Promise.all(
+      allIds.map(id => loader(Users).loadBy('id', id)),
     );
 
-    return users;
+    return affectedUsers;
   },
 };
