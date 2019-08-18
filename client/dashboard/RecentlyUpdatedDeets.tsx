@@ -23,8 +23,6 @@ function RecentlyUpdatedDeets() {
     }, [size.width]);
   }
 
-  console.log(deets.accessibleDeets);
-
   let content;
   if (loading) {
     content = <Loader />;
