@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Button, Icon, Dropdown, Header, Modal } from 'semantic-ui-react';
 import { DeetTypes, Deet } from 'client/types';
-import AddressCreator from './CreateAddress';
-import PhoneNumberCreator from './CreatePhoneNumber';
-import EmailAddressCreator from './CreateEmailAddress';
+import AddressCreator from './AddressCreator';
+import PhoneNumberCreator from './PhoneNumberCreator';
+import EmailAddressCreator from './EmailAddressCreator';
 import CtxModal, { closeModal } from 'client/components/Modal';
 import { useCtxDispatch } from 'client/components/ContextProvider';
 import postMutationUpdateCache from 'client/lib/postMutationUpdateCache';
@@ -77,7 +77,7 @@ export default function DeetCreator() {
       </div>
       <style jsx>{`
         .deet-creator {
-          margin-right: 30px;
+          margin: 15px;
         }
       `}</style>
     </div>

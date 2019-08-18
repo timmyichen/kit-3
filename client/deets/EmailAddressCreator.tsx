@@ -1,45 +1,43 @@
 import * as React from 'react';
 import pick from 'lodash/pick';
 import { Form, Input, TextArea, Button, Checkbox } from 'semantic-ui-react';
-import { PhoneNumberDeet } from 'client/types';
+import { EmailAddressDeet } from 'client/types';
 
 interface Fields {
-  countryCode?: string;
-  phoneNumber?: string;
+  emailAddress?: string;
   label?: string;
   notes?: string;
   isPrimary?: boolean;
 }
 
 const defaultFields = {
-  countryCode: '',
-  phoneNumber: '',
+  emailAddress: '',
   label: '',
   notes: '',
   isPrimary: false,
 };
 
-const getPhoneFields = (phone: PhoneNumberDeet) =>
-  pick(phone, Object.keys(defaultFields));
+const getEmailFields = (email: EmailAddressDeet) =>
+  pick(email, Object.keys(defaultFields));
 
 interface Props {
   loading: boolean;
-  phone?: PhoneNumberDeet;
+  email?: EmailAddressDeet;
   ctaText?: string;
   isModal?: boolean;
-  onClose(): void;
   onSubmit(variables: Object): Promise<void>;
+  onClose(): void;
 }
 
-export default function PhoneNumberCreator({
+export default function EmailAddressCreator({
   onSubmit,
   loading,
   onClose,
-  phone,
+  email,
   ctaText,
 }: Props) {
   const [fields, setFields] = React.useState<Fields>(
-    phone ? getPhoneFields(phone) : defaultFields,
+    email ? getEmailFields(email) : defaultFields,
   );
 
   const setValue = (field: keyof Fields, value: any) => {
@@ -52,50 +50,38 @@ export default function PhoneNumberCreator({
   };
 
   return (
-    <div className="phone-number-creator">
+    <div className="create-email-creator">
       <Form>
         <Form.Field required>
           <label>Label</label>
           <Input
             value={fields.label}
-            onChange={(_, { value }: { value: any }) =>
+            onChange={(_, { value }: { value: string }) =>
               setValue('label', value)
             }
           />
         </Form.Field>
-
-        <Form.Group>
-          <Form.Field width="4">
-            <label>Country</label>
-            <Input
-              value={fields.countryCode}
-              onChange={(_, { value }: { value: any }) =>
-                setValue('countryCode', value)
-              }
-            />
-          </Form.Field>
-          <Form.Field width="12" required>
-            <label>Number</label>
-            <Input
-              value={fields.phoneNumber}
-              onChange={(_, { value }: { value: any }) =>
-                setValue('phoneNumber', value)
-              }
-            />
-          </Form.Field>
-        </Form.Group>
+        <Form.Field required>
+          <label>Email</label>
+          <Input
+            value={fields.emailAddress}
+            onChange={(_, { value }: { value: string }) =>
+              setValue('emailAddress', value)
+            }
+          />
+        </Form.Field>
         <Form.Field>
           <label>Notes</label>
           <TextArea
             value={fields.notes}
-            onChange={(_, { value }: { value: any }) =>
+            onChange={(_, { value }: { value: string }) =>
               setValue('notes', value)
             }
           />
         </Form.Field>
         <Form.Field>
           <Checkbox
-            label="This is my primary phone number"
+            label="This is my primary email address"
             checked={fields.isPrimary}
             onChange={(_, { checked }: { checked: boolean }) =>
               setValue('isPrimary', checked)
@@ -105,7 +91,7 @@ export default function PhoneNumberCreator({
       </Form>
       <div className="ctas">
         <Button disabled={loading} onClick={onClose}>
-          Close
+          Cancel
         </Button>
         <Button
           disabled={loading}
@@ -116,7 +102,7 @@ export default function PhoneNumberCreator({
         </Button>
       </div>
       <style jsx>{`
-        .phone-number-creator {
+        .create-email-creator {
           max-width: 300px;
           margin: 0 auto;
         }

@@ -64,6 +64,7 @@
     "sequelize": "^5.8.12",
     "sequelize-cli": "^5.5.0",
     "sequelize-typescript": "^1.0.0-beta.3",
+    "time-ago": "^0.2.1",
     "ts-node": "^8.1.0",
     "typescript": "^3.4.4",
     "uuid": "^3.3.2",

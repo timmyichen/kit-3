@@ -44,6 +44,7 @@ function CurrentUserDeets() {
       ))}
       <style jsx>{`
         .current-user-deets {
+          margin-top: 30px;
           display: flex;
           justify-content: space-around;
         }

@@ -8,9 +8,9 @@ import {
   PhoneNumberDeet,
 } from 'client/types';
 import { Header, Modal } from 'semantic-ui-react';
-import AddressCreator from './CreateAddress';
-import EmailAddressCreator from './CreateEmailAddress';
-import PhoneNumberCreator from './CreatePhoneNumber';
+import AddressCreator from './AddressCreator';
+import EmailAddressCreator from './EmailAddressCreator';
+import PhoneNumberCreator from './PhoneNumberCreator';
 import {
   useUpsertAddressMutation,
   useUpsertPhoneNumberMutation,

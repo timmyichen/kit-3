@@ -5,6 +5,7 @@ import {
   EmailAddressDeet,
   PhoneNumberDeet,
 } from 'client/types';
+import ta from 'time-ago';
 import { OwnedDeetCardActions } from './OwnedDeetCardActions';
 
 const deetMap = {
@@ -56,32 +57,35 @@ export const DeetCardType = ({
 export const DeetCardDescription = ({ deet }: { deet: Deet }) => {
   switch (deet.type) {
     case 'address':
-      const address: AddressDeet = deet as AddressDeet;
+      const address = deet as AddressDeet;
       return (
         <Card.Description>
           <div>{address.addressLine1}</div>
-          <div>{address.addressLine2}</div>
-          <div>{address.city}</div>
-          <div>{address.state}</div>
-          <div>{address.postalCode}</div>
-          <div>{address.country}</div>
-          <div>{address.notes}</div>
+          {address.addressLine2 && <div>{address.addressLine2}</div>}
+          <div>
+            {address.city}, {address.state} {address.postalCode}
+          </div>
+          {address.country && <div>{address.country}</div>}
+          <Notes notes={address.notes} />
         </Card.Description>
       );
     case 'phone_number':
-      const phoneNumber: PhoneNumberDeet = deet as PhoneNumberDeet;
+      const phoneNumber = deet as PhoneNumberDeet;
       return (
         <div>
-          {phoneNumber.countryCode && `+${phoneNumber.countryCode} `}
-          {phoneNumber.phoneNumber}
+          <div>
+            {phoneNumber.countryCode && `+${phoneNumber.countryCode} `}
+            {phoneNumber.phoneNumber}
+          </div>
+          <Notes notes={phoneNumber.notes} />
         </div>
       );
     case 'email_address':
-      const email: EmailAddressDeet = deet as EmailAddressDeet;
+      const email = deet as EmailAddressDeet;
       return (
         <Card.Description>
           <div>{email.emailAddress}</div>
-          <div>{email.notes}</div>
+          <Notes notes={email.notes} />
         </Card.Description>
       );
     default:
@@ -97,9 +101,51 @@ export const DeetCardFooter = ({
   isOwner: boolean;
 }) => (
   <Card.Content extra>
-    <div>
-      Last updated {new Date(parseInt(deet.updatedAt, 10)).toISOString()}
+    <div className="extra-wrapper">
+      <div>
+        <div className="last-updated-label">Last updated</div>
+        <div className="last-updated">
+          {ta.ago(parseInt(deet.updatedAt, 10))}
+        </div>
+      </div>
+      <div className="actions-wrapper">
+        {isOwner && <OwnedDeetCardActions deet={deet} />}
+      </div>
     </div>
-    {isOwner && <OwnedDeetCardActions deet={deet} />}
+    <style jsx>{`
+      .extra-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: ${isOwner ? 'space-between' : 'start'};
+      }
+      .last-updated-label {
+        font-size: 12px;
+      }
+      .last-updated {
+        color: rgba(0, 0, 0, 0.68);
+      }
+    `}</style>
   </Card.Content>
 );
+
+const Notes = ({ notes }: { notes?: string }) => {
+  if (!notes) {
+    return null;
+  }
+
+  return (
+    <div>
+      <h4 className="notes-label">Notes</h4>
+      <pre>{notes.trim()}</pre>
+      <style jsx>{`
+        .notes-label {
+          margin: 10px 0 0;
+        }
+        pre {
+          font-family: inherit;
+          margin: 5px 0 5px;
+        }
+      `}</style>
+    </div>
+  );
+};

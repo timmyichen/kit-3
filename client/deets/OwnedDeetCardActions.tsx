@@ -49,7 +49,7 @@ export function OwnedDeetCardActions({ deet }: Props) {
         </Dropdown.Menu>
       </Dropdown>
       <style jsx>{`
-        .address-card-wrapper :global(.address-card-content) {
+        .address-card-wrapper :global(.deet-card-content) {
           position: relative;
         }
         .address-card-wrapper :global(.header-icon) {

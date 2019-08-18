@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Menu } from 'semantic-ui-react';
 import DeetDashboard from 'client/deets/DeetDashboard';
-import DeetCreator from 'client/deets/DeetCreator';
 import { useRouter } from 'next/router';
 import SharedDeetsDashboard from 'client/deets/SharedDeetsDashboard';
 
@@ -72,9 +71,6 @@ const Deets = () => {
             );
           })}
         </Menu>
-        <div className="creator-wrapper">
-          <DeetCreator />
-        </div>
       </div>
       {content}
       <style jsx>{`

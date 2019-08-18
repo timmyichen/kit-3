@@ -160,7 +160,7 @@ export default function AddressCreator({
       </Form>
       <div className="ctas">
         <Button disabled={loading} onClick={onClose}>
-          Close
+          Cancel
         </Button>
         <Button
           disabled={loading}
