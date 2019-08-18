@@ -1,4 +1,3 @@
-import * as express from 'express';
 import { GraphQLNonNull, GraphQLInt, GraphQLList } from 'graphql';
 import { Op } from 'sequelize';
 import {
@@ -6,9 +5,10 @@ import {
   UserInputError,
   ApolloError,
 } from 'apollo-server';
-import { Friendships, Deets, SharedDeets } from 'server/models';
+import { Friendships, Deets, SharedDeets, Users } from 'server/models';
 import { db } from 'server/lib/db';
 import userType from '../types/userType';
+import { ReqWithLoader } from 'server/lib/loader';
 
 type Args = {
   deetId: number;
@@ -24,7 +24,7 @@ export default {
     userIdsToAdd: { type: new GraphQLList(GraphQLInt) },
     userIdsToRemove: { type: new GraphQLList(GraphQLInt) },
   },
-  async resolve(_: any, args: Args, { user }: express.Request) {
+  async resolve(_: any, args: Args, { user, loader }: ReqWithLoader) {
     if (!user) {
       throw new AuthenticationError('Must be logged in');
     }
@@ -84,6 +84,10 @@ export default {
       ]),
     );
 
-    return true;
+    const users = await Promise.all(
+      usersToAdd.map(u => loader(Users).loadBy('id', u.first_user)),
+    );
+
+    return users;
   },
 };
