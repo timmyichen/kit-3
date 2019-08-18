@@ -23,10 +23,16 @@ function RecentlyUpdatedDeets() {
     }, [size.width]);
   }
 
+  console.log(deets.accessibleDeets);
+
   let content;
   if (loading) {
     content = <Loader />;
-  } else if (deets && deets.accessibleDeets) {
+  } else if (
+    deets &&
+    deets.accessibleDeets &&
+    deets.accessibleDeets.items.length
+  ) {
     const deetCards = deets.accessibleDeets.items.map(deet => (
       <DeetCard key={`recent-deet-${deet.id}`} deet={deet} isOwner={false} />
     ));

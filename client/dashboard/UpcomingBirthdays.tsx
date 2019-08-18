@@ -43,7 +43,7 @@ function UpcomingBirthdays() {
           const age = getUpcomingAge(parseInt(friend.birthdayYear, 10));
 
           return (
-            <List.Item>
+            <List.Item key={`friend-birthday-${friend.username}`}>
               <Image avatar src="" />
               <List.Content>
                 <List.Header>
