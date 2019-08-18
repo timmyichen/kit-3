@@ -58,6 +58,16 @@ export const loader = () => {
 
       const models = await model.findAll({ where });
 
+      const defaultValue = many ? [] : null;
+
+      const defaultObj = keys.reduce(
+        (obj: { [k: string]: any }, key: string) => ({
+          ...obj,
+          [key]: defaultValue,
+        }),
+        {},
+      );
+
       const modelsMap = models.reduce(
         (obj: { [k: string]: any }, item: any) => {
           const modelKey = item[key];
@@ -71,7 +81,7 @@ export const loader = () => {
 
           return obj;
         },
-        {},
+        defaultObj,
       );
 
       return keys.map(k => modelsMap[k]);
