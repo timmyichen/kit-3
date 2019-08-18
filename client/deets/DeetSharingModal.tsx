@@ -39,7 +39,7 @@ const DeetSharingModal = ({ deet }: Props) => {
   const onSave = async () => {
     setSaving(true);
     try {
-      const res = await updateSharingPermissions({
+      await updateSharingPermissions({
         variables: {
           deetId: deet.id,
           userIdsToAdd: changedPerms

@@ -44,9 +44,8 @@ function CurrentUserDeets() {
       ))}
       <style jsx>{`
         .current-user-deets {
-          margin-top: 30px;
+          margin: 20px;
           display: flex;
-          justify-content: space-around;
         }
         .current-user-deets :global(.deet-item) {
           padding: 15px;
