@@ -76,6 +76,9 @@ const FriendSearch = () => {
         .search-results {
           margin-top: 30px;
         }
+        .content {
+          margin-top: 30px;
+        }
       `}</style>
     </div>
   );

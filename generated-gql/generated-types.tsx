@@ -519,7 +519,7 @@ export type UpcomingBirthdaysQuery = { __typename?: 'RootQuery' } & {
   upcomingBirthdays: Array<
     { __typename?: 'BirthdayUser' } & Pick<
       BirthdayUser,
-      'id' | 'username' | 'fullName' | 'birthday'
+      'id' | 'username' | 'fullName' | 'birthday' | 'birthdayYear'
     >
   >;
 };
@@ -1566,6 +1566,7 @@ export const UpcomingBirthdaysDocument = gql`
       username
       fullName
       birthday
+      birthdayYear
     }
   }
 `;

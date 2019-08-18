@@ -88,3 +88,9 @@ export function getCurrentTimezoneDate(date: Date) {
   const timestamp = date.getTime() + offset * 1000 * 60;
   return new Date(timestamp);
 }
+
+export function getUpcomingAge(birthYear: number) {
+  const currentYear = new Date().getFullYear();
+
+  return currentYear - birthYear;
+}

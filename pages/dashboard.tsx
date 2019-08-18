@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Header } from 'semantic-ui-react';
 import RecentlyUpdatedDeets from 'client/dashboard/RecentlyUpdatedDeets';
 import UpcomingBirthdays from 'client/dashboard/UpcomingBirthdays';
 import Todos from 'client/dashboard/Todos';

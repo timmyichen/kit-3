@@ -123,7 +123,13 @@ interface NavProps {
 function HeaderNavLink({ label, href, currentPath, noCSR }: NavProps) {
   const link = (
     <div className={classnames('nav-link', { active: currentPath === href })}>
-      {noCSR ? <a href={href}>{label}</a> : <a>{label}</a>}
+      {noCSR ? (
+        <a href={href}>{label}</a>
+      ) : (
+        <Link href={href}>
+          <a>{label}</a>
+        </Link>
+      )}
       <style jsx>{`
         .nav-link {
           height: 100%;

@@ -5,6 +5,7 @@ import {
   getDateString,
   getDateDistance,
   getCurrentTimezoneDate,
+  getUpcomingAge,
 } from 'client/lib/date';
 
 const BIRTHDAY_RANGE_DAYS = 60;
@@ -33,11 +34,21 @@ function UpcomingBirthdays() {
           const birthdayStr = getDateString(birthday);
           const distance = getDateDistance(birthday);
 
+          if (!friend.birthdayYear) {
+            throw new Error(
+              'Birthday year not found, but this should never happen',
+            );
+          }
+
+          const age = getUpcomingAge(parseInt(friend.birthdayYear, 10));
+
           return (
             <List.Item>
               <Image avatar src="" />
               <List.Content>
-                <List.Header>{friend.fullName}</List.Header>
+                <List.Header>
+                  {friend.fullName}'s turning {age}
+                </List.Header>
                 <List.Description>
                   {birthdayStr} ({distance} days away)
                 </List.Description>

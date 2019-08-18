@@ -4,5 +4,6 @@ query upcomingBirthdays($days: Int) {
     username
     fullName
     birthday
+    birthdayYear
   }
 }
