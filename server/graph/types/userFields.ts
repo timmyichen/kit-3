@@ -10,9 +10,10 @@ import {
   FriendRequests,
   Deets,
   SharedDeets,
+  Images,
+  Users,
 } from 'server/models';
 import { timestamps } from './common';
-import { User } from 'server/models/types';
 import { AuthenticationError, UserInputError } from 'apollo-server';
 import { ReqWithLoader } from 'server/lib/loader';
 import * as express from 'express';
@@ -24,22 +25,22 @@ export default {
   },
   fullName: {
     type: new GraphQLNonNull(GraphQLString),
-    resolve: (user: User) =>
+    resolve: (user: Users) =>
       user.family_name
         ? user.given_name + ' ' + user.family_name
         : user.given_name,
   },
   givenName: {
     type: new GraphQLNonNull(GraphQLString),
-    resolve: (user: User) => user.given_name,
+    resolve: (user: Users) => user.given_name,
   },
   familyName: {
     type: new GraphQLNonNull(GraphQLString),
-    resolve: (user: User) => user.family_name,
+    resolve: (user: Users) => user.family_name,
   },
   email: {
     type: new GraphQLNonNull(GraphQLString),
-    resolve: (user: User, _: any, req: express.Request) => {
+    resolve: (user: Users, _: any, req: express.Request) => {
       if (req.user && user.id === req.user.id) {
         return req.user.email;
       }
@@ -47,9 +48,25 @@ export default {
       throw new AuthenticationError('Not allowed');
     },
   },
+  profilePicture: {
+    type: GraphQLString,
+    resolve: async (user: Users, _: any, { loader }: ReqWithLoader) => {
+      if (!user.profile_picture_id) {
+        return null;
+      }
+
+      const image = await loader(Images).loadBy('id', user.profile_picture_id);
+
+      if (image) {
+        return image.url;
+      }
+
+      return null;
+    },
+  },
   birthdayDate: {
     type: GraphQLString,
-    resolve: async (user: User, _: any, req: ReqWithLoader) => {
+    resolve: async (user: Users, _: any, req: ReqWithLoader) => {
       if (!req.user) {
         return null;
       }
@@ -69,7 +86,7 @@ export default {
   },
   birthdayYear: {
     type: GraphQLString,
-    resolve: async (user: User, _: any, req: ReqWithLoader) => {
+    resolve: async (user: Users, _: any, req: ReqWithLoader) => {
       if (!req.user) {
         return null;
       }
@@ -89,11 +106,11 @@ export default {
   },
   username: {
     type: new GraphQLNonNull(GraphQLString),
-    resolve: (user: User) => user.username,
+    resolve: (user: Users) => user.username,
   },
   isFriend: {
     type: new GraphQLNonNull(GraphQLBoolean),
-    async resolve(u: User, _: any, { user, loader }: ReqWithLoader) {
+    async resolve(u: Users, _: any, { user, loader }: ReqWithLoader) {
       if (!user) {
         return false;
       }
@@ -105,7 +122,7 @@ export default {
   },
   isRequested: {
     type: new GraphQLNonNull(GraphQLBoolean),
-    async resolve(u: User, _: any, { user, loader }: ReqWithLoader) {
+    async resolve(u: Users, _: any, { user, loader }: ReqWithLoader) {
       if (!user) {
         return false;
       }
@@ -117,7 +134,7 @@ export default {
   },
   hasRequestedUser: {
     type: new GraphQLNonNull(GraphQLBoolean),
-    async resolve(u: User, _: any, { user, loader }: ReqWithLoader) {
+    async resolve(u: Users, _: any, { user, loader }: ReqWithLoader) {
       if (!user) {
         return false;
       }
@@ -129,7 +146,7 @@ export default {
   },
   isBlocked: {
     type: new GraphQLNonNull(GraphQLBoolean),
-    async resolve(u: User, _: any, { user, loader }: ReqWithLoader) {
+    async resolve(u: Users, _: any, { user, loader }: ReqWithLoader) {
       if (!user) {
         return false;
       }
@@ -145,7 +162,7 @@ export default {
       deetId: { type: new GraphQLNonNull(GraphQLInt) },
     },
     async resolve(
-      u: User,
+      u: Users,
       { deetId }: { deetId: number },
       { user, loader }: ReqWithLoader,
     ) {

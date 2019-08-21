@@ -7,6 +7,7 @@ import EmailAddresses from './schemas/EmailAddresses';
 import PhoneNumbers from './schemas/PhoneNumbers';
 import Deets from './schemas/Deets';
 import SharedDeets from './schemas/SharedDeets';
+import Images from './schemas/Images';
 
 export {
   Users,
@@ -18,4 +19,5 @@ export {
   PhoneNumbers,
   Deets,
   SharedDeets,
+  Images,
 };

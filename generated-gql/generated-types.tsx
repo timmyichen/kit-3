@@ -11,6 +11,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: any;
 };
 
 /** A physical address deet */
@@ -40,6 +42,7 @@ export type BirthdayUser = {
   givenName: Scalars['String'];
   familyName: Scalars['String'];
   email: Scalars['String'];
+  profilePicture?: Maybe<Scalars['String']>;
   birthdayDate?: Maybe<Scalars['String']>;
   birthdayYear?: Maybe<Scalars['String']>;
   username: Scalars['String'];
@@ -136,6 +139,8 @@ export type RootMutation = {
   updateUser: User;
   /** Update the users password */
   updatePassword: Scalars['Boolean'];
+  /** Update the users profile picture */
+  updateProfilePicture: User;
 };
 
 export type RootMutationRequestFriendArgs = {
@@ -215,6 +220,10 @@ export type RootMutationUpdatePasswordArgs = {
   newPassword: Scalars['String'];
 };
 
+export type RootMutationUpdateProfilePictureArgs = {
+  file?: Maybe<Scalars['Upload']>;
+};
+
 export type RootQuery = {
   __typename?: 'RootQuery';
   /** The currently authed user */
@@ -281,6 +290,7 @@ export type User = {
   givenName: Scalars['String'];
   familyName: Scalars['String'];
   email: Scalars['String'];
+  profilePicture?: Maybe<Scalars['String']>;
   birthdayDate?: Maybe<Scalars['String']>;
   birthdayYear?: Maybe<Scalars['String']>;
   username: Scalars['String'];
@@ -307,6 +317,27 @@ export type UserTodos = {
   hasPrimaryPhoneNumber: Scalars['Boolean'];
   hasPrimaryEmailAddress: Scalars['Boolean'];
 };
+export type UpdateProfilePictureMutationVariables = {
+  file: Scalars['Upload'];
+};
+
+export type UpdateProfilePictureMutation = { __typename?: 'RootMutation' } & {
+  updateProfilePicture: { __typename?: 'User' } & Pick<User, 'id'>;
+};
+
+export type UserProfileByUsernameQueryVariables = {
+  username: Scalars['String'];
+};
+
+export type UserProfileByUsernameQuery = { __typename?: 'RootQuery' } & {
+  userByUsername: Maybe<
+    { __typename: 'User' } & Pick<
+      User,
+      'id' | 'username' | 'fullName' | 'profilePicture'
+    >
+  >;
+};
+
 export type AcceptFriendRequestMutationVariables = {
   targetUserId: Scalars['Int'];
 };
@@ -385,6 +416,7 @@ export type CurrentUserFragment = { __typename: 'User' } & Pick<
   | 'givenName'
   | 'familyName'
   | 'email'
+  | 'profilePicture'
   | 'birthdayDate'
   | 'birthdayYear'
 >;
@@ -657,6 +689,7 @@ export const CurrentUserFragmentDoc = gql`
     givenName
     familyName
     email
+    profilePicture
     birthdayDate
     birthdayYear
     __typename
@@ -708,6 +741,150 @@ export const UserAccessFragmentDoc = gql`
     __typename
   }
 `;
+export const UpdateProfilePictureDocument = gql`
+  mutation updateProfilePicture($file: Upload!) {
+    updateProfilePicture(file: $file) {
+      id
+    }
+  }
+`;
+export type UpdateProfilePictureMutationFn = ReactApollo.MutationFn<
+  UpdateProfilePictureMutation,
+  UpdateProfilePictureMutationVariables
+>;
+export type UpdateProfilePictureComponentProps = Omit<
+  ReactApollo.MutationProps<
+    UpdateProfilePictureMutation,
+    UpdateProfilePictureMutationVariables
+  >,
+  'mutation'
+>;
+
+export const UpdateProfilePictureComponent = (
+  props: UpdateProfilePictureComponentProps,
+) => (
+  <ReactApollo.Mutation<
+    UpdateProfilePictureMutation,
+    UpdateProfilePictureMutationVariables
+  >
+    mutation={UpdateProfilePictureDocument}
+    {...props}
+  />
+);
+
+export type UpdateProfilePictureProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<
+    UpdateProfilePictureMutation,
+    UpdateProfilePictureMutationVariables
+  >
+> &
+  TChildProps;
+export function withUpdateProfilePicture<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    UpdateProfilePictureMutation,
+    UpdateProfilePictureMutationVariables,
+    UpdateProfilePictureProps<TChildProps>
+  >,
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    UpdateProfilePictureMutation,
+    UpdateProfilePictureMutationVariables,
+    UpdateProfilePictureProps<TChildProps>
+  >(UpdateProfilePictureDocument, {
+    alias: 'withUpdateProfilePicture',
+    ...operationOptions,
+  });
+}
+
+export function useUpdateProfilePictureMutation(
+  baseOptions?: ReactApolloHooks.MutationHookOptions<
+    UpdateProfilePictureMutation,
+    UpdateProfilePictureMutationVariables
+  >,
+) {
+  return ReactApolloHooks.useMutation<
+    UpdateProfilePictureMutation,
+    UpdateProfilePictureMutationVariables
+  >(UpdateProfilePictureDocument, baseOptions);
+}
+export type UpdateProfilePictureMutationHookResult = ReturnType<
+  typeof useUpdateProfilePictureMutation
+>;
+export const UserProfileByUsernameDocument = gql`
+  query userProfileByUsername($username: String!) {
+    userByUsername(username: $username) {
+      id
+      username
+      fullName
+      profilePicture
+      __typename
+    }
+  }
+`;
+export type UserProfileByUsernameComponentProps = Omit<
+  ReactApollo.QueryProps<
+    UserProfileByUsernameQuery,
+    UserProfileByUsernameQueryVariables
+  >,
+  'query'
+> &
+  (
+    | { variables: UserProfileByUsernameQueryVariables; skip?: false }
+    | { skip: true });
+
+export const UserProfileByUsernameComponent = (
+  props: UserProfileByUsernameComponentProps,
+) => (
+  <ReactApollo.Query<
+    UserProfileByUsernameQuery,
+    UserProfileByUsernameQueryVariables
+  >
+    query={UserProfileByUsernameDocument}
+    {...props}
+  />
+);
+
+export type UserProfileByUsernameProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<
+    UserProfileByUsernameQuery,
+    UserProfileByUsernameQueryVariables
+  >
+> &
+  TChildProps;
+export function withUserProfileByUsername<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    UserProfileByUsernameQuery,
+    UserProfileByUsernameQueryVariables,
+    UserProfileByUsernameProps<TChildProps>
+  >,
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    UserProfileByUsernameQuery,
+    UserProfileByUsernameQueryVariables,
+    UserProfileByUsernameProps<TChildProps>
+  >(UserProfileByUsernameDocument, {
+    alias: 'withUserProfileByUsername',
+    ...operationOptions,
+  });
+}
+
+export function useUserProfileByUsernameQuery(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<
+    UserProfileByUsernameQueryVariables
+  >,
+) {
+  return ReactApolloHooks.useQuery<
+    UserProfileByUsernameQuery,
+    UserProfileByUsernameQueryVariables
+  >(UserProfileByUsernameDocument, baseOptions);
+}
+export type UserProfileByUsernameQueryHookResult = ReturnType<
+  typeof useUserProfileByUsernameQuery
+>;
 export const AcceptFriendRequestDocument = gql`
   mutation acceptFriendRequest($targetUserId: Int!) {
     acceptFriendRequest(targetUserId: $targetUserId) {

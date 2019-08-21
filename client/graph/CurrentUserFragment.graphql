@@ -4,6 +4,7 @@ fragment CurrentUser on User {
   givenName
   familyName
   email
+  profilePicture
   birthdayDate
   birthdayYear
   __typename

@@ -1,0 +1,9 @@
+query userProfileByUsername($username: String!) {
+  userByUsername(username: $username) {
+    id
+    username
+    fullName
+    profilePicture
+    __typename
+  }
+}

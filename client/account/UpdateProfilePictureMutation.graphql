@@ -1,0 +1,5 @@
+mutation updateProfilePicture($file: Upload!) {
+  updateProfilePicture(file: $file) {
+    id
+  }
+}

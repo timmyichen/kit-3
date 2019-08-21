@@ -40,9 +40,10 @@ function MessageRoll() {
       ))}
       <style jsx>{`
         .message-roll-wrapper {
-          position: absolute;
+          position: fixed;
           top: 80px;
           right: 20px;
+          z-index: 999;
         }
         .message-roll-wrapper :global(.ui.message) {
           z-index: 999;

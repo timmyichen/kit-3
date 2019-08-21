@@ -71,6 +71,15 @@ export default class Users extends Model<Users> {
   })
   settings: Object;
 
+  @Column({
+    allowNull: true,
+    references: {
+      model: 'images',
+      key: 'id',
+    },
+  })
+  profile_picture_id: number;
+
   @Column
   birthday_date: Date;
 

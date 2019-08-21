@@ -309,6 +309,14 @@
             "deprecationReason": null
           },
           {
+            "name": "profilePicture",
+            "description": null,
+            "args": [],
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "birthdayDate",
             "description": null,
             "args": [],
@@ -1201,6 +1209,14 @@
             "deprecationReason": null
           },
           {
+            "name": "profilePicture",
+            "description": null,
+            "args": [],
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "birthdayDate",
             "description": null,
             "args": [],
@@ -1986,10 +2002,39 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "updateProfilePicture",
+            "description": "Update the users profile picture",
+            "args": [
+              {
+                "name": "file",
+                "description": null,
+                "type": { "kind": "SCALAR", "name": "Upload", "ofType": null },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "OBJECT", "name": "User", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
         "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
+        "name": "Upload",
+        "description": "The `Upload` scalar type represents a file upload.",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
       },

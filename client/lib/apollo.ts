@@ -1,5 +1,6 @@
 import { ApolloClient } from 'apollo-client';
-import { HttpLink } from 'apollo-link-http';
+// @ts-ignore TODO: type this
+import { createUploadLink } from 'apollo-upload-client';
 import {
   InMemoryCache,
   IntrospectionFragmentMatcher,
@@ -12,7 +13,7 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
 });
 
 const client = new ApolloClient({
-  link: new HttpLink({
+  link: new createUploadLink({
     uri: '/graphql',
     fetch,
   }),

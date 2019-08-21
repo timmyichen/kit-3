@@ -27,6 +27,7 @@ export interface CurrentUser {
   settings: Object;
   updatedAt: string;
   createdAt: string;
+  profilePicture?: string;
 }
 
 export type DeetTypes = 'address' | 'email_address' | 'phone_number';
