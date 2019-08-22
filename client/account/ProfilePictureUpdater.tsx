@@ -57,7 +57,7 @@ function ProfilePictureUpdater() {
   const updateProfilePicture = useUpdateProfilePictureMutation();
 
   const onClick = async () => {
-    if (isFileRefInvalid) {
+    if (isFileRefInvalid(fileInputRef)) {
       return;
     }
 
@@ -90,7 +90,6 @@ function ProfilePictureUpdater() {
     const { ok, message } = validateFile(fileInputRef);
 
     if (!ok) {
-      console.log(message);
       return showError(message);
     }
 

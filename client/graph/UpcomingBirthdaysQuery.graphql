@@ -3,6 +3,7 @@ query upcomingBirthdays($days: Int) {
     id
     username
     fullName
+    profilePicture
     birthday
     birthdayYear
   }

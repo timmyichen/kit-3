@@ -7,6 +7,7 @@ import {
   getCurrentTimezoneDate,
   getUpcomingAge,
 } from 'client/lib/date';
+import ProfileImage from 'client/components/ProfileImage';
 
 const BIRTHDAY_RANGE_DAYS = 60;
 
@@ -43,8 +44,16 @@ function UpcomingBirthdays() {
           const age = getUpcomingAge(parseInt(friend.birthdayYear, 10));
 
           return (
-            <List.Item key={`friend-birthday-${friend.username}`}>
-              <Image avatar src="" />
+            <List.Item
+              key={`friend-birthday-${friend.username}`}
+              className="list-item-wrapper"
+            >
+              <ProfileImage
+                profileImageUrl={friend.profilePicture}
+                width={30}
+                height={30}
+                style={{ marginRight: '10px' }}
+              />
               <List.Content>
                 <List.Header>
                   {friend.fullName}'s turning {age}
@@ -60,6 +69,10 @@ function UpcomingBirthdays() {
       <style jsx>{`
         .upcoming-birthday-wrapper {
           margin-top: 30px;
+        }
+        .upcoming-birthday-wrapper :global(.list-item-wrapper) {
+          display: flex;
+          align-items: center;
         }
       `}</style>
     </div>

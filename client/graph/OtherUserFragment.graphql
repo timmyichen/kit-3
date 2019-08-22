@@ -6,5 +6,6 @@ fragment OtherUser on User {
   isRequested
   hasRequestedUser
   isBlocked
+  profilePicture
   __typename
 }

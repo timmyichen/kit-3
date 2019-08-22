@@ -48,8 +48,6 @@ function SharedDeetsDashboard() {
     setFilterType(value);
   };
 
-  console.log(deets);
-
   let content;
   if (loadingDeets || !deets || !deets.accessibleDeets) {
     content = <Loader />;

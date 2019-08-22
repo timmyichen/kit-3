@@ -91,8 +91,6 @@ function init() {
             return done(null, user);
           })
           .catch((e: any) => {
-            console.log(e.name);
-            console.log(e.message);
             if (e.name === 'SequelizeUniqueConstraintError') {
               return done(null, false, {
                 message: 'A user with that email or username exists.',

@@ -2,6 +2,7 @@ fragment UserAccess on User {
   id
   fullName
   username
+  profilePicture
   hasAccessToDeet(deetId: $deetId)
   __typename
 }

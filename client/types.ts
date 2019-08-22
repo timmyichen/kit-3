@@ -6,6 +6,7 @@ export interface BaseUser {
   id: number;
   fullName: string;
   username: string;
+  profilePicture: string | null;
   __typename: 'User';
 }
 

@@ -478,6 +478,7 @@ export type OtherUserFragment = { __typename: 'User' } & Pick<
   | 'isRequested'
   | 'hasRequestedUser'
   | 'isBlocked'
+  | 'profilePicture'
 >;
 
 export type PendingFriendRequestsQueryVariables = {
@@ -551,7 +552,12 @@ export type UpcomingBirthdaysQuery = { __typename?: 'RootQuery' } & {
   upcomingBirthdays: Array<
     { __typename?: 'BirthdayUser' } & Pick<
       BirthdayUser,
-      'id' | 'username' | 'fullName' | 'birthday' | 'birthdayYear'
+      | 'id'
+      | 'username'
+      | 'fullName'
+      | 'profilePicture'
+      | 'birthday'
+      | 'birthdayYear'
     >
   >;
 };
@@ -642,7 +648,7 @@ export type UpsertPhoneNumberMutation = { __typename?: 'RootMutation' } & {
 
 export type UserAccessFragment = { __typename: 'User' } & Pick<
   User,
-  'id' | 'fullName' | 'username' | 'hasAccessToDeet'
+  'id' | 'fullName' | 'username' | 'profilePicture' | 'hasAccessToDeet'
 >;
 
 export type UserTodosQueryVariables = {};
@@ -716,6 +722,7 @@ export const OtherUserFragmentDoc = gql`
     isRequested
     hasRequestedUser
     isBlocked
+    profilePicture
     __typename
   }
 `;
@@ -737,6 +744,7 @@ export const UserAccessFragmentDoc = gql`
     id
     fullName
     username
+    profilePicture
     hasAccessToDeet(deetId: $deetId)
     __typename
   }
@@ -1742,6 +1750,7 @@ export const UpcomingBirthdaysDocument = gql`
       id
       username
       fullName
+      profilePicture
       birthday
       birthdayYear
     }

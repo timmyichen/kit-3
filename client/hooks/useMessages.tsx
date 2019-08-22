@@ -14,7 +14,6 @@ export default function useMessages({ length }: { length: number }) {
   }, []);
 
   const showError = React.useCallback((content: string) => {
-    console.log('oh no');
     dispatch({
       type: 'ADD_MESSAGE',
       messageType: 'error',

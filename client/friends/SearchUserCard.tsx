@@ -10,6 +10,7 @@ import {
   useRequestFriendMutation,
 } from 'generated/generated-types';
 import useMessages from 'client/hooks/useMessages';
+import ProfileImage from 'client/components/ProfileImage';
 interface Props {
   user: UserSearch;
 }
@@ -106,7 +107,12 @@ function SearchUserCard({ user }: Props) {
     <div className="user-card-item-wrapper">
       <Card key={`friend-search-${user.username}`} className="user-card-item">
         <Card.Content>
-          <Image floated="right" size="mini" />
+          <ProfileImage
+            profileImageUrl={user.profilePicture}
+            width={50}
+            height={50}
+            style={{ float: 'right' }}
+          />
           <Card.Header>{user.fullName}</Card.Header>
           <Card.Meta>{user.username}</Card.Meta>
         </Card.Content>
