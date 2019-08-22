@@ -6,6 +6,7 @@ import RemoveFriendModal from 'client/components/RemoveFriendModal';
 import { useCtxDispatch } from 'client/components/ContextProvider';
 import postMutationUpdateCache from 'client/lib/postMutationUpdateCache';
 import { FriendsDocument } from 'generated/generated-types';
+import ProfileImage from 'client/components/ProfileImage';
 
 interface Props {
   friend: User;
@@ -73,7 +74,12 @@ const FriendItem = ({ friend }: Props) => {
     <div className="friend-list-item">
       <Card key={`friend-list-${friend.username}`}>
         <Card.Content>
-          <Image floated="right" size="mini" />
+          <ProfileImage
+            profileImageUrl={friend.profilePicture}
+            width={50}
+            height={50}
+            style={{ float: 'right' }}
+          />
           <Card.Header>{friend.fullName}</Card.Header>
           <Card.Meta>{friend.username}</Card.Meta>
         </Card.Content>

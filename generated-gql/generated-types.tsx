@@ -460,7 +460,10 @@ export type FriendsQueryVariables = {
 export type FriendsQuery = { __typename?: 'RootQuery' } & {
   friends: { __typename?: 'FriendsPagination' } & {
     items: Array<
-      { __typename: 'User' } & Pick<User, 'id' | 'fullName' | 'username'>
+      { __typename: 'User' } & Pick<
+        User,
+        'id' | 'fullName' | 'username' | 'profilePicture'
+      >
     >;
     pageInfo: { __typename?: 'PaginationInfo' } & Pick<
       PaginationInfo,
@@ -487,7 +490,12 @@ export type PendingFriendRequestsQueryVariables = {
 
 export type PendingFriendRequestsQuery = { __typename?: 'RootQuery' } & {
   pendingFriendRequests: Array<
-    Maybe<{ __typename: 'User' } & Pick<User, 'id' | 'fullName' | 'username'>>
+    Maybe<
+      { __typename: 'User' } & Pick<
+        User,
+        'id' | 'fullName' | 'username' | 'profilePicture'
+      >
+    >
   >;
 };
 
@@ -1308,6 +1316,7 @@ export const FriendsDocument = gql`
         id
         fullName
         username
+        profilePicture
         __typename
       }
       pageInfo {
@@ -1367,6 +1376,7 @@ export const PendingFriendRequestsDocument = gql`
       id
       fullName
       username
+      profilePicture
       __typename
     }
   }

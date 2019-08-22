@@ -15,6 +15,7 @@ function Todos() {
     content = <Loader />;
   } else {
     const hasBirthday = !!currentUser.birthdayDate;
+    const hasProfilePicture = !!currentUser.profilePicture;
     const {
       hasFriends,
       hasDeets,
@@ -29,7 +30,8 @@ function Todos() {
       hasDeets &&
       hasPrimaryAddress &&
       hasPrimaryEmailAddress &&
-      hasPrimaryPhoneNumber
+      hasPrimaryPhoneNumber &&
+      hasProfilePicture
     ) {
       return null;
     }
@@ -44,6 +46,19 @@ function Todos() {
                 <a>Update your account</a>
               </Link>{' '}
               so friends can send you things!
+            </Message>
+          </div>
+        )}
+        {!hasProfilePicture && (
+          <div className="reminder">
+            <Message info>
+              <Message.Header>
+                You haven't uploaded a profile picture.
+              </Message.Header>
+              <Link href="/account">
+                <a>Upload one</a>
+              </Link>{' '}
+              so your friends will recognize you!
             </Message>
           </div>
         )}

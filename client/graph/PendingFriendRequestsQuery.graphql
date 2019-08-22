@@ -3,6 +3,7 @@ query pendingFriendRequests($count: Int) {
     id
     fullName
     username
+    profilePicture
     __typename
   }
 }

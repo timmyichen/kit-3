@@ -17,6 +17,7 @@ import {
   FriendsQuery,
 } from 'generated/generated-types';
 import useMessages from 'client/hooks/useMessages';
+import ProfileImage from 'client/components/ProfileImage';
 
 const PendingFriends = ({ colCount }: { colCount: number }) => {
   const dispatch = useCtxDispatch();
@@ -95,7 +96,12 @@ const PendingFriends = ({ colCount }: { colCount: number }) => {
           key={`pending-friend-${user.username}`}
         >
           <Card.Content>
-            <Image floated="right" size="mini" />
+            <ProfileImage
+              profileImageUrl={user.profilePicture}
+              width={50}
+              height={50}
+              style={{ float: 'right' }}
+            />
             <Card.Header>{user.fullName}</Card.Header>
             <Card.Meta>{user.username}</Card.Meta>
           </Card.Content>

@@ -4,6 +4,7 @@ query friends($searchQuery: String, $count: Int, $after: String) {
       id
       fullName
       username
+      profilePicture
       __typename
     }
     pageInfo {
