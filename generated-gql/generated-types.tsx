@@ -390,7 +390,7 @@ export type AddressFragment = { __typename: 'AddressDeet' } & Pick<
 
 export type BaseUserFragment = { __typename: 'User' } & Pick<
   User,
-  'id' | 'username' | 'fullName'
+  'id' | 'username' | 'fullName' | 'profilePicture'
 >;
 
 export type BlockUserMutationVariables = {
@@ -693,6 +693,7 @@ export const BaseUserFragmentDoc = gql`
     id
     username
     fullName
+    profilePicture
     __typename
   }
 `;
