@@ -12,6 +12,7 @@ import UserLoader from 'client/components/UserLoader';
 import fetch from 'isomorphic-fetch';
 import Footer from 'client/components/Footer';
 import MessageRoll from 'client/components/MessageRoll';
+import { footerHeight, headerHeight } from 'client/lib/pageMeasurements';
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }: any) {
@@ -66,8 +67,8 @@ class MyApp extends App {
                 </div>
                 <style jsx>{`
                   .page-wrapper {
-                    margin-bottom: 60px;
-                    min-height: calc(100vh - 120px);
+                    margin-bottom: ${footerHeight}px;
+                    min-height: calc(100vh - ${footerHeight + headerHeight}px);
                     height: 100%;
                   }
                   .root-wrapper {
@@ -78,7 +79,7 @@ class MyApp extends App {
                   :global(.main-footer) {
                     position: absolute;
                     bottom: 0;
-                    height: 60px;
+                    height: ${footerHeight}px;
                     width: 100%;
                   }
                 `}</style>

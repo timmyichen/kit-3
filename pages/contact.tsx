@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Icon } from 'semantic-ui-react';
 import colors from 'client/styles/colors';
+import { headerHeight } from 'client/lib/pageMeasurements';
 
 export default () => (
   <div className="contact-wrapper">
@@ -19,7 +20,7 @@ export default () => (
         background: url('/images/marketing/mailboxes.jpg') no-repeat center
           center fixed;
         background-size: cover;
-        min-height: calc(100vh - 60px);
+        min-height: calc(100vh - ${headerHeight}px);
         justify-content: center;
         align-items: center;
         text-align: center;

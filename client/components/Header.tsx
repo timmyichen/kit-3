@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import classnames from 'classnames';
 import Link from 'next/link';
 import colors from 'client/styles/colors';
+import { headerHeight } from 'client/lib/pageMeasurements';
 
 interface Props {
   isAuthed: boolean;
@@ -96,7 +97,7 @@ function Header(props: Props) {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          height: 60px;
+          height: ${headerHeight}px;
           background-color: ${colors.blue};
         }
         .nav,

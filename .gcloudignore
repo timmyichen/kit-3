@@ -15,7 +15,6 @@
 .env
 .vscode
 public/report.html
-config/gcs-create.json
 
 # Node.js dependencies:
 node_modules/

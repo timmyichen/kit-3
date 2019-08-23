@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card, Image, Button, Header } from 'semantic-ui-react';
+import { Card, Button, Header } from 'semantic-ui-react';
 import { User } from 'client/types';
 import BlockUserModal from 'client/components/BlockUserModal';
 import { useCtxDispatch } from 'client/components/ContextProvider';

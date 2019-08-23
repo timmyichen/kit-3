@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card, Image, Dropdown } from 'semantic-ui-react';
+import { Card, Dropdown } from 'semantic-ui-react';
 import { User, PaginationResponse } from 'client/types';
 import BlockUserModal from 'client/components/BlockUserModal';
 import RemoveFriendModal from 'client/components/RemoveFriendModal';

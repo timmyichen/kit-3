@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { UserSearch } from 'client/types';
-import { Button, Card, Image } from 'semantic-ui-react';
+import { Button, Card } from 'semantic-ui-react';
 import {
   useAcceptFriendRequestMutation,
   useRescindFriendRequestMutation,

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Button } from 'semantic-ui-react';
 import Link from 'next/link';
+import { headerHeight } from 'client/lib/pageMeasurements';
 
 export default () => (
   <div className="index">
@@ -11,8 +12,7 @@ export default () => (
       </div>
       <div className="subtitles">
         <h3>
-          There are few feelings better than receiving letters from close
-          friends.
+          Few feelings are better than receiving letters from close friends.
         </h3>
         <h3>Let us help you keep in touch.</h3>
       </div>
@@ -38,7 +38,7 @@ export default () => (
         background: url('/images/marketing/letters.jpg') no-repeat center center
           fixed;
         background-size: cover;
-        min-height: calc(100vh - 60px);
+        min-height: calc(100vh - ${headerHeight}px);
         justify-content: center;
         align-items: center;
         flex-direction: column;

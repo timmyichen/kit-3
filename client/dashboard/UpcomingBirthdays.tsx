@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Header, List, Image } from 'semantic-ui-react';
+import { Header, List } from 'semantic-ui-react';
 import { useUpcomingBirthdaysQuery } from 'generated/generated-types';
 import {
   getDateString,
