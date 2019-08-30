@@ -58,7 +58,9 @@ export default {
       const [year, month, day] = args.birthday
         .split('-')
         .map(s => parseInt(s, 10));
-      const date = new Date(Date.UTC(year, month, day));
+
+      // months are zero indexed
+      const date = new Date(Date.UTC(year, month - 1, day));
       birthdayYear = date.getFullYear();
       birthdayDate = date;
       birthdayDate.setFullYear(1234);
