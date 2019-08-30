@@ -117,7 +117,12 @@ function ProfilePictureUpdater() {
             </div>
           </>
         )}
-        {imageData && <img src={imageData} />}
+        {imageData && (
+          <div
+            className="img"
+            style={{ backgroundImage: `url(${imageData})` }}
+          />
+        )}
       </div>
       <div className="input-wrapper">
         <input
@@ -138,11 +143,14 @@ function ProfilePictureUpdater() {
           max-width: 400px;
           margin: 0 auto;
         }
-        img {
+        .img {
           width: 200px;
           height: 200px;
           min-width: 200px;
           border-radius: 100px;
+          background-size: auto 100%;
+          background-repeat: no-repeat;
+          background-position: center center;
         }
         .image {
           width: 200px;

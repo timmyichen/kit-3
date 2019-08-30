@@ -8,14 +8,14 @@ import Loader from 'client/components/Loader';
 function Todos() {
   const { currentUser } = useCtxState();
 
-  const { data, loading } = useUserTodosQuery();
+  const { data, loading } = useUserTodosQuery({ fetchPolicy: 'network-only' });
 
   let content;
   if (loading || !data || !currentUser) {
     content = <Loader />;
   } else {
     const hasBirthday = !!currentUser.birthdayDate;
-    const hasProfilePicture = !!currentUser.profilePicture;
+    const hasProfilePicture = !!currentUser.profilePictureId;
     const {
       hasFriends,
       hasDeets,

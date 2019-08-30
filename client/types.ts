@@ -29,6 +29,7 @@ export interface CurrentUser {
   updatedAt: string;
   createdAt: string;
   profilePicture?: string;
+  profilePictureId?: number;
 }
 
 export type DeetTypes = 'address' | 'email_address' | 'phone_number';
