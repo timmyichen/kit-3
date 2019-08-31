@@ -11,6 +11,7 @@ export interface User {
   created_at: Date;
   updated_at: Date;
   deleted_at?: Date;
+  verified_at: Date;
 }
 
 interface CommonDeetFields {

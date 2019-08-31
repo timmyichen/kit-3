@@ -5,6 +5,7 @@ import DeetSharingModal from './DeetSharingModal';
 import { useCtxDispatch } from 'client/components/ContextProvider';
 import DeleteDeetModal from './DeleteDeetModal';
 import { EditDeetModal } from './EditDeetModal';
+import VerifyDeetModal from './VerifyDeetModal';
 
 interface Props {
   deet: Deet;
@@ -31,6 +32,11 @@ export function OwnedDeetCardActions({ deet }: Props) {
         className="icon"
       >
         <Dropdown.Menu>
+          <Dropdown.Item
+            text="Verify"
+            icon="check circle outline"
+            onClick={() => showModal(<VerifyDeetModal deet={deet} />)}
+          />
           <Dropdown.Item
             text="Edit"
             icon="pencil alternate"

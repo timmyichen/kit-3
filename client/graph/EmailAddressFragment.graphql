@@ -4,6 +4,7 @@ fragment EmailAddress on EmailAddressDeet {
   label
   emailAddress
   updatedAt
+  verifiedAt
   type
   isPrimary
   __typename

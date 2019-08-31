@@ -135,6 +135,7 @@ export default {
           notes,
           label,
           is_primary: isPrimary,
+          verified_at: new Date(),
         },
         { transaction },
       );

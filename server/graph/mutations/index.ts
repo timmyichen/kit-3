@@ -13,6 +13,7 @@ import updateSharedPermissions from './updateSharedPermissions';
 import updateUser from './updateUser';
 import updatePassword from './updatePassword';
 import updateProfilePicture from './updateProfilePicture';
+import verifyDeet from './verifyDeet';
 
 export default new GraphQLObjectType({
   name: 'RootMutation',
@@ -32,5 +33,6 @@ export default new GraphQLObjectType({
     updateUser,
     updatePassword,
     updateProfilePicture,
+    verifyDeet,
   }),
 });

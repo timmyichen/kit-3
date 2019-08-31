@@ -9,6 +9,7 @@ fragment Address on AddressDeet {
   postalCode
   country
   updatedAt
+  verifiedAt
   type
   isPrimary
   __typename

@@ -66,6 +66,11 @@ export default class Deets extends Model<Deets> {
   @UpdatedAt
   updated_at: Date;
 
+  @AllowNull(false)
+  @Default(new Date())
+  @Column
+  verified_at: Date;
+
   @HasOne(() => Addresses, 'deet_id')
   address: Addresses;
 

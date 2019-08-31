@@ -103,9 +103,9 @@ export const DeetCardFooter = ({
   <Card.Content extra>
     <div className="extra-wrapper">
       <div>
-        <div className="last-updated-label">Last updated</div>
+        <div className="last-updated-label">Last verified</div>
         <div className="last-updated">
-          {ta.ago(parseInt(deet.updatedAt, 10))}
+          {ta.ago(parseInt(deet.verifiedAt, 10))}
         </div>
       </div>
       <div className="actions-wrapper">

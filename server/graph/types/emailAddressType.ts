@@ -26,6 +26,6 @@ export default new GraphQLObjectType({
       resolve: (email: any) => email.email_address.email_address,
     },
     ...commonDeetFields(),
-    ...timestamps(),
+    ...timestamps({ verified: true }),
   }),
 });

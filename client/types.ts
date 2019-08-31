@@ -46,6 +46,7 @@ interface BaseDeet {
   updatedAt: string;
   type: DeetTypes;
   isPrimary: boolean;
+  verifiedAt: string;
   __typename: ApolloDeetTypes;
 }
 

@@ -1,0 +1,16 @@
+mutation verifyDeet($deetId: Int!) {
+  verifyDeet(deetId: $deetId) {
+    ... on EmailAddressDeet {
+      id
+      verifiedAt
+    }
+    ... on AddressDeet {
+      id
+      verifiedAt
+    }
+    ... on PhoneNumberDeet {
+      id
+      verifiedAt
+    }
+  }
+}

@@ -7,14 +7,15 @@ export default new GraphQLUnionType({
   name: 'Deet',
   types: [emailAddressType, phoneNumberType, addressType],
   resolveType(obj) {
-    if (obj.address) {
-      return addressType;
-    } else if (obj.email_address) {
-      return emailAddressType;
-    } else if (obj.phone_number) {
-      return phoneNumberType;
+    switch (obj.type) {
+      case 'address':
+        return addressType;
+      case 'email_address':
+        return emailAddressType;
+      case 'phone_number':
+        return phoneNumberType;
+      default:
+        throw new Error(`Deet type ${obj.type} not recognized`);
     }
-
-    return null;
   },
 });

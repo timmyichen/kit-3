@@ -32,6 +32,7 @@ export type AddressDeet = {
   isPrimary: Scalars['Boolean'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
+  verifiedAt: Scalars['String'];
 };
 
 /** A user of the platform */
@@ -81,6 +82,7 @@ export type EmailAddressDeet = {
   isPrimary: Scalars['Boolean'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
+  verifiedAt: Scalars['String'];
 };
 
 /** Pagination for Friends */
@@ -109,6 +111,7 @@ export type PhoneNumberDeet = {
   isPrimary: Scalars['Boolean'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
+  verifiedAt: Scalars['String'];
 };
 
 export type RootMutation = {
@@ -141,6 +144,8 @@ export type RootMutation = {
   updatePassword: Scalars['Boolean'];
   /** Update the users profile picture */
   updateProfilePicture: User;
+  /** Upsert a phone number record */
+  verifyDeet: Deet;
 };
 
 export type RootMutationRequestFriendArgs = {
@@ -222,6 +227,10 @@ export type RootMutationUpdatePasswordArgs = {
 
 export type RootMutationUpdateProfilePictureArgs = {
   file?: Maybe<Scalars['Upload']>;
+};
+
+export type RootMutationVerifyDeetArgs = {
+  deetId: Scalars['Int'];
 };
 
 export type RootQuery = {
@@ -384,6 +393,7 @@ export type AddressFragment = { __typename: 'AddressDeet' } & Pick<
   | 'postalCode'
   | 'country'
   | 'updatedAt'
+  | 'verifiedAt'
   | 'type'
   | 'isPrimary'
 >;
@@ -448,7 +458,14 @@ export type DeleteDeetMutation = { __typename?: 'RootMutation' } & {
 
 export type EmailAddressFragment = { __typename: 'EmailAddressDeet' } & Pick<
   EmailAddressDeet,
-  'id' | 'notes' | 'label' | 'emailAddress' | 'updatedAt' | 'type' | 'isPrimary'
+  | 'id'
+  | 'notes'
+  | 'label'
+  | 'emailAddress'
+  | 'updatedAt'
+  | 'verifiedAt'
+  | 'type'
+  | 'isPrimary'
 >;
 
 export type FriendsQueryVariables = {
@@ -507,6 +524,7 @@ export type PhoneNumberFragment = { __typename: 'PhoneNumberDeet' } & Pick<
   | 'phoneNumber'
   | 'countryCode'
   | 'updatedAt'
+  | 'verifiedAt'
   | 'type'
   | 'isPrimary'
 >;
@@ -671,6 +689,23 @@ export type UserTodosQuery = { __typename?: 'RootQuery' } & {
     | 'hasPrimaryEmailAddress'
   >;
 };
+
+export type VerifyDeetMutationVariables = {
+  deetId: Scalars['Int'];
+};
+
+export type VerifyDeetMutation = { __typename?: 'RootMutation' } & {
+  verifyDeet:
+    | ({ __typename?: 'EmailAddressDeet' } & Pick<
+        EmailAddressDeet,
+        'id' | 'verifiedAt'
+      >)
+    | ({ __typename?: 'AddressDeet' } & Pick<AddressDeet, 'id' | 'verifiedAt'>)
+    | ({ __typename?: 'PhoneNumberDeet' } & Pick<
+        PhoneNumberDeet,
+        'id' | 'verifiedAt'
+      >);
+};
 export const AddressFragmentDoc = gql`
   fragment Address on AddressDeet {
     id
@@ -683,6 +718,7 @@ export const AddressFragmentDoc = gql`
     postalCode
     country
     updatedAt
+    verifiedAt
     type
     isPrimary
     __typename
@@ -717,6 +753,7 @@ export const EmailAddressFragmentDoc = gql`
     label
     emailAddress
     updatedAt
+    verifiedAt
     type
     isPrimary
     __typename
@@ -743,6 +780,7 @@ export const PhoneNumberFragmentDoc = gql`
     phoneNumber
     countryCode
     updatedAt
+    verifiedAt
     type
     isPrimary
     __typename
@@ -2364,3 +2402,74 @@ export function useUserTodosQuery(
   );
 }
 export type UserTodosQueryHookResult = ReturnType<typeof useUserTodosQuery>;
+export const VerifyDeetDocument = gql`
+  mutation verifyDeet($deetId: Int!) {
+    verifyDeet(deetId: $deetId) {
+      ... on EmailAddressDeet {
+        id
+        verifiedAt
+      }
+      ... on AddressDeet {
+        id
+        verifiedAt
+      }
+      ... on PhoneNumberDeet {
+        id
+        verifiedAt
+      }
+    }
+  }
+`;
+export type VerifyDeetMutationFn = ReactApollo.MutationFn<
+  VerifyDeetMutation,
+  VerifyDeetMutationVariables
+>;
+export type VerifyDeetComponentProps = Omit<
+  ReactApollo.MutationProps<VerifyDeetMutation, VerifyDeetMutationVariables>,
+  'mutation'
+>;
+
+export const VerifyDeetComponent = (props: VerifyDeetComponentProps) => (
+  <ReactApollo.Mutation<VerifyDeetMutation, VerifyDeetMutationVariables>
+    mutation={VerifyDeetDocument}
+    {...props}
+  />
+);
+
+export type VerifyDeetProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<VerifyDeetMutation, VerifyDeetMutationVariables>
+> &
+  TChildProps;
+export function withVerifyDeet<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    VerifyDeetMutation,
+    VerifyDeetMutationVariables,
+    VerifyDeetProps<TChildProps>
+  >,
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    VerifyDeetMutation,
+    VerifyDeetMutationVariables,
+    VerifyDeetProps<TChildProps>
+  >(VerifyDeetDocument, {
+    alias: 'withVerifyDeet',
+    ...operationOptions,
+  });
+}
+
+export function useVerifyDeetMutation(
+  baseOptions?: ReactApolloHooks.MutationHookOptions<
+    VerifyDeetMutation,
+    VerifyDeetMutationVariables
+  >,
+) {
+  return ReactApolloHooks.useMutation<
+    VerifyDeetMutation,
+    VerifyDeetMutationVariables
+  >(VerifyDeetDocument, baseOptions);
+}
+export type VerifyDeetMutationHookResult = ReturnType<
+  typeof useVerifyDeetMutation
+>;

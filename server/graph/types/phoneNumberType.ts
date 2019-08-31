@@ -30,6 +30,6 @@ export default new GraphQLObjectType({
       resolve: (num: any) => num.phone_number.phone_number,
     },
     ...commonDeetFields(),
-    ...timestamps(),
+    ...timestamps({ verified: true }),
   }),
 });

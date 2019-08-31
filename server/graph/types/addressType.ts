@@ -46,6 +46,6 @@ export default new GraphQLObjectType({
       resolve: (address: any) => address.address.country_code,
     },
     ...commonDeetFields(),
-    ...timestamps(),
+    ...timestamps({ verified: true }),
   }),
 });

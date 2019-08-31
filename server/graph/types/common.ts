@@ -20,7 +20,10 @@ export const commonDeetFields = () => ({
   },
 });
 
-export const timestamps = (opts?: { paranoid: boolean }) => {
+export const timestamps = (opts?: {
+  paranoid?: boolean;
+  verified?: boolean;
+}) => {
   const fields: {
     [s: string]: Object;
   } = {
@@ -34,11 +37,20 @@ export const timestamps = (opts?: { paranoid: boolean }) => {
     },
   };
 
-  if (opts && opts.paranoid) {
-    fields.deletedAt = {
-      type: GraphQLString,
-      resolve: (obj: any) => obj.deleted_at,
-    };
+  if (opts) {
+    if (opts.paranoid) {
+      fields.deletedAt = {
+        type: GraphQLString,
+        resolve: (obj: any) => obj.deleted_at,
+      };
+    }
+
+    if (opts.verified) {
+      fields.verifiedAt = {
+        type: new GraphQLNonNull(GraphQLString),
+        resolve: (obj: any) => obj.verified_at,
+      };
+    }
   }
 
   return fields;
