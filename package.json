@@ -17,6 +17,8 @@
     "precommit": "lint-staged",
     "db:migrate": "./node_modules/.bin/sequelize db:migrate",
     "db:migrate:undo": "./node_modules/.bin/sequelize db:migrate:undo",
+    "prod:db:migrate": "NODE_ENV=production ./node_modules/.bin/sequelize db:migrate",
+    "prod:db:migrate:undo": "NODE_ENV=production ./node_modules/.bin/sequelize db:migrate:undo",
     "gql:gen": "./node_modules/.bin/graphql-codegen --config ./generated-gql/codegen.yml"
   },
   "author": "",
