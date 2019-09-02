@@ -22,6 +22,7 @@ on the client:
 - React
 - Next.js
 - GraphQL Apollo
+- Semantic UI React for UI components
 
 on the server:
 
