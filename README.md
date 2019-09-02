@@ -36,19 +36,18 @@ to generate schemas and React hooks for GraphQL mutations and queries.
 # Dev Setup
 
 A development environment for this requires some setup, as it uses Google Cloud
-Storage for profile images. You'll also need Docker and a postgres database
-somewhere.
+Storage for profile images. Docker will set up a local postgres database to
+use.
 
 Set up your `.env` file with the following fields:
 
 ```
-DB_USER=
-DB_DATABASE=
+DB_USER=postgres
+DB_DATABASE=postgres
 DB_PASSWORD=
-DB_HOST=
-DB_PORT=
-SESSION_SECRET=
-DB_URI=
+DB_HOST=db
+DB_PORT=5432
+SESSION_SECRET=wheeeeethisisadevsecret
 GCLOUD_STORAGE_BUCKET=
 ```
 
@@ -61,6 +60,20 @@ npm install
 
 docker-compose up
 ```
+
+On first run, also run all existing migrations on the database by running:
+
+```
+docker-compose exec app npm run db:migrate
+```
+
+You can also connect to the local database by running:
+
+```
+docker-compose exec db psql -U postgres -d postgres
+```
+
+Both of the previous commands require that `docker-compose up` be running.
 
 # Deployment
 

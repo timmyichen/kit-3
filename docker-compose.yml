@@ -1,11 +1,19 @@
-version: "3"
+version: '3'
 services:
   app:
     image: node:10-alpine
-    command: "npm run dev"
+    command: 'npm run dev'
     volumes:
       - .:/usr/ydb2/
     working_dir: /usr/ydb2/
     ports:
-    - "8000:8000"
-    - "8888:8888"
+      - '8000:8000'
+      - '8888:8888'
+    depends_on:
+      - db
+  db:
+    image: postgres:11
+    environment:
+      - POSTGRES_USER=postgres
+    ports:
+      - '5433:5432'
