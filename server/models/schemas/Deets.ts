@@ -80,14 +80,28 @@ export default class Deets extends Model<Deets> {
   @HasOne(() => PhoneNumbers, 'deet_id')
   phone_number: PhoneNumbers;
 
-  getDeet(opts: Object) {
+  getDeet(loader?: any) {
+    let model: typeof PhoneNumbers | typeof Addresses | typeof EmailAddresses;
     switch (this.type) {
       case 'phone_number':
-        return PhoneNumbers.findOne(opts);
+        model = PhoneNumbers;
+        break;
       case 'address':
-        return Addresses.findOne(opts);
+        model = Addresses;
+        break;
       case 'email_address':
-        return EmailAddresses.findOne(opts);
+        model = EmailAddresses;
+        break;
+      default:
+        throw new Error(`${this.type} not recognized as deet type`);
     }
+
+    if (loader) {
+      return loader(model).loadBy('deet_id', this.id);
+    }
+
+    return (model as any).findOne({
+      where: { deet_id: this.id },
+    });
   }
 }

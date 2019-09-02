@@ -1,5 +1,4 @@
 #import "./AddressFragment.graphql"
-#import "./BaseUserFragment.graphql"
 
 mutation upsertAddress(
   $deetId: Int
@@ -26,8 +25,5 @@ mutation upsertAddress(
     isPrimary: $isPrimary
   ) {
     ...Address
-    owner {
-      ...BaseUser
-    }
   }
 }

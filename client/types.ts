@@ -1,20 +1,27 @@
-export interface User extends BaseUser {
-  hasAccessToDeet: boolean;
-}
-
 export interface BaseUser {
   id: number;
   fullName: string;
   username: string;
   profilePicture?: string | null;
+}
+
+export interface OtherUser extends BaseUser {
+  isFriend?: boolean;
+  isRequested?: boolean;
+  hasRequestedUser?: boolean;
+  isBlocked?: boolean;
+}
+
+export interface User extends OtherUser {
   __typename: 'User';
 }
 
-export interface UserSearch extends User {
-  isFriend: boolean;
-  isRequested: boolean;
-  hasRequestedUser: boolean;
-  isBlocked: boolean;
+export interface Friend extends OtherUser {
+  birthdayDate?: string;
+  birthdayYear?: number;
+  birthday?: string;
+  hasAccessToDeet?: boolean;
+  __typename: 'Friend';
 }
 
 export interface CurrentUser {
@@ -30,6 +37,7 @@ export interface CurrentUser {
   createdAt: string;
   profilePicture?: string;
   profilePictureId?: number;
+  __typename: 'User';
 }
 
 export type DeetTypes = 'address' | 'email_address' | 'phone_number';
@@ -42,7 +50,7 @@ interface BaseDeet {
   id: number;
   label: string;
   notes: string;
-  owner?: BaseUser;
+  owner?: Friend;
   updatedAt: string;
   type: DeetTypes;
   isPrimary: boolean;

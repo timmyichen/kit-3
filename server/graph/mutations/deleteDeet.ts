@@ -28,7 +28,7 @@ export default {
       throw new UserInputError('Deet not found');
     }
 
-    const entry = await deet.getDeet({ where: { deet_id: deet.id } });
+    const entry = await deet.getDeet();
 
     if (!entry) {
       throw new UserInputError('Deet not found');

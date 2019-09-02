@@ -1,4 +1,4 @@
-fragment CurrentUser on User {
+fragment CurrentUser on Friend {
   id
   username
   givenName

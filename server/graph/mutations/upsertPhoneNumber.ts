@@ -51,7 +51,7 @@ export default {
         throw new UserInputError('Phone number not found');
       }
 
-      const entry = await deet.getDeet({ where: { deet_id: deet.id } });
+      const entry = await deet.getDeet();
 
       if (!entry) {
         throw new ApolloError(`Matching deet entry not found for ${deet.id}`);

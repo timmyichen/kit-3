@@ -39,7 +39,7 @@ function RecentlyUpdatedDeets() {
 
     content = (
       <>
-        <div className="shared-deets-list">{columns}</div>
+        <div className="recently-updated-deets-list">{columns}</div>
         {deets.accessibleDeets.pageInfo.hasNext && (
           <Button
             onClick={() => {

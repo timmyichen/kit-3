@@ -1,15 +1,16 @@
 import * as React from 'react';
-import { Card, Dropdown } from 'semantic-ui-react';
-import { User, PaginationResponse } from 'client/types';
+import { Card, Dropdown, Button, Icon } from 'semantic-ui-react';
+import { User, PaginationResponse, Friend } from 'client/types';
 import BlockUserModal from 'client/components/BlockUserModal';
 import RemoveFriendModal from 'client/components/RemoveFriendModal';
 import { useCtxDispatch } from 'client/components/ContextProvider';
 import postMutationUpdateCache from 'client/lib/postMutationUpdateCache';
 import { FriendsDocument } from 'generated/generated-types';
 import ProfileImage from 'client/components/ProfileImage';
+import Link from 'next/link';
 
 interface Props {
-  friend: User;
+  friend: Friend;
 }
 
 export const PAGE_COUNT = 20;
@@ -30,7 +31,7 @@ const FriendItem = ({ friend }: Props) => {
           user={friend}
           update={(cache, { data }) => {
             postMutationUpdateCache<
-              { friends: PaginationResponse<User> },
+              { friends: PaginationResponse<Friend> },
               User
             >({
               cache,
@@ -54,8 +55,8 @@ const FriendItem = ({ friend }: Props) => {
           user={friend}
           update={(cache, { data }) => {
             postMutationUpdateCache<
-              { friends: PaginationResponse<User> },
-              User
+              { friends: PaginationResponse<Friend> },
+              Friend
             >({
               cache,
               query: friendsQuery,
@@ -85,6 +86,17 @@ const FriendItem = ({ friend }: Props) => {
         </Card.Content>
         <Card.Content extra>
           <div className="ctas">
+            <Link
+              href={`/friend?username=${friend.username}`}
+              as={`/friend/${friend.username}`}
+            >
+              <a>
+                <Button icon labelPosition="right">
+                  <Icon name="magnify" />
+                  View
+                </Button>
+              </a>
+            </Link>
             <Dropdown
               text="Actions"
               icon="unordered list"
@@ -112,7 +124,7 @@ const FriendItem = ({ friend }: Props) => {
       <style jsx>{`
         .ctas {
           display: flex;
-          justify-content: flex-end;
+          justify-content: space-between;
         }
       `}</style>
     </div>

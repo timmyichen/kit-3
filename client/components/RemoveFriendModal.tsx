@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { User } from 'client/types';
+import { Friend } from 'client/types';
 import { Modal, Button, Header } from 'semantic-ui-react';
 import CtxModal, { closeModal } from './Modal';
 import { useCtxDispatch } from './ContextProvider';
@@ -9,7 +9,7 @@ import { useRemoveFriendMutation } from 'generated/generated-types';
 import useMessages from 'client/hooks/useMessages';
 
 interface RemoveModalProps {
-  user: User;
+  user: Friend;
   update?: ((cache: DataProxy, data: FetchResult<any>) => void) | undefined;
 }
 

@@ -17,7 +17,7 @@ interface Args {
 
 export default {
   description: 'Searching for users',
-  type: new GraphQLNonNull(new GraphQLList(userType)),
+  type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(userType))),
   args: {
     searchQuery: { type: new GraphQLNonNull(GraphQLString) },
     count: { type: GraphQLInt },

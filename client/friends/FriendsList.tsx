@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { User } from 'client/types';
+import { Friend } from 'client/types';
 import FriendItem, { PAGE_COUNT } from './FriendItem';
 import { Button, Header } from 'semantic-ui-react';
 import createUpdateQuery from 'client/lib/createUpdateQuery';
@@ -22,7 +22,7 @@ const FriendsList = ({ colCount }: { colCount: number }) => {
   if (friendsLoading || !friendsData) {
     content = <Loader />;
   } else {
-    const friendCards = friendsData.friends.items.map((friend: User) => (
+    const friendCards = friendsData.friends.items.map((friend: Friend) => (
       <div className="item" key={`friend-card-${friend.id}`}>
         <FriendItem key={`friend-${friend.id}`} friend={friend} />
       </div>

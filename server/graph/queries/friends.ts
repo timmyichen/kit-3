@@ -3,7 +3,7 @@ import { GraphQLString, GraphQLInt, GraphQLNonNull } from 'graphql';
 import { AuthenticationError } from 'apollo-server';
 import { Op } from 'sequelize';
 import { Users, Friendships } from 'server/models';
-import userType from 'server/graph/types/userType';
+import friendType from 'server/graph/types/friendType';
 import paginationType from './lib/paginationType';
 import paginate from './lib/paginate';
 
@@ -15,7 +15,9 @@ interface Args {
 
 export default {
   description: 'A users friends',
-  type: new GraphQLNonNull(paginationType({ name: 'Friends', type: userType })),
+  type: new GraphQLNonNull(
+    paginationType({ name: 'Friends', type: friendType }),
+  ),
   args: {
     after: { type: GraphQLString },
     searchQuery: { type: GraphQLString },

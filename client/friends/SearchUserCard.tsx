@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { UserSearch } from 'client/types';
+import { User } from 'client/types';
 import { Button, Card } from 'semantic-ui-react';
 import {
   useAcceptFriendRequestMutation,
@@ -12,7 +12,7 @@ import {
 import useMessages from 'client/hooks/useMessages';
 import ProfileImage from 'client/components/ProfileImage';
 interface Props {
-  user: UserSearch;
+  user: User;
 }
 
 function SearchUserCard({ user }: Props) {
@@ -38,7 +38,7 @@ function SearchUserCard({ user }: Props) {
     setLoading(false);
   };
 
-  const getCtas = (u: UserSearch) => {
+  const getCtas = (u: User) => {
     const variables = { targetUserId: u.id };
 
     if (u.isBlocked) {

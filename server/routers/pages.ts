@@ -64,4 +64,22 @@ router.getAsync(
   },
 );
 
+router.getAsync(
+  '/friend/:username',
+  async (req: express.Request, res: express.Response) => {
+    if (!req.user) {
+      res.redirect('/login');
+      return;
+    }
+
+    const { username } = req.params;
+
+    if (!username) {
+      return res.status(404).send();
+    }
+
+    nextjs.render(req, res, '/friend', { username });
+  },
+);
+
 export default router;

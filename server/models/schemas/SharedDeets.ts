@@ -33,4 +33,12 @@ export default class SharedDeets extends Model<SharedDeets> {
 
   @BelongsTo(() => Deets)
   deet: Deets;
+
+  getDeet(loader?: any) {
+    if (loader) {
+      return loader(Deets).loadBy('id', this.deet_id);
+    }
+
+    return Deets.findByPk(this.deet_id);
+  }
 }

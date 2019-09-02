@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Modal, Header, Button, Checkbox } from 'semantic-ui-react';
-import { Deet, User } from 'client/types';
+import { Deet, Friend } from 'client/types';
 import CtxModal, { closeModal } from 'client/components/Modal';
 import { useCtxDispatch } from 'client/components/ContextProvider';
 import Loader from 'client/components/Loader';
@@ -80,7 +80,7 @@ const DeetSharingModal = ({ deet }: Props) => {
           <Loader />
         ) : (
           <div className="friend-share-wrapper">
-            {data.friends.items.map((friend: User) => {
+            {data.friends.items.map((friend: Friend) => {
               let hasAccessToDeet = friend.hasAccessToDeet;
               const change = changedPerms.find(p => p.userId === friend.id);
               if (change) {
@@ -126,7 +126,7 @@ function FriendShareItem({
   friend,
   setPerm,
 }: {
-  friend: User;
+  friend: Friend;
   setPerm(p: Permission): void;
 }) {
   return (

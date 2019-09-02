@@ -8,13 +8,11 @@ import {
   Friendships,
   BlockedUsers,
   FriendRequests,
-  Deets,
-  SharedDeets,
   Images,
   Users,
 } from 'server/models';
 import { timestamps } from './common';
-import { AuthenticationError, UserInputError } from 'apollo-server';
+import { AuthenticationError } from 'apollo-server';
 import { ReqWithLoader } from 'server/lib/loader';
 import * as express from 'express';
 
@@ -59,46 +57,6 @@ export default {
 
       if (image) {
         return image.url;
-      }
-
-      return null;
-    },
-  },
-  birthdayDate: {
-    type: GraphQLString,
-    resolve: async (user: Users, _: any, req: ReqWithLoader) => {
-      if (!req.user) {
-        return null;
-      }
-
-      const isFriend = await req
-        .loader(Friendships)
-        .loadBy('first_user', user.id, {
-          second_user: req.user.id,
-        });
-
-      if (isFriend) {
-        return user.birthday_date;
-      }
-
-      return null;
-    },
-  },
-  birthdayYear: {
-    type: GraphQLString,
-    resolve: async (user: Users, _: any, req: ReqWithLoader) => {
-      if (!req.user) {
-        return null;
-      }
-
-      const isFriend = await req
-        .loader(Friendships)
-        .loadBy('first_user', user.id, {
-          second_user: req.user.id,
-        });
-
-      if (isFriend) {
-        return user.birthday_year;
       }
 
       return null;
@@ -153,35 +111,6 @@ export default {
 
       return !!(await loader(BlockedUsers).loadBy('target_user', u.id, {
         blocked_by: user.id,
-      }));
-    },
-  },
-  hasAccessToDeet: {
-    type: new GraphQLNonNull(GraphQLBoolean),
-    args: {
-      deetId: { type: new GraphQLNonNull(GraphQLInt) },
-    },
-    async resolve(
-      u: Users,
-      { deetId }: { deetId: number },
-      { user, loader }: ReqWithLoader,
-    ) {
-      if (!user) {
-        throw new AuthenticationError('Must be logged in');
-      }
-
-      if (!deetId) {
-        throw new UserInputError('Missing id');
-      }
-
-      const deet = await loader(Deets).loadBy('id', deetId);
-
-      if (!deet || deet.owner_id !== user.id) {
-        throw new UserInputError('Deet not found');
-      }
-
-      return !!(await loader(SharedDeets).loadBy('deet_id', deet.id, {
-        shared_with: u.id,
       }));
     },
   },

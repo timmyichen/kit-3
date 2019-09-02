@@ -3,7 +3,7 @@ import { GraphQLList, GraphQLNonNull, GraphQLInt } from 'graphql';
 import { Friendships, Users } from 'server/models';
 import { AuthenticationError } from 'apollo-server';
 import { Op } from 'sequelize';
-import birthdayUserType from '../types/birthdayUserType';
+import friendType from '../types/friendType';
 
 const pad = (num: number) => (num < 10 ? '0' + num : '' + num);
 
@@ -53,9 +53,7 @@ const getMonthDateString = (d: Date) =>
 
 export default {
   description: 'Get all users with upcoming birthdays',
-  type: new GraphQLNonNull(
-    new GraphQLList(new GraphQLNonNull(birthdayUserType)),
-  ),
+  type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(friendType))),
   args: {
     days: { type: GraphQLInt },
   },

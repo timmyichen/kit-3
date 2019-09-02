@@ -1,0 +1,7 @@
+fragment BaseFriend on Friend {
+  id
+  username
+  fullName
+  profilePicture
+  __typename
+}

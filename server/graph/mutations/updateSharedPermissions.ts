@@ -7,7 +7,7 @@ import {
 } from 'apollo-server';
 import { Friendships, Deets, SharedDeets, Users } from 'server/models';
 import { db } from 'server/lib/db';
-import userType from '../types/userType';
+import friendType from '../types/friendType';
 import { ReqWithLoader } from 'server/lib/loader';
 
 type Args = {
@@ -18,7 +18,7 @@ type Args = {
 
 export default {
   description: 'Update permissions for shared',
-  type: new GraphQLList(userType),
+  type: new GraphQLList(friendType),
   args: {
     deetId: { type: new GraphQLNonNull(GraphQLInt) },
     userIdsToAdd: { type: new GraphQLList(GraphQLInt) },
@@ -50,7 +50,7 @@ export default {
       );
     }
 
-    const entry = await deet.getDeet({ where: { deet_id: deet.id } });
+    const entry = await deet.getDeet();
 
     if (!entry) {
       throw new ApolloError(`Matching deet entry not found for ${deet.id}`);

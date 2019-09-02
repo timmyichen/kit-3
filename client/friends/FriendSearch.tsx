@@ -2,7 +2,7 @@ import * as React from 'react';
 import debounce from 'lodash/debounce';
 import { Input, Header } from 'semantic-ui-react';
 
-import { UserSearch } from 'client/types';
+import { User } from 'client/types';
 import { isBrowser, splitColumns } from 'client/lib/dom';
 import useWindowSize from 'client/hooks/useWindowSize';
 import Loader from 'client/components/Loader';
@@ -48,7 +48,7 @@ const FriendSearch = () => {
   if (loading) {
     content = <Loader />;
   } else if (results.length) {
-    const userCards = results.map((result: UserSearch) => (
+    const userCards = results.map((result: User) => (
       <SearchUserCard key={`search-user-card-${result.id}`} user={result} />
     ));
 

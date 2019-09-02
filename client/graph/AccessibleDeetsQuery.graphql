@@ -1,7 +1,7 @@
 #import "./EmailAddressFragment.graphql"
 #import "./PhoneNumberFragment.graphql"
 #import "./AddressFragment.graphql"
-#import "./BaseUserFragment.graphql"
+#import "./BaseFriendFragment.graphql"
 
 query accessibleDeets($type: String, $after: String, $count: Int) {
   accessibleDeets(type: $type, count: $count, after: $after) {
@@ -9,19 +9,19 @@ query accessibleDeets($type: String, $after: String, $count: Int) {
       ... on EmailAddressDeet {
         ...EmailAddress
         owner {
-          ...BaseUser
+          ...BaseFriend
         }
       }
       ... on AddressDeet {
         ...Address
         owner {
-          ...BaseUser
+          ...BaseFriend
         }
       }
       ... on PhoneNumberDeet {
         ...PhoneNumber
         owner {
-          ...BaseUser
+          ...BaseFriend
         }
       }
     }

@@ -5,8 +5,8 @@ import {
   GraphQLInt,
 } from 'graphql';
 import { Users } from 'server/models';
-import userType from './userType';
 import { commonDeetFields, timestamps } from './common';
+import friendType from './friendType';
 
 export default new GraphQLObjectType({
   name: 'AddressDeet',
@@ -17,7 +17,7 @@ export default new GraphQLObjectType({
       resolve: (address: any) => address.id,
     },
     owner: {
-      type: new GraphQLNonNull(userType),
+      type: new GraphQLNonNull(friendType),
       resolve: (address: any, _, { loader }) =>
         loader(Users).loadBy('id', address.owner_id),
     },

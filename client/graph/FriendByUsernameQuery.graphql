@@ -1,0 +1,56 @@
+#import "./EmailAddressFragment.graphql"
+#import "./PhoneNumberFragment.graphql"
+#import "./AddressFragment.graphql"
+#import "./BaseFriendFragment.graphql"
+
+query friendByUsername($username: String!) {
+  friend(username: $username) {
+    id
+    username
+    fullName
+    profilePicture
+    birthday
+    givenName
+    familyName
+    sharedDeets {
+      ... on EmailAddressDeet {
+        ...EmailAddress
+        owner {
+          ...BaseFriend
+        }
+      }
+      ... on AddressDeet {
+        ...Address
+        owner {
+          ...BaseFriend
+        }
+      }
+      ... on PhoneNumberDeet {
+        ...PhoneNumber
+        owner {
+          ...BaseFriend
+        }
+      }
+    }
+    viewableDeets {
+      ... on EmailAddressDeet {
+        ...EmailAddress
+        owner {
+          ...BaseFriend
+        }
+      }
+      ... on AddressDeet {
+        ...Address
+        owner {
+          ...BaseFriend
+        }
+      }
+      ... on PhoneNumberDeet {
+        ...PhoneNumber
+        owner {
+          ...BaseFriend
+        }
+      }
+    }
+  }
+}

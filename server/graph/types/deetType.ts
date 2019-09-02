@@ -1,7 +1,7 @@
 import { GraphQLUnionType } from 'graphql';
+import addressType from './addressType';
 import emailAddressType from './emailAddressType';
 import phoneNumberType from './phoneNumberType';
-import addressType from './addressType';
 
 export default new GraphQLUnionType({
   name: 'Deet',

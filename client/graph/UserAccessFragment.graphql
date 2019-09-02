@@ -1,4 +1,4 @@
-fragment UserAccess on User {
+fragment UserAccess on Friend {
   id
   fullName
   username

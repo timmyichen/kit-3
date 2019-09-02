@@ -19,7 +19,7 @@ export type Scalars = {
 export type AddressDeet = {
   __typename?: 'AddressDeet';
   id: Scalars['Int'];
-  owner: User;
+  owner: Friend;
   addressLine1: Scalars['String'];
   addressLine2: Scalars['String'];
   city: Scalars['String'];
@@ -35,33 +35,6 @@ export type AddressDeet = {
   verifiedAt: Scalars['String'];
 };
 
-/** A user of the platform */
-export type BirthdayUser = {
-  __typename?: 'BirthdayUser';
-  id: Scalars['Int'];
-  fullName: Scalars['String'];
-  givenName: Scalars['String'];
-  familyName: Scalars['String'];
-  email: Scalars['String'];
-  profilePicture?: Maybe<Scalars['String']>;
-  birthdayDate?: Maybe<Scalars['String']>;
-  birthdayYear?: Maybe<Scalars['String']>;
-  username: Scalars['String'];
-  isFriend: Scalars['Boolean'];
-  isRequested: Scalars['Boolean'];
-  hasRequestedUser: Scalars['Boolean'];
-  isBlocked: Scalars['Boolean'];
-  hasAccessToDeet: Scalars['Boolean'];
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
-  birthday: Scalars['String'];
-};
-
-/** A user of the platform */
-export type BirthdayUserHasAccessToDeetArgs = {
-  deetId: Scalars['Int'];
-};
-
 export type Deet = EmailAddressDeet | PhoneNumberDeet | AddressDeet;
 
 export enum DeetType {
@@ -74,7 +47,7 @@ export enum DeetType {
 export type EmailAddressDeet = {
   __typename?: 'EmailAddressDeet';
   id: Scalars['Int'];
-  owner: User;
+  owner: Friend;
   emailAddress: Scalars['String'];
   label: Scalars['String'];
   notes: Scalars['String'];
@@ -85,10 +58,39 @@ export type EmailAddressDeet = {
   verifiedAt: Scalars['String'];
 };
 
+/** A user who is a friend */
+export type Friend = {
+  __typename?: 'Friend';
+  id: Scalars['Int'];
+  fullName: Scalars['String'];
+  givenName: Scalars['String'];
+  familyName: Scalars['String'];
+  email: Scalars['String'];
+  profilePicture?: Maybe<Scalars['String']>;
+  username: Scalars['String'];
+  isFriend: Scalars['Boolean'];
+  isRequested: Scalars['Boolean'];
+  hasRequestedUser: Scalars['Boolean'];
+  isBlocked: Scalars['Boolean'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  birthdayDate?: Maybe<Scalars['String']>;
+  birthdayYear?: Maybe<Scalars['String']>;
+  birthday: Scalars['String'];
+  hasAccessToDeet: Scalars['Boolean'];
+  viewableDeets: Array<Deet>;
+  sharedDeets: Array<Deet>;
+};
+
+/** A user who is a friend */
+export type FriendHasAccessToDeetArgs = {
+  deetId: Scalars['Int'];
+};
+
 /** Pagination for Friends */
 export type FriendsPagination = {
   __typename?: 'FriendsPagination';
-  items: Array<User>;
+  items: Array<Friend>;
   pageInfo: PaginationInfo;
 };
 
@@ -102,7 +104,7 @@ export type PaginationInfo = {
 export type PhoneNumberDeet = {
   __typename?: 'PhoneNumberDeet';
   id: Scalars['Int'];
-  owner: User;
+  owner: Friend;
   countryCode: Scalars['String'];
   phoneNumber: Scalars['String'];
   label: Scalars['String'];
@@ -137,7 +139,7 @@ export type RootMutation = {
   /** Upsert a phone number record */
   deleteDeet: Deet;
   /** Update permissions for shared */
-  updateSharedPermissions?: Maybe<Array<Maybe<User>>>;
+  updateSharedPermissions?: Maybe<Array<Maybe<Friend>>>;
   /** Update the currently authed user */
   updateUser: User;
   /** Update the users password */
@@ -238,7 +240,7 @@ export type RootQuery = {
   /** The currently authed user */
   currentUser?: Maybe<User>;
   /** Searching for users */
-  searchUsers: Array<Maybe<User>>;
+  searchUsers: Array<User>;
   /** The currently authed user */
   userByUsername?: Maybe<User>;
   /** A users friends */
@@ -252,7 +254,9 @@ export type RootQuery = {
   /** Get all of a users todos */
   userTodos: UserTodos;
   /** Get all users with upcoming birthdays */
-  upcomingBirthdays: Array<BirthdayUser>;
+  upcomingBirthdays: Array<Friend>;
+  /** A users friends */
+  friend: Friend;
 };
 
 export type RootQuerySearchUsersArgs = {
@@ -284,6 +288,10 @@ export type RootQueryUpcomingBirthdaysArgs = {
   days?: Maybe<Scalars['Int']>;
 };
 
+export type RootQueryFriendArgs = {
+  username: Scalars['String'];
+};
+
 /** Pagination for SharedDeets */
 export type SharedDeetsPagination = {
   __typename?: 'SharedDeetsPagination';
@@ -300,21 +308,13 @@ export type User = {
   familyName: Scalars['String'];
   email: Scalars['String'];
   profilePicture?: Maybe<Scalars['String']>;
-  birthdayDate?: Maybe<Scalars['String']>;
-  birthdayYear?: Maybe<Scalars['String']>;
   username: Scalars['String'];
   isFriend: Scalars['Boolean'];
   isRequested: Scalars['Boolean'];
   hasRequestedUser: Scalars['Boolean'];
   isBlocked: Scalars['Boolean'];
-  hasAccessToDeet: Scalars['Boolean'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
-};
-
-/** A user of the platform */
-export type UserHasAccessToDeetArgs = {
-  deetId: Scalars['Int'];
 };
 
 /** A phone number deet */
@@ -365,13 +365,13 @@ export type AccessibleDeetsQuery = { __typename?: 'RootQuery' } & {
   accessibleDeets: { __typename?: 'SharedDeetsPagination' } & {
     items: Array<
       | ({ __typename?: 'EmailAddressDeet' } & {
-          owner: { __typename?: 'User' } & BaseUserFragment;
+          owner: { __typename?: 'Friend' } & BaseFriendFragment;
         } & EmailAddressFragment)
       | ({ __typename?: 'AddressDeet' } & {
-          owner: { __typename?: 'User' } & BaseUserFragment;
+          owner: { __typename?: 'Friend' } & BaseFriendFragment;
         } & AddressFragment)
       | ({ __typename?: 'PhoneNumberDeet' } & {
-          owner: { __typename?: 'User' } & BaseUserFragment;
+          owner: { __typename?: 'Friend' } & BaseFriendFragment;
         } & PhoneNumberFragment)
     >;
     pageInfo: { __typename?: 'PaginationInfo' } & Pick<
@@ -398,6 +398,11 @@ export type AddressFragment = { __typename: 'AddressDeet' } & Pick<
   | 'isPrimary'
 >;
 
+export type BaseFriendFragment = { __typename: 'Friend' } & Pick<
+  Friend,
+  'id' | 'username' | 'fullName' | 'profilePicture'
+>;
+
 export type BaseUserFragment = { __typename: 'User' } & Pick<
   User,
   'id' | 'username' | 'fullName' | 'profilePicture'
@@ -419,8 +424,8 @@ export type CurrentUserDeetsQuery = { __typename?: 'RootQuery' } & {
   >;
 };
 
-export type CurrentUserFragment = { __typename: 'User' } & Pick<
-  User,
+export type CurrentUserFragment = { __typename: 'Friend' } & Pick<
+  Friend,
   | 'id'
   | 'username'
   | 'givenName'
@@ -440,7 +445,7 @@ export type DeetPermsQueryVariables = {
 
 export type DeetPermsQuery = { __typename?: 'RootQuery' } & {
   friends: { __typename?: 'FriendsPagination' } & {
-    items: Array<{ __typename?: 'User' } & UserAccessFragment>;
+    items: Array<{ __typename?: 'Friend' } & UserAccessFragment>;
     pageInfo: { __typename?: 'PaginationInfo' } & Pick<
       PaginationInfo,
       'hasNext' | 'nextCursor'
@@ -468,6 +473,46 @@ export type EmailAddressFragment = { __typename: 'EmailAddressDeet' } & Pick<
   | 'isPrimary'
 >;
 
+export type FriendByUsernameQueryVariables = {
+  username: Scalars['String'];
+};
+
+export type FriendByUsernameQuery = { __typename?: 'RootQuery' } & {
+  friend: { __typename?: 'Friend' } & Pick<
+    Friend,
+    | 'id'
+    | 'username'
+    | 'fullName'
+    | 'profilePicture'
+    | 'birthday'
+    | 'givenName'
+    | 'familyName'
+  > & {
+      sharedDeets: Array<
+        | ({ __typename?: 'EmailAddressDeet' } & {
+            owner: { __typename?: 'Friend' } & BaseFriendFragment;
+          } & EmailAddressFragment)
+        | ({ __typename?: 'AddressDeet' } & {
+            owner: { __typename?: 'Friend' } & BaseFriendFragment;
+          } & AddressFragment)
+        | ({ __typename?: 'PhoneNumberDeet' } & {
+            owner: { __typename?: 'Friend' } & BaseFriendFragment;
+          } & PhoneNumberFragment)
+      >;
+      viewableDeets: Array<
+        | ({ __typename?: 'EmailAddressDeet' } & {
+            owner: { __typename?: 'Friend' } & BaseFriendFragment;
+          } & EmailAddressFragment)
+        | ({ __typename?: 'AddressDeet' } & {
+            owner: { __typename?: 'Friend' } & BaseFriendFragment;
+          } & AddressFragment)
+        | ({ __typename?: 'PhoneNumberDeet' } & {
+            owner: { __typename?: 'Friend' } & BaseFriendFragment;
+          } & PhoneNumberFragment)
+      >;
+    };
+};
+
 export type FriendsQueryVariables = {
   searchQuery?: Maybe<Scalars['String']>;
   count?: Maybe<Scalars['Int']>;
@@ -477,8 +522,8 @@ export type FriendsQueryVariables = {
 export type FriendsQuery = { __typename?: 'RootQuery' } & {
   friends: { __typename?: 'FriendsPagination' } & {
     items: Array<
-      { __typename: 'User' } & Pick<
-        User,
+      { __typename: 'Friend' } & Pick<
+        Friend,
         'id' | 'fullName' | 'username' | 'profilePicture'
       >
     >;
@@ -559,7 +604,7 @@ export type SearchUsersQueryVariables = {
 };
 
 export type SearchUsersQuery = { __typename?: 'RootQuery' } & {
-  searchUsers: Array<Maybe<{ __typename?: 'User' } & OtherUserFragment>>;
+  searchUsers: Array<{ __typename?: 'User' } & OtherUserFragment>;
 };
 
 export type UnblockUserMutationVariables = {
@@ -576,8 +621,8 @@ export type UpcomingBirthdaysQueryVariables = {
 
 export type UpcomingBirthdaysQuery = { __typename?: 'RootQuery' } & {
   upcomingBirthdays: Array<
-    { __typename?: 'BirthdayUser' } & Pick<
-      BirthdayUser,
+    { __typename?: 'Friend' } & Pick<
+      Friend,
       | 'id'
       | 'username'
       | 'fullName'
@@ -608,7 +653,7 @@ export type UpdateSharedPermissionsMutation = {
   __typename?: 'RootMutation';
 } & {
   updateSharedPermissions: Maybe<
-    Array<Maybe<{ __typename?: 'User' } & UserAccessFragment>>
+    Array<Maybe<{ __typename?: 'Friend' } & UserAccessFragment>>
   >;
 };
 
@@ -638,9 +683,7 @@ export type UpsertAddressMutationVariables = {
 };
 
 export type UpsertAddressMutation = { __typename?: 'RootMutation' } & {
-  upsertAddress: { __typename?: 'AddressDeet' } & {
-    owner: { __typename?: 'User' } & BaseUserFragment;
-  } & AddressFragment;
+  upsertAddress: { __typename?: 'AddressDeet' } & AddressFragment;
 };
 
 export type UpsertEmailAddressMutationVariables = {
@@ -667,13 +710,11 @@ export type UpsertPhoneNumberMutationVariables = {
 };
 
 export type UpsertPhoneNumberMutation = { __typename?: 'RootMutation' } & {
-  upsertPhoneNumber: { __typename?: 'PhoneNumberDeet' } & {
-    owner: { __typename?: 'User' } & BaseUserFragment;
-  } & PhoneNumberFragment;
+  upsertPhoneNumber: { __typename?: 'PhoneNumberDeet' } & PhoneNumberFragment;
 };
 
-export type UserAccessFragment = { __typename: 'User' } & Pick<
-  User,
+export type UserAccessFragment = { __typename: 'Friend' } & Pick<
+  Friend,
   'id' | 'fullName' | 'username' | 'profilePicture' | 'hasAccessToDeet'
 >;
 
@@ -724,6 +765,15 @@ export const AddressFragmentDoc = gql`
     __typename
   }
 `;
+export const BaseFriendFragmentDoc = gql`
+  fragment BaseFriend on Friend {
+    id
+    username
+    fullName
+    profilePicture
+    __typename
+  }
+`;
 export const BaseUserFragmentDoc = gql`
   fragment BaseUser on User {
     id
@@ -734,7 +784,7 @@ export const BaseUserFragmentDoc = gql`
   }
 `;
 export const CurrentUserFragmentDoc = gql`
-  fragment CurrentUser on User {
+  fragment CurrentUser on Friend {
     id
     username
     givenName
@@ -787,7 +837,7 @@ export const PhoneNumberFragmentDoc = gql`
   }
 `;
 export const UserAccessFragmentDoc = gql`
-  fragment UserAccess on User {
+  fragment UserAccess on Friend {
     id
     fullName
     username
@@ -1019,19 +1069,19 @@ export const AccessibleDeetsDocument = gql`
         ... on EmailAddressDeet {
           ...EmailAddress
           owner {
-            ...BaseUser
+            ...BaseFriend
           }
         }
         ... on AddressDeet {
           ...Address
           owner {
-            ...BaseUser
+            ...BaseFriend
           }
         }
         ... on PhoneNumberDeet {
           ...PhoneNumber
           owner {
-            ...BaseUser
+            ...BaseFriend
           }
         }
       }
@@ -1042,7 +1092,7 @@ export const AccessibleDeetsDocument = gql`
     }
   }
   ${EmailAddressFragmentDoc}
-  ${BaseUserFragmentDoc}
+  ${BaseFriendFragmentDoc}
   ${AddressFragmentDoc}
   ${PhoneNumberFragmentDoc}
 `;
@@ -1347,6 +1397,116 @@ export function useDeleteDeetMutation(
 }
 export type DeleteDeetMutationHookResult = ReturnType<
   typeof useDeleteDeetMutation
+>;
+export const FriendByUsernameDocument = gql`
+  query friendByUsername($username: String!) {
+    friend(username: $username) {
+      id
+      username
+      fullName
+      profilePicture
+      birthday
+      givenName
+      familyName
+      sharedDeets {
+        ... on EmailAddressDeet {
+          ...EmailAddress
+          owner {
+            ...BaseFriend
+          }
+        }
+        ... on AddressDeet {
+          ...Address
+          owner {
+            ...BaseFriend
+          }
+        }
+        ... on PhoneNumberDeet {
+          ...PhoneNumber
+          owner {
+            ...BaseFriend
+          }
+        }
+      }
+      viewableDeets {
+        ... on EmailAddressDeet {
+          ...EmailAddress
+          owner {
+            ...BaseFriend
+          }
+        }
+        ... on AddressDeet {
+          ...Address
+          owner {
+            ...BaseFriend
+          }
+        }
+        ... on PhoneNumberDeet {
+          ...PhoneNumber
+          owner {
+            ...BaseFriend
+          }
+        }
+      }
+    }
+  }
+  ${EmailAddressFragmentDoc}
+  ${BaseFriendFragmentDoc}
+  ${AddressFragmentDoc}
+  ${PhoneNumberFragmentDoc}
+`;
+export type FriendByUsernameComponentProps = Omit<
+  ReactApollo.QueryProps<FriendByUsernameQuery, FriendByUsernameQueryVariables>,
+  'query'
+> &
+  (
+    | { variables: FriendByUsernameQueryVariables; skip?: false }
+    | { skip: true });
+
+export const FriendByUsernameComponent = (
+  props: FriendByUsernameComponentProps,
+) => (
+  <ReactApollo.Query<FriendByUsernameQuery, FriendByUsernameQueryVariables>
+    query={FriendByUsernameDocument}
+    {...props}
+  />
+);
+
+export type FriendByUsernameProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<FriendByUsernameQuery, FriendByUsernameQueryVariables>
+> &
+  TChildProps;
+export function withFriendByUsername<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    FriendByUsernameQuery,
+    FriendByUsernameQueryVariables,
+    FriendByUsernameProps<TChildProps>
+  >,
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    FriendByUsernameQuery,
+    FriendByUsernameQueryVariables,
+    FriendByUsernameProps<TChildProps>
+  >(FriendByUsernameDocument, {
+    alias: 'withFriendByUsername',
+    ...operationOptions,
+  });
+}
+
+export function useFriendByUsernameQuery(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<
+    FriendByUsernameQueryVariables
+  >,
+) {
+  return ReactApolloHooks.useQuery<
+    FriendByUsernameQuery,
+    FriendByUsernameQueryVariables
+  >(FriendByUsernameDocument, baseOptions);
+}
+export type FriendByUsernameQueryHookResult = ReturnType<
+  typeof useFriendByUsernameQuery
 >;
 export const FriendsDocument = gql`
   query friends($searchQuery: String, $count: Int, $after: String) {
@@ -2109,13 +2269,9 @@ export const UpsertAddressDocument = gql`
       isPrimary: $isPrimary
     ) {
       ...Address
-      owner {
-        ...BaseUser
-      }
     }
   }
   ${AddressFragmentDoc}
-  ${BaseUserFragmentDoc}
 `;
 export type UpsertAddressMutationFn = ReactApollo.MutationFn<
   UpsertAddressMutation,
@@ -2275,13 +2431,9 @@ export const UpsertPhoneNumberDocument = gql`
       isPrimary: $isPrimary
     ) {
       ...PhoneNumber
-      owner {
-        ...BaseUser
-      }
     }
   }
   ${PhoneNumberFragmentDoc}
-  ${BaseUserFragmentDoc}
 `;
 export type UpsertPhoneNumberMutationFn = ReactApollo.MutationFn<
   UpsertPhoneNumberMutation,
