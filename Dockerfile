@@ -12,12 +12,14 @@ RUN apt-get update && apt-get install -y postgresql-11 postgresql-contrib-11
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get update && apt-get install -y nodejs
 
-# verify versions for everything
-RUN node -v && npm -v && psql --version
+RUN npm install -g sequelize sequelize-cli jest
 
 WORKDIR /usr/src/kit
 
 COPY . .
+
+# verify versions for everything
+RUN node -v && npm -v && psql --version
 
 EXPOSE 8080
 EXPOSE 8888

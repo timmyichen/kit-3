@@ -12,7 +12,9 @@ import {
   UpdatedAt,
   HasOne,
 } from 'sequelize-typescript';
-import { PhoneNumbers, Addresses, EmailAddresses } from '..';
+import PhoneNumbers from './PhoneNumbers';
+import Addresses from './Addresses';
+import EmailAddresses from './EmailAddresses';
 import { DeetTypes } from '../types';
 import { emptyOptionalString, requiredString } from 'server/lib/model';
 

@@ -17,4 +17,11 @@ module.exports = {
     port: process.env.PROD_DB_PORT,
     dialect: 'postgres',
   },
+  test: {
+    database: 'test',
+    username: 'postgres',
+    host: 'db',
+    port: 5432,
+    dialect: 'postgres',
+  },
 };

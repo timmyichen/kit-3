@@ -5,10 +5,10 @@ import * as morgan from 'morgan';
 import * as passport from 'passport';
 import * as bodyParser from 'body-parser';
 import * as session from 'express-session';
-import nextjs from './lib/next';
-import PagesRouter from './routers/pages';
-import GraphqlRouter from './routers/graphql';
-import auth from './routers/auth';
+import nextjs from 'server/lib/next';
+import PagesRouter from 'server/routers/pages';
+import GraphqlRouter from 'server/routers/graphql';
+import auth from 'server/routers/auth';
 
 dotenv.config();
 
@@ -22,14 +22,17 @@ if (!process.env.SESSION_SECRET) {
 
 const sessionSecret: string = process.env.SESSION_SECRET;
 
-const store = new SequelizeStore({
-  db,
-});
+const store = new SequelizeStore({ db });
 
 const app: express.Application = express();
 
 nextjs.nextApp.prepare().then(async () => {
-  await db.authenticate();
+  try {
+    await db.authenticate();
+  } catch (e) {
+    throw e;
+  }
+
   console.log('connected to db'); // tslint:disable-line no-console
 
   const port = process.env.PORT || 8000;

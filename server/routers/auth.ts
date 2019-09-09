@@ -202,6 +202,11 @@ function init() {
     res.redirect('/');
   });
 
+  router.post('/logout', (req: express.Request, res: express.Response) => {
+    req.logout();
+    res.json({ success: true });
+  });
+
   router.get(
     '/data/user_info',
     (req: express.Request, res: express.Response) => {
