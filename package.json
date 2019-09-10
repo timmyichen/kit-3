@@ -19,7 +19,10 @@
     "db:migrate:undo": "./node_modules/.bin/sequelize db:migrate:undo",
     "prod:db:migrate": "NODE_ENV=production ./node_modules/.bin/sequelize db:migrate",
     "prod:db:migrate:undo": "NODE_ENV=production ./node_modules/.bin/sequelize db:migrate:undo",
-    "gql:gen": "./node_modules/.bin/graphql-codegen --config ./generated-gql/codegen.yml"
+    "gql:gen": "./node_modules/.bin/graphql-codegen --config ./generated-gql/codegen.yml",
+    "jest:setup": "node ./server/test/setup.js",
+    "jest": "NODE_ENV=test npm run jest:setup && jest",
+    "jest:watch": "NODE_ENV=test npm run jest:setup && jest --watch"
   },
   "author": "",
   "license": "ISC",

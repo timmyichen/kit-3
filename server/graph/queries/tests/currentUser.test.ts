@@ -1,4 +1,3 @@
-// import * as request from 'supertest';
 import App from 'server/test/app';
 import { createUser } from 'server/test/util';
 import { Users } from 'server/models';

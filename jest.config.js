@@ -9,5 +9,4 @@ module.exports = {
   moduleNameMapper: {
     '^server/(.*)': '<rootDir>/server/$1',
   },
-  setupFilesAfterEnv: ['<rootDir>/server/test/setup.js'],
 };

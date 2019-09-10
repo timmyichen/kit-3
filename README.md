@@ -75,6 +75,22 @@ docker-compose exec db psql -U postgres -d postgres
 
 Both of the previous commands require that `docker-compose up` be running.
 
+# Testing
+
+To run tests, run:
+
+```
+docker-compose exec app npm run jest:watch
+```
+
+To run a test for a particular file, run:
+
+```
+docker-compose exec app npm run jest:watch path/to/file
+```
+
+To turn watchmode off, just remove `:watch`
+
 # Deployment
 
 Assuming you're already set up with Google Apps Engine, deploying is as simple as:
