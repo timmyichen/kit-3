@@ -1,15 +1,13 @@
 FROM ubuntu:16.04
 
-# initial setup
-RUN apt-get update && apt install -y wget ca-certificates lsb-release curl
-
 # install psql and node
-RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
-RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
-RUN apt-get update && apt-get install -y postgresql-11 postgresql-contrib-11 nodejs
+RUN apt-get update && apt install -y --no-install-recommends wget ca-certificates lsb-release curl && \
+  wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
+  sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list' && \
+  curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
+  apt-get update && apt-get install -y postgresql-11 postgresql-contrib-11 nodejs
 
-RUN npm install -g sequelize sequelize-cli jest
+RUN npm install -g jest
 
 WORKDIR /usr/src/kit
 
