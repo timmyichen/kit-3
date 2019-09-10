@@ -7,11 +7,11 @@ RUN apt-get update && apt install -y --no-install-recommends wget ca-certificate
   curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
   apt-get update && apt-get install -y postgresql-11 postgresql-contrib-11 nodejs
 
-RUN npm install
-
 WORKDIR /usr/src/kit
 
 COPY . .
+
+RUN npm install
 
 # verify versions for everything
 RUN node -v && npm -v && psql --version
