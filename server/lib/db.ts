@@ -35,5 +35,5 @@ export const db = new Sequelize({
   port: typeof port === 'number' ? port : parseInt(port, 10),
   dialect,
   modelPaths: [path.resolve(__dirname, '..', 'models/schemas')],
-  logging: process.env.NODE_ENV !== 'test',
+  logging: process.env.NODE_ENV === 'test' ? false : console.log,
 });

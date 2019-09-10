@@ -1,3 +1,5 @@
+console.log(`RUNNING IN CONTEXT: ${process.env.NODE_ENV}`); // tslint:disable-line no-console
+
 import 'module-alias/register';
 import * as dotenv from 'dotenv';
 import * as express from 'express';
