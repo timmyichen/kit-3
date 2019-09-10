@@ -26,7 +26,7 @@ export default {
 
     if (!user) {
       throw new AuthenticationError(
-        'Something must have really gone wrong but this is only here to appease TS',
+        'Something must have really gone wrong but this is only here to appease TypeScript',
       );
     }
 

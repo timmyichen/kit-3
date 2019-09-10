@@ -2,7 +2,7 @@ import App from 'server/test/app';
 import { createUser } from 'server/test/util';
 import { Users } from 'server/models';
 
-describe('userTodos', () => {
+describe('userByUsername', () => {
   const app = new App();
 
   const query = `

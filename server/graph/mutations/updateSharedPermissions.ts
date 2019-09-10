@@ -32,7 +32,7 @@ export default {
     const deet = await Deets.findByPk(args.deetId);
 
     if (!deet || deet.owner_id !== user.id) {
-      throw new UserInputError('Email address not found');
+      throw new UserInputError('Deet not found');
     }
 
     if (
