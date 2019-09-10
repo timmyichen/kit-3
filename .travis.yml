@@ -4,7 +4,7 @@ node_js:
 env:
   DOCKER_COMPOSE_VERSION: 1.24.0
 before_script:
-  - docker-compose build
+  - docker-compose up --build -d
 script:
   - docker-compose exec app npm run test
 after_script:
