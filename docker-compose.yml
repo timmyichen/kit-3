@@ -8,6 +8,13 @@ services:
     ports:
       - '8000:8000'
       - '8888:8888'
+    environment:
+      - GCLOUD_STORAGE_BUCKET=kit-images-prod
+      - SESSION_SECRET=sgdfgjkhsdfg
+      - DB_USER=postgres
+      - DB_DATABASE=postgres
+      - DB_HOST=db
+      - DB_PORT=5432
     depends_on:
       - db
   db:
