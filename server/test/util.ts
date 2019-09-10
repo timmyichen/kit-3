@@ -25,10 +25,8 @@ export const randomUsername = () =>
     .replace(/ /gi, '')
     .slice(0, 24);
 
-export interface LoginUser {
-  username: string;
-  password: string;
-}
+export const randomInt = (min: number, max: number) =>
+  Math.floor(Math.random() * (max - min + 1)) + min;
 
 export async function createUser(
   opts: {

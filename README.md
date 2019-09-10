@@ -39,25 +39,11 @@ A development environment for this requires some setup, as it uses Google Cloud
 Storage for profile images. Docker will set up a local postgres database to
 use.
 
-Set up your `.env` file with the following fields:
-
-```
-DB_USER=postgres
-DB_DATABASE=postgres
-DB_PASSWORD=
-DB_HOST=db
-DB_PORT=5432
-SESSION_SECRET=wheeeeethisisadevsecret
-GCLOUD_STORAGE_BUCKET=
-```
-
 Production keys are the same format prefixed with `PROD_`.
 
 Your Google Cloud Storage auth json file should go under `config/gcs-owner.json`.
 
 ```
-npm install
-
 docker-compose up
 ```
 
@@ -65,6 +51,12 @@ On first run, also run all existing migrations on the database by running:
 
 ```
 docker-compose exec app npm run db:migrate
+```
+
+OR run the seed script (this will also migrate):
+
+```
+docker-compose exec app npm run dev:seed
 ```
 
 You can also connect to the local database by running:
