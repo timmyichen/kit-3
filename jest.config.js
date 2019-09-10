@@ -11,12 +11,7 @@ module.exports = {
   },
   globals: {
     'ts-jest': {
-      diagnostics: {
-        warnOnly: true,
-        // https://github.com/kulshekhar/ts-jest/blob/master/docs/user/config/diagnostics.md#advanced-configuration
-        // 2339 pops up on every test in travis for some reason
-        ignoreCodes: [6059, 18002, 18003, 2339],
-      },
+      diagnostics: false,
     },
   },
 };
