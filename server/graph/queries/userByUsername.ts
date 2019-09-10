@@ -8,7 +8,7 @@ interface Args {
 }
 
 export default {
-  description: 'The currently authed user',
+  description: 'Find a user by their username',
   type: userType,
   args: {
     username: { type: new GraphQLNonNull(GraphQLString) },
