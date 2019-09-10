@@ -3,6 +3,12 @@ node_js:
   - 10
 env:
   DOCKER_COMPOSE_VERSION: 1.24.0
+  GCLOUD_STORAGE_BUCKET: kit-images-prod
+  SESSION_SECRET: sgdfgjkhsdfg
+  DB_USER: postgres
+  DB_DATABASE: postgres
+  DB_HOST: db
+  DB_PORT: 5432
 before_script:
   - docker-compose up --build -d
 script:
