@@ -1,16 +1,14 @@
 import { db } from 'server/lib/db';
 import { Sequelize } from 'sequelize-typescript';
 import * as express from 'express';
-// import * as passport from 'passport';
 import * as bodyParser from 'body-parser';
 import * as session from 'express-session';
 import * as request from 'supertest';
 import * as connectSessionSequelize from 'connect-session-sequelize';
 import GraphqlRouter from 'server/routers/graphql';
-// import auth from 'server/routers/auth';
 import { Server } from 'http';
-// import { LoginUser } from './util';
 import { Users } from 'server/models';
+import * as getPort from 'get-port';
 
 class App {
   db: Sequelize;
@@ -49,7 +47,9 @@ class App {
 
     store.sync();
 
-    const server = app.listen(8081);
+    const server = app.listen(
+      await getPort({ port: getPort.makeRange(9000, 10000) }),
+    );
 
     this.server = app;
     this._server = server;
