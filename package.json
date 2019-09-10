@@ -139,5 +139,9 @@
   "_moduleAliases": {
     "server": "server",
     "client": "client"
+  },
+  "engines": {
+    "node": "10.x",
+    "npm": ">= 6.0.0"
   }
 }
