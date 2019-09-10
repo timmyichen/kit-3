@@ -40,7 +40,27 @@ export default {
     type: new GraphQLNonNull(GraphQLString),
     resolve: (user: Users, _: any, req: express.Request) => {
       if (req.user && user.id === req.user.id) {
-        return req.user.email;
+        return user.email;
+      }
+
+      throw new AuthenticationError('Not allowed');
+    },
+  },
+  birthdayDate: {
+    type: GraphQLString,
+    resolve: (user: Users, _: any, req: express.Request) => {
+      if (req.user && user.id === req.user.id) {
+        return user.birthday_date;
+      }
+
+      throw new AuthenticationError('Not allowed');
+    },
+  },
+  birthdayYear: {
+    type: GraphQLString,
+    resolve: (user: Users, _: any, req: express.Request) => {
+      if (req.user && user.id === req.user.id) {
+        return user.birthday_year;
       }
 
       throw new AuthenticationError('Not allowed');

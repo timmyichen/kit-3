@@ -66,6 +66,8 @@ export type Friend = {
   givenName: Scalars['String'];
   familyName: Scalars['String'];
   email: Scalars['String'];
+  birthdayDate?: Maybe<Scalars['String']>;
+  birthdayYear?: Maybe<Scalars['String']>;
   profilePicture?: Maybe<Scalars['String']>;
   username: Scalars['String'];
   isFriend: Scalars['Boolean'];
@@ -74,8 +76,6 @@ export type Friend = {
   isBlocked: Scalars['Boolean'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
-  birthdayDate?: Maybe<Scalars['String']>;
-  birthdayYear?: Maybe<Scalars['String']>;
   birthday: Scalars['String'];
   hasAccessToDeet: Scalars['Boolean'];
   viewableDeets: Array<Deet>;
@@ -241,7 +241,7 @@ export type RootQuery = {
   currentUser?: Maybe<User>;
   /** Searching for users */
   searchUsers: Array<User>;
-  /** The currently authed user */
+  /** Find a user by their username */
   userByUsername?: Maybe<User>;
   /** A users friends */
   friends: FriendsPagination;
@@ -307,6 +307,8 @@ export type User = {
   givenName: Scalars['String'];
   familyName: Scalars['String'];
   email: Scalars['String'];
+  birthdayDate?: Maybe<Scalars['String']>;
+  birthdayYear?: Maybe<Scalars['String']>;
   profilePicture?: Maybe<Scalars['String']>;
   username: Scalars['String'];
   isFriend: Scalars['Boolean'];
@@ -424,8 +426,8 @@ export type CurrentUserDeetsQuery = { __typename?: 'RootQuery' } & {
   >;
 };
 
-export type CurrentUserFragment = { __typename: 'Friend' } & Pick<
-  Friend,
+export type CurrentUserFragment = { __typename: 'User' } & Pick<
+  User,
   | 'id'
   | 'username'
   | 'givenName'
@@ -784,7 +786,7 @@ export const BaseUserFragmentDoc = gql`
   }
 `;
 export const CurrentUserFragmentDoc = gql`
-  fragment CurrentUser on Friend {
+  fragment CurrentUser on User {
     id
     username
     givenName

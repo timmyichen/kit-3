@@ -30,7 +30,7 @@ export default {
       throw new AuthenticationError('Must be logged in');
     }
 
-    const user: Users | null = await Users.findByPk(req.user.id);
+    let user: Users | null = await Users.findByPk(req.user.id);
 
     if (!user) {
       throw new AuthenticationError(
@@ -45,6 +45,10 @@ export default {
 
     if (!isValid) {
       throw new UserInputError('Password verification failed');
+    }
+
+    if (args.givenName.trim().length === 0) {
+      throw new UserInputError('Your given name is required');
     }
 
     const { email, givenName, familyName } = args;
@@ -66,7 +70,7 @@ export default {
       birthdayDate.setFullYear(1234);
     }
 
-    await user.update({
+    user = await user.update({
       email,
       given_name: givenName,
       family_name: familyName,

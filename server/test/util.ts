@@ -14,6 +14,10 @@ import * as faker from 'faker';
 const bcrypt = bluebird.promisifyAll(require('bcrypt-nodejs'));
 
 export const randomName = faker.name.findName;
+export const randomFirstAndLastNames = () => [
+  faker.name.firstName(),
+  faker.name.lastName(),
+];
 export const randomEmail = faker.internet.email;
 export const randomUsername = () =>
   faker.name
