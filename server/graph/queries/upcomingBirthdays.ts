@@ -113,6 +113,8 @@ export default {
       birthdays.sort((a, b) => (a.birthdayString > b.birthdayString ? 1 : -1));
 
       return birthdays.map(b => map[b.id]);
+    } else {
+      friends.sort((a, b) => (a.birthday_date > b.birthday_date ? 1 : -1));
     }
 
     return friends;

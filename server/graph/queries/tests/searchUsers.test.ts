@@ -23,9 +23,13 @@ describe('searchUsers', () => {
       await app.initialize();
       user = await createUser();
       await Promise.all([
-        createUser({ username: 'abc' + randomUsername().slice(0, 20) }),
-        createUser({ username: 'abc' + randomUsername().slice(0, 20) }),
-        createUser({ username: 'xyz' + randomUsername().slice(0, 20) }),
+        createUser({
+          username: 'hfgdhfghdfgh' + randomUsername().slice(0, 10),
+        }),
+        createUser({
+          username: 'hfgdhfghdfgh' + randomUsername().slice(0, 10),
+        }),
+        createUser({ username: 'grtsdfgsdfg' + randomUsername().slice(0, 10) }),
       ]);
     } catch (e) {
       throw e;
@@ -45,14 +49,14 @@ describe('searchUsers', () => {
 
   it('searches for users', async () => {
     app.login(user);
-    const res = await gqlRequest({ searchQuery: 'abc' });
+    const res = await gqlRequest({ searchQuery: 'hfgdhfghdfgh' });
 
     expect(res.body.data.searchUsers).toHaveLength(2);
   });
 
   it('respects count', async () => {
     app.login(user);
-    const res = await gqlRequest({ searchQuery: 'abc', count: 1 });
+    const res = await gqlRequest({ searchQuery: 'hfgdhfghdfgh', count: 1 });
 
     expect(res.body.data.searchUsers).toHaveLength(1);
   });

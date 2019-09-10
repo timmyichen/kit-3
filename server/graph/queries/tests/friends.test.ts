@@ -33,8 +33,12 @@ describe('friends', () => {
     // must be done in serial so they have different time_updated timestamps
     // otherwise leads to flaky tests
     friends = [
-      await createUser({ username: 'abc' + randomUsername().slice(0, 20) }),
-      await createUser({ username: 'xyz' + randomUsername().slice(0, 20) }),
+      await createUser({
+        username: 'sdfgsdfsg' + randomUsername().slice(0, 15),
+      }),
+      await createUser({
+        username: 'fghsdfghg' + randomUsername().slice(0, 15),
+      }),
     ];
 
     await Promise.all([
@@ -72,7 +76,7 @@ describe('friends', () => {
 
   it('finds all your friends with search', async () => {
     app.login(user);
-    const res = await gqlRequest({ searchQuery: 'abc' });
+    const res = await gqlRequest({ searchQuery: 'sdfg' });
 
     expect(res.body.errors).toBeFalsy();
 
