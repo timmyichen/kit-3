@@ -153,6 +153,8 @@ export type RootMutation = {
   verifyUser: User;
   /** Request the verification email be resent */
   requestVerificationEmail: Scalars['Boolean'];
+  /** Invites a user to KIT */
+  inviteUserToKit: Scalars['Boolean'];
 };
 
 export type RootMutationRequestFriendArgs = {
@@ -242,6 +244,10 @@ export type RootMutationVerifyDeetArgs = {
 
 export type RootMutationVerifyUserArgs = {
   hash: Scalars['String'];
+};
+
+export type RootMutationInviteUserToKitArgs = {
+  email: Scalars['String'];
 };
 
 export type RootQuery = {
@@ -546,6 +552,15 @@ export type FriendsQuery = { __typename?: 'RootQuery' } & {
     >;
   };
 };
+
+export type InviteUserToKitMutationVariables = {
+  email: Scalars['String'];
+};
+
+export type InviteUserToKitMutation = { __typename?: 'RootMutation' } & Pick<
+  RootMutation,
+  'inviteUserToKit'
+>;
 
 export type OtherUserFragment = { __typename: 'User' } & Pick<
   User,
@@ -1597,6 +1612,75 @@ export function useFriendsQuery(
   );
 }
 export type FriendsQueryHookResult = ReturnType<typeof useFriendsQuery>;
+export const InviteUserToKitDocument = gql`
+  mutation inviteUserToKit($email: String!) {
+    inviteUserToKit(email: $email)
+  }
+`;
+export type InviteUserToKitMutationFn = ReactApollo.MutationFn<
+  InviteUserToKitMutation,
+  InviteUserToKitMutationVariables
+>;
+export type InviteUserToKitComponentProps = Omit<
+  ReactApollo.MutationProps<
+    InviteUserToKitMutation,
+    InviteUserToKitMutationVariables
+  >,
+  'mutation'
+>;
+
+export const InviteUserToKitComponent = (
+  props: InviteUserToKitComponentProps,
+) => (
+  <ReactApollo.Mutation<
+    InviteUserToKitMutation,
+    InviteUserToKitMutationVariables
+  >
+    mutation={InviteUserToKitDocument}
+    {...props}
+  />
+);
+
+export type InviteUserToKitProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<
+    InviteUserToKitMutation,
+    InviteUserToKitMutationVariables
+  >
+> &
+  TChildProps;
+export function withInviteUserToKit<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    InviteUserToKitMutation,
+    InviteUserToKitMutationVariables,
+    InviteUserToKitProps<TChildProps>
+  >,
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    InviteUserToKitMutation,
+    InviteUserToKitMutationVariables,
+    InviteUserToKitProps<TChildProps>
+  >(InviteUserToKitDocument, {
+    alias: 'withInviteUserToKit',
+    ...operationOptions,
+  });
+}
+
+export function useInviteUserToKitMutation(
+  baseOptions?: ReactApolloHooks.MutationHookOptions<
+    InviteUserToKitMutation,
+    InviteUserToKitMutationVariables
+  >,
+) {
+  return ReactApolloHooks.useMutation<
+    InviteUserToKitMutation,
+    InviteUserToKitMutationVariables
+  >(InviteUserToKitDocument, baseOptions);
+}
+export type InviteUserToKitMutationHookResult = ReturnType<
+  typeof useInviteUserToKitMutation
+>;
 export const PendingFriendRequestsDocument = gql`
   query pendingFriendRequests($count: Int) {
     pendingFriendRequests(count: $count) {

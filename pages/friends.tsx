@@ -3,6 +3,7 @@ import FriendSearch from 'client/friends/FriendSearch';
 import FriendsDashboard from 'client/friends/FriendsDashboard';
 import { Menu } from 'semantic-ui-react';
 import { useRouter } from 'next/router';
+import InviteFriends from 'client/friends/InviteFriends';
 
 type MenuKey = 'default' | 'find' | 'invite';
 
@@ -38,6 +39,9 @@ const FriendsPage = () => {
       break;
     case 'my-friends':
       content = <FriendsDashboard />;
+      break;
+    case 'invite-friends':
+      content = <InviteFriends />;
       break;
   }
 

@@ -67,6 +67,8 @@ docker-compose exec db psql -U postgres -d postgres
 
 Both of the previous commands require that `docker-compose up` be running.
 
+To generate graphql mutation/query hooks, run `npm run gql:gen`. No need to run within docker.
+
 # Testing
 
 To run tests, run:

@@ -101,7 +101,7 @@ export async function sendInviteEmail({
       '',
       `Get started by signing up for an account <a href="${signupUrl}">here</a>!`,
       '',
-      'Any questions? Feel free to ask by responding to this email',
+      'Any questions? Feel free to ask by responding to this email.',
       '',
       'Cheers,',
       'The Keep In Touch team',

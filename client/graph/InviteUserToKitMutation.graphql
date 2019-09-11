@@ -1,0 +1,3 @@
+mutation inviteUserToKit($email: String!) {
+  inviteUserToKit(email: $email)
+}
