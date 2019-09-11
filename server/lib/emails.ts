@@ -60,11 +60,11 @@ export async function sendWelcomeEmail({ user }: { user: Users }) {
   await sendEmail({
     user,
     subject: 'Welcome to KIT!',
-    html: `
-      Welcome to <a href="https://kit-with.me">Keep In Touch</a>!
-      <br/><br/>
-      Click <a href="${verifyUrl}">here</a> to verify your email.
-    `,
+    html: [
+      'Welcome to <a href="https://kit-with.me">Keep In Touch</a>!',
+      '<br/><br/>',
+      `Click <a href="${verifyUrl}">here</a> to verify your email.`,
+    ].join('\n'),
   });
 }
 
@@ -75,8 +75,6 @@ export async function sendVerificationEmail({ user }: { user: Users }) {
   await sendEmail({
     user,
     subject: 'Verify your KIT email',
-    html: `
-        Click <a href="${verifyUrl}">here</a> to verify your email.
-      `,
+    html: `Click <a href="${verifyUrl}">here</a> to verify your email.`,
   });
 }

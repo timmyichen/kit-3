@@ -1,7 +1,10 @@
 console.log(`RUNNING IN CONTEXT: ${process.env.NODE_ENV}`); // tslint:disable-line no-console
 
 import 'module-alias/register';
+
 import * as dotenv from 'dotenv';
+dotenv.config();
+
 import * as express from 'express';
 import * as morgan from 'morgan';
 import * as passport from 'passport';
@@ -12,7 +15,7 @@ import PagesRouter from 'server/routers/pages';
 import GraphqlRouter from 'server/routers/graphql';
 import auth from 'server/routers/auth';
 
-dotenv.config();
+import 'server/lib/redis';
 
 import { db } from './lib/db';
 

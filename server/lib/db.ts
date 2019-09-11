@@ -1,10 +1,7 @@
 import { Sequelize } from 'sequelize-typescript';
 import * as path from 'path';
-import * as dotenv from 'dotenv';
 
 const config = require('../../config/config');
-
-dotenv.config();
 
 interface SequelizeConfig {
   database: string;

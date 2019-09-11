@@ -9,6 +9,8 @@ services:
       - '8000:8000'
       - '8888:8888'
     environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
       - GCLOUD_STORAGE_BUCKET=kit-images-prod
       - SESSION_SECRET=sgdfgjkhsdfg
       - DB_USER=postgres
@@ -19,9 +21,14 @@ services:
       - VERIFICATION_SECRET=89se4jgsouidjgs
     depends_on:
       - db
+      - redis
   db:
     image: postgres:11
     environment:
       - POSTGRES_USER=postgres
     ports:
       - '5433:5432'
+  redis:
+    image: redis
+    ports:
+      - '6379:6379'
