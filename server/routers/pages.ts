@@ -32,6 +32,17 @@ router.getAsync(
 );
 
 router.getAsync(
+  '/account/verify',
+  async (req: express.Request, res: express.Response) => {
+    if (!req.user) {
+      res.redirect('/login');
+      return;
+    }
+    nextjs.render(req, res, '/account/verify', req.query);
+  },
+);
+
+router.getAsync(
   '/account',
   async (req: express.Request, res: express.Response) => {
     if (!req.user) {

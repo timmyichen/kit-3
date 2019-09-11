@@ -2,13 +2,21 @@ import * as React from 'react';
 import { Header, Message } from 'semantic-ui-react';
 import { useCtxState } from 'client/components/ContextProvider';
 import Link from 'next/link';
-import { useUserTodosQuery } from 'generated/generated-types';
+import {
+  useUserTodosQuery,
+  useRequestVerificationEmailMutation,
+} from 'generated/generated-types';
 import Loader from 'client/components/Loader';
+import useMessages from 'client/hooks/useMessages';
 
 function Todos() {
   const { currentUser } = useCtxState();
 
   const { data, loading } = useUserTodosQuery({ fetchPolicy: 'network-only' });
+  const { showConfirm, showError } = useMessages({ length: 4000 });
+
+  const requestVerification = useRequestVerificationEmailMutation();
+  const [requesting, setRequesting] = React.useState(false);
 
   let content;
   if (loading || !data || !currentUser) {
@@ -16,6 +24,7 @@ function Todos() {
   } else {
     const hasBirthday = !!currentUser.birthdayDate;
     const hasProfilePicture = !!currentUser.profilePictureId;
+    const isVerified = currentUser.isVerified;
     const {
       hasFriends,
       hasDeets,
@@ -31,13 +40,46 @@ function Todos() {
       hasPrimaryAddress &&
       hasPrimaryEmailAddress &&
       hasPrimaryPhoneNumber &&
-      hasProfilePicture
+      hasProfilePicture &&
+      isVerified
     ) {
       return null;
     }
 
+    const requestEmailVerification = async () => {
+      if (requesting) {
+        return;
+      }
+
+      setRequesting(true);
+
+      try {
+        await requestVerification();
+      } catch (e) {
+        showError(e.message);
+        setRequesting(false);
+
+        return;
+      }
+
+      setRequesting(false);
+      showConfirm('Verification email resent');
+    };
+
     content = (
       <div className="content">
+        {!isVerified && (
+          <div className="reminder">
+            <Message info>
+              <Message.Header>Your email is unverified</Message.Header>
+              Check your email for a verification link. Don't see one?{' '}
+              <a onClick={requestEmailVerification}>
+                Resend verification email
+              </a>
+              .
+            </Message>
+          </div>
+        )}
         {!hasBirthday && (
           <div className="reminder">
             <Message info>
@@ -145,6 +187,7 @@ function Todos() {
         }
         .dashboard-todos :global(.reminder a) {
           text-decoration: underline;
+          cursor: pointer;
         }
       `}</style>
     </div>

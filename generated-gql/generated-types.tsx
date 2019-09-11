@@ -69,6 +69,7 @@ export type Friend = {
   birthdayDate?: Maybe<Scalars['String']>;
   birthdayYear?: Maybe<Scalars['String']>;
   profilePicture?: Maybe<Scalars['String']>;
+  isVerified: Scalars['Boolean'];
   username: Scalars['String'];
   isFriend: Scalars['Boolean'];
   isRequested: Scalars['Boolean'];
@@ -146,8 +147,12 @@ export type RootMutation = {
   updatePassword: Scalars['Boolean'];
   /** Update the users profile picture */
   updateProfilePicture: User;
-  /** Upsert a phone number record */
+  /** Verifies a deet */
   verifyDeet: Deet;
+  /** Verify a user */
+  verifyUser: User;
+  /** Request the verification email be resent */
+  requestVerificationEmail: Scalars['Boolean'];
 };
 
 export type RootMutationRequestFriendArgs = {
@@ -235,6 +240,10 @@ export type RootMutationVerifyDeetArgs = {
   deetId: Scalars['Int'];
 };
 
+export type RootMutationVerifyUserArgs = {
+  hash: Scalars['String'];
+};
+
 export type RootQuery = {
   __typename?: 'RootQuery';
   /** The currently authed user */
@@ -310,6 +319,7 @@ export type User = {
   birthdayDate?: Maybe<Scalars['String']>;
   birthdayYear?: Maybe<Scalars['String']>;
   profilePicture?: Maybe<Scalars['String']>;
+  isVerified: Scalars['Boolean'];
   username: Scalars['String'];
   isFriend: Scalars['Boolean'];
   isRequested: Scalars['Boolean'];
@@ -436,6 +446,7 @@ export type CurrentUserFragment = { __typename: 'User' } & Pick<
   | 'profilePicture'
   | 'birthdayDate'
   | 'birthdayYear'
+  | 'isVerified'
 >;
 
 export type DeetPermsQueryVariables = {
@@ -591,6 +602,12 @@ export type RequestFriendMutationVariables = {
 export type RequestFriendMutation = { __typename?: 'RootMutation' } & {
   requestFriend: { __typename?: 'User' } & OtherUserFragment;
 };
+
+export type RequestVerificationEmailMutationVariables = {};
+
+export type RequestVerificationEmailMutation = {
+  __typename?: 'RootMutation';
+} & Pick<RootMutation, 'requestVerificationEmail'>;
 
 export type RescindFriendRequestMutationVariables = {
   targetUserId: Scalars['Int'];
@@ -749,6 +766,14 @@ export type VerifyDeetMutation = { __typename?: 'RootMutation' } & {
         'id' | 'verifiedAt'
       >);
 };
+
+export type VerifyUserMutationVariables = {
+  hash: Scalars['String'];
+};
+
+export type VerifyUserMutation = { __typename?: 'RootMutation' } & {
+  verifyUser: { __typename?: 'User' } & Pick<User, 'isVerified'>;
+};
 export const AddressFragmentDoc = gql`
   fragment Address on AddressDeet {
     id
@@ -795,6 +820,7 @@ export const CurrentUserFragmentDoc = gql`
     profilePicture
     birthdayDate
     birthdayYear
+    isVerified
     __typename
   }
 `;
@@ -1769,6 +1795,75 @@ export function useRequestFriendMutation(
 export type RequestFriendMutationHookResult = ReturnType<
   typeof useRequestFriendMutation
 >;
+export const RequestVerificationEmailDocument = gql`
+  mutation requestVerificationEmail {
+    requestVerificationEmail
+  }
+`;
+export type RequestVerificationEmailMutationFn = ReactApollo.MutationFn<
+  RequestVerificationEmailMutation,
+  RequestVerificationEmailMutationVariables
+>;
+export type RequestVerificationEmailComponentProps = Omit<
+  ReactApollo.MutationProps<
+    RequestVerificationEmailMutation,
+    RequestVerificationEmailMutationVariables
+  >,
+  'mutation'
+>;
+
+export const RequestVerificationEmailComponent = (
+  props: RequestVerificationEmailComponentProps,
+) => (
+  <ReactApollo.Mutation<
+    RequestVerificationEmailMutation,
+    RequestVerificationEmailMutationVariables
+  >
+    mutation={RequestVerificationEmailDocument}
+    {...props}
+  />
+);
+
+export type RequestVerificationEmailProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<
+    RequestVerificationEmailMutation,
+    RequestVerificationEmailMutationVariables
+  >
+> &
+  TChildProps;
+export function withRequestVerificationEmail<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    RequestVerificationEmailMutation,
+    RequestVerificationEmailMutationVariables,
+    RequestVerificationEmailProps<TChildProps>
+  >,
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    RequestVerificationEmailMutation,
+    RequestVerificationEmailMutationVariables,
+    RequestVerificationEmailProps<TChildProps>
+  >(RequestVerificationEmailDocument, {
+    alias: 'withRequestVerificationEmail',
+    ...operationOptions,
+  });
+}
+
+export function useRequestVerificationEmailMutation(
+  baseOptions?: ReactApolloHooks.MutationHookOptions<
+    RequestVerificationEmailMutation,
+    RequestVerificationEmailMutationVariables
+  >,
+) {
+  return ReactApolloHooks.useMutation<
+    RequestVerificationEmailMutation,
+    RequestVerificationEmailMutationVariables
+  >(RequestVerificationEmailDocument, baseOptions);
+}
+export type RequestVerificationEmailMutationHookResult = ReturnType<
+  typeof useRequestVerificationEmailMutation
+>;
 export const RescindFriendRequestDocument = gql`
   mutation rescindFriendRequest($targetUserId: Int!) {
     rescindFriendRequest(targetUserId: $targetUserId) {
@@ -2626,4 +2721,64 @@ export function useVerifyDeetMutation(
 }
 export type VerifyDeetMutationHookResult = ReturnType<
   typeof useVerifyDeetMutation
+>;
+export const VerifyUserDocument = gql`
+  mutation verifyUser($hash: String!) {
+    verifyUser(hash: $hash) {
+      isVerified
+    }
+  }
+`;
+export type VerifyUserMutationFn = ReactApollo.MutationFn<
+  VerifyUserMutation,
+  VerifyUserMutationVariables
+>;
+export type VerifyUserComponentProps = Omit<
+  ReactApollo.MutationProps<VerifyUserMutation, VerifyUserMutationVariables>,
+  'mutation'
+>;
+
+export const VerifyUserComponent = (props: VerifyUserComponentProps) => (
+  <ReactApollo.Mutation<VerifyUserMutation, VerifyUserMutationVariables>
+    mutation={VerifyUserDocument}
+    {...props}
+  />
+);
+
+export type VerifyUserProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<VerifyUserMutation, VerifyUserMutationVariables>
+> &
+  TChildProps;
+export function withVerifyUser<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    VerifyUserMutation,
+    VerifyUserMutationVariables,
+    VerifyUserProps<TChildProps>
+  >,
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    VerifyUserMutation,
+    VerifyUserMutationVariables,
+    VerifyUserProps<TChildProps>
+  >(VerifyUserDocument, {
+    alias: 'withVerifyUser',
+    ...operationOptions,
+  });
+}
+
+export function useVerifyUserMutation(
+  baseOptions?: ReactApolloHooks.MutationHookOptions<
+    VerifyUserMutation,
+    VerifyUserMutationVariables
+  >,
+) {
+  return ReactApolloHooks.useMutation<
+    VerifyUserMutation,
+    VerifyUserMutationVariables
+  >(VerifyUserDocument, baseOptions);
+}
+export type VerifyUserMutationHookResult = ReturnType<
+  typeof useVerifyUserMutation
 >;

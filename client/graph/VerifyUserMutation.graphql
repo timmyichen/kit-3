@@ -1,0 +1,5 @@
+mutation verifyUser($hash: String!) {
+  verifyUser(hash: $hash) {
+    isVerified
+  }
+}

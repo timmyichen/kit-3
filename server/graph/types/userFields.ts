@@ -82,6 +82,10 @@ export default {
       return null;
     },
   },
+  isVerified: {
+    type: new GraphQLNonNull(GraphQLBoolean),
+    resolve: (user: Users) => user.is_verified,
+  },
   username: {
     type: new GraphQLNonNull(GraphQLString),
     resolve: (user: Users) => user.username,

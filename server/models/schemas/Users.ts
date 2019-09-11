@@ -7,6 +7,8 @@ import {
   UpdatedAt,
   DeletedAt,
   Unique,
+  AllowNull,
+  Default,
 } from 'sequelize-typescript';
 import { requiredString } from 'server/lib/model';
 
@@ -79,6 +81,11 @@ export default class Users extends Model<Users> {
     },
   })
   profile_picture_id: number;
+
+  @AllowNull(false)
+  @Default(false)
+  @Column
+  is_verified: boolean;
 
   @Column
   birthday_date: Date;

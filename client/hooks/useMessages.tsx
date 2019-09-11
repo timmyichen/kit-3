@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { useCtxDispatch } from 'client/components/ContextProvider';
 
+export const removeGql = (s: string) => s.replace(/^GraphQL error: /, '');
+
 export default function useMessages({ length }: { length: number }) {
   const dispatch = useCtxDispatch();
 
@@ -18,7 +20,7 @@ export default function useMessages({ length }: { length: number }) {
       type: 'ADD_MESSAGE',
       messageType: 'error',
       time: length,
-      content: content.replace(/^GraphQL error: /, ''),
+      content: removeGql(content),
     });
   }, []);
 

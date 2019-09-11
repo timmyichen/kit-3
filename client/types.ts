@@ -37,6 +37,7 @@ export interface CurrentUser {
   createdAt: string;
   profilePicture?: string;
   profilePictureId?: number;
+  isVerified: boolean;
   __typename: 'User';
 }
 

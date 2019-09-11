@@ -67,21 +67,26 @@ function Msg({
   onDismiss: (id: string) => void;
 }) {
   const { type, content } = msg;
-  let color: 'red' | 'green' | 'blue';
+
+  const props: {
+    color?: 'blue';
+    positive?: boolean;
+    negative?: boolean;
+  } = {};
 
   switch (type) {
     case 'confirm':
-      color = 'green';
+      props.positive = true;
       break;
     case 'error':
-      color = 'red';
+      props.negative = true;
       break;
     default:
-      color = 'blue';
+      props.color = 'blue';
   }
 
   return (
-    <Message color={color} onDismiss={() => onDismiss(msg.id)}>
+    <Message {...props} onDismiss={() => onDismiss(msg.id)}>
       <p>{content}</p>
     </Message>
   );

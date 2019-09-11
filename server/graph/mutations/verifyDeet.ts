@@ -9,7 +9,7 @@ interface Args {
 }
 
 export default {
-  description: 'Upsert a phone number record',
+  description: 'Verifies a deet',
   type: new GraphQLNonNull(deetType),
   args: {
     deetId: { type: new GraphQLNonNull(GraphQLInt) },

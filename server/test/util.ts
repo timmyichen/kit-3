@@ -36,6 +36,7 @@ export async function createUser(
     familyName?: string;
     password?: string;
     birthday?: Date;
+    isVerified?: boolean;
   } = {},
 ) {
   const salt = await bcrypt.genSaltAsync(10);
@@ -59,6 +60,7 @@ export async function createUser(
     password: hash,
     birthday_date: birthdayDate,
     birthday_year: birthdayYear,
+    is_verified: opts.isVerified || false,
   });
 }
 

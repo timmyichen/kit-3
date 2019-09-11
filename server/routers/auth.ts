@@ -6,6 +6,7 @@ import * as passportLocal from 'passport-local';
 import camelize = require('camelize');
 import * as validator from 'validator';
 import { Users } from 'server/models';
+import { sendWelcomeEmail } from 'server/lib/emails';
 const bcrypt = bluebird.promisifyAll(require('bcrypt-nodejs'));
 
 function init() {
@@ -30,7 +31,7 @@ function init() {
       }
 
       promise
-        .then((user: any) => {
+        .then((user: Users) => {
           if (!user) {
             return done(null, false, { message: 'Login failed' });
           }
@@ -87,10 +88,12 @@ function init() {
               password: hash,
             });
           })
-          .then((user: any) => {
+          .then(async (user: Users) => {
+            await sendWelcomeEmail({ user });
+
             return done(null, user);
           })
-          .catch((e: any) => {
+          .catch((e: Error) => {
             if (e.name === 'SequelizeUniqueConstraintError') {
               return done(null, false, {
                 message: 'A user with that email or username exists.',
