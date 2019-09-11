@@ -21,7 +21,7 @@
     "prod:db:migrate:undo": "NODE_ENV=production ./node_modules/.bin/sequelize db:migrate:undo",
     "gql:gen": "./node_modules/.bin/graphql-codegen --config ./generated-gql/codegen.yml",
     "jest:setup": "node ./server/test/setup.js",
-    "jest": "NODE_ENV=test npm run jest:setup && ./node_modules/.bin/jest",
+    "jest": "NODE_ENV=test npm run jest:setup && ./node_modules/.bin/jest --detectOpenHandles",
     "jest:watch": "NODE_ENV=test npm run jest:setup && ./node_modules/.bin/jest --watch",
     "test": "npm run lint:ts && npm run jest",
     "dev:seed": "NODE_ENV=development ts-node --files ./server/test/seed.ts"
