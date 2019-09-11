@@ -35,6 +35,10 @@ async function sendEmail({
       html,
     });
   } else {
+    if (process.env.NODE_ENV === 'test') {
+      return;
+    }
+
     console.log(`
 
       ===========================================
