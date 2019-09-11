@@ -23,7 +23,7 @@ async function sendEmail({
   subject,
   html,
 }: {
-  user: Users;
+  user: { email: string; username?: string };
   subject: string;
   html: string;
 }) {
@@ -41,13 +41,13 @@ async function sendEmail({
 
     console.log(`
 
-      ===========================================
-      EMAIL SENT
-      to: ${user.email} (${user.username})
-      subject: ${subject}
-      ===========================================
-      ${html}
-      ===========================================
+  ===========================================
+  EMAIL SENT
+  to: ${user.email} (${user.username || '~unregistered~'})
+  subject: ${subject}
+  ===========================================
+  ${html}
+  ===========================================
 
     `);
   }
@@ -78,3 +78,52 @@ export async function sendVerificationEmail({ user }: { user: Users }) {
     html: `Click <a href="${verifyUrl}">here</a> to verify your email.`,
   });
 }
+
+export async function sendInviteEmail({
+  invitingUser,
+  email,
+}: {
+  invitingUser: Users;
+  email: string;
+}) {
+  // todo: special invite link
+
+  const signupUrl = WEB_BASE_URL + '/signup';
+
+  await sendEmail({
+    user: { email },
+    subject: `${invitingUser.given_name} wants to keep in touch with you!`,
+    html: [
+      'Hello!',
+      '',
+      `${invitingUser.given_name} wants to keep in touch with you using Keep In Touch,`,
+      'a simple social network dedicated to helping friends stay connected.',
+      '',
+      `Get started by signing up for an account <a href="${signupUrl}">here</a>!`,
+      '',
+      'Any questions? Feel free to ask by responding to this email',
+      '',
+      'Cheers,',
+      'The Keep In Touch team',
+    ].join('\n'),
+  });
+}
+
+export const genRedisKey = {
+  wasNotifiedOfDeetUpdate: ({
+    userId,
+    deetId,
+  }: {
+    userId: number;
+    deetId: number;
+  }) => `email-notified-userId-${userId}-of-deetId-${deetId}-updated`,
+  // wasNotifiedOfBirthday: () => '', TODO later when workers
+  wasAskedToVerifyDeet: ({
+    userId,
+    deetId,
+  }: {
+    userId: number;
+    deetId: number;
+  }) => `email-asked-to-verify-deetId-${deetId}-by-userId-${userId}`,
+  wasInvitedToKit: ({ email }: { email: string }) => `email-invited-${email}`,
+};

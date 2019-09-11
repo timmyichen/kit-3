@@ -15,7 +15,10 @@ const client = redis.createClient({
   password: process.env.REDIS_PASSWORD || undefined,
 });
 
-console.log('initialized redis client'); // tslint:disable-line no-console
+if (process.env.NODE_ENV !== 'test') {
+  console.log('initialized redis client'); // tslint:disable-line no-console
+}
 
+// 'as any' because the types dont support expiry on setting
 export const getAsync = promisify(client.get).bind(client);
-export const setAsync = promisify(client.set).bind(client);
+export const setAsync = promisify(client.set).bind(client) as any;

@@ -16,6 +16,7 @@ import updateProfilePicture from './updateProfilePicture';
 import verifyDeet from './verifyDeet';
 import verifyUser from './verifyUser';
 import requestVerificationEmail from './requestVerificationEmail';
+import inviteUserToKit from './inviteUserToKit';
 
 export default new GraphQLObjectType({
   name: 'RootMutation',
@@ -38,5 +39,6 @@ export default new GraphQLObjectType({
     verifyDeet,
     verifyUser,
     requestVerificationEmail,
+    inviteUserToKit,
   }),
 });
