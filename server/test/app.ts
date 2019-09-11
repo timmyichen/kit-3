@@ -9,12 +9,18 @@ import GraphqlRouter from 'server/routers/graphql';
 import { Server } from 'http';
 import { Users } from 'server/models';
 import * as getPort from 'get-port';
+import {
+  ReqWithRedis,
+  createRedisClient,
+  CustomRedisClient,
+} from 'server/lib/redis';
 
 class App {
   db: Sequelize;
   server: express.Application;
   _server: Server;
   authedUser: Users | null = null;
+  redis: CustomRedisClient;
 
   constructor() {
     this.db = db;
@@ -27,6 +33,8 @@ class App {
       throw e;
     }
 
+    const redisClient = createRedisClient();
+
     const SequelizeStore = connectSessionSequelize(session.Store);
     const store = new SequelizeStore({ db });
 
@@ -34,6 +42,11 @@ class App {
 
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
+
+    app.use((req: ReqWithRedis, _, next) => {
+      req.redis = redisClient;
+      next();
+    });
 
     app.use((req, _, next) => {
       if (this.authedUser) {
@@ -53,10 +66,12 @@ class App {
 
     this.server = app;
     this._server = server;
+    this.redis = redisClient;
   }
 
   async destroy() {
     this._server.close();
+    this.redis.quit();
     try {
       await this.db.connectionManager.close();
     } catch (e) {

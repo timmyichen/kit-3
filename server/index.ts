@@ -14,8 +14,7 @@ import nextjs from 'server/lib/next';
 import PagesRouter from 'server/routers/pages';
 import GraphqlRouter from 'server/routers/graphql';
 import auth from 'server/routers/auth';
-
-import 'server/lib/redis';
+import { createRedisClient, ReqWithRedis } from 'server/lib/redis';
 
 import { db } from './lib/db';
 
@@ -38,6 +37,8 @@ nextjs.nextApp.prepare().then(async () => {
     throw e;
   }
 
+  const redisClient = createRedisClient();
+
   console.log('connected to db'); // tslint:disable-line no-console
 
   const port = process.env.PORT || 8000;
@@ -58,6 +59,10 @@ nextjs.nextApp.prepare().then(async () => {
     }),
   );
   app.use(express.static('public'));
+  app.use((req: ReqWithRedis, _, next) => {
+    req.redis = redisClient;
+    next();
+  });
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(

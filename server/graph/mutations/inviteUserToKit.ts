@@ -1,10 +1,9 @@
-import * as express from 'express';
 import { GraphQLNonNull, GraphQLString, GraphQLBoolean } from 'graphql';
 import { AuthenticationError, UserInputError } from 'apollo-server';
 import * as validator from 'validator';
 import { genRedisKey, sendInviteEmail } from 'server/lib/emails';
-import { getAsync, setAsync } from 'server/lib/redis';
 import { Users } from 'server/models';
+import { ReqWithRedis } from 'server/lib/redis';
 
 interface Args {
   email: string;
@@ -18,7 +17,7 @@ export default {
   args: {
     email: { type: new GraphQLNonNull(GraphQLString) },
   },
-  async resolve(_: any, { email }: Args, { user }: express.Request) {
+  async resolve(_: any, { email }: Args, { user, redis }: ReqWithRedis) {
     if (!user) {
       throw new AuthenticationError('Must be logged in');
     }
@@ -36,7 +35,7 @@ export default {
     }
 
     const redisKey = genRedisKey.wasInvitedToKit({ email });
-    const exists = !!(await getAsync(redisKey));
+    const exists = !!(await redis.getAsync(redisKey));
 
     if (exists) {
       throw new UserInputError(
@@ -45,7 +44,7 @@ export default {
     }
 
     await sendInviteEmail({ invitingUser: user, email });
-    await setAsync(redisKey, '1', 'ex', ONE_WEEK_IN_SECONDS);
+    await redis.setAsync(redisKey, '1', 'ex', ONE_WEEK_IN_SECONDS);
 
     return true;
   },
