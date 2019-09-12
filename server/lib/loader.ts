@@ -1,4 +1,3 @@
-import * as express from 'express';
 import { Op } from 'sequelize';
 const DataLoader = require('dataloader');
 

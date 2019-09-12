@@ -8,7 +8,11 @@ import {
 } from 'graphql';
 import { Op } from 'sequelize';
 import userFields from './userFields';
-import { UserInputError, ApolloError } from 'apollo-server';
+import {
+  UserInputError,
+  ApolloError,
+  AuthenticationError,
+} from 'apollo-server';
 import {
   Users,
   Deets,
@@ -54,6 +58,10 @@ const friendType: GraphQLObjectType = new GraphQLObjectType({
         { deetId }: { deetId: number },
         { user, loader }: GraphQLContext,
       ) {
+        if (!user) {
+          throw new AuthenticationError('Login required');
+        }
+
         if (!deetId) {
           throw new UserInputError('Missing id');
         }
@@ -72,6 +80,10 @@ const friendType: GraphQLObjectType = new GraphQLObjectType({
     viewableDeets: {
       type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(deetType))),
       async resolve(u: Users, _: any, { user, loader }: GraphQLContext) {
+        if (!user) {
+          throw new AuthenticationError('Login required');
+        }
+
         const sharedDeets = await loader(SharedDeets).loadManyBy(
           'shared_with',
           u.id,
@@ -97,6 +109,10 @@ const friendType: GraphQLObjectType = new GraphQLObjectType({
     sharedDeets: {
       type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(deetType))),
       async resolve(u: Users, _: any, { user, loader }: GraphQLContext) {
+        if (!user) {
+          throw new AuthenticationError('Login required');
+        }
+
         const sharedDeets = await loader(SharedDeets).loadManyBy(
           'shared_with',
           user.id,
