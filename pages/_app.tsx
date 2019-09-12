@@ -67,8 +67,8 @@ class MyApp extends App {
                 </div>
                 <style jsx>{`
                   .page-wrapper {
-                    margin-bottom: ${footerHeight}px;
-                    min-height: calc(100vh - ${footerHeight + headerHeight}px);
+                    padding-bottom: ${footerHeight}px;
+                    min-height: 100vh;
                     height: 100%;
                   }
                   .root-wrapper {
