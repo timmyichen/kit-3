@@ -36,10 +36,6 @@ function InviteFriends() {
   return (
     <div className="invite-friends">
       <Form>
-        <p>
-          This will send them an email with an invitation link. If they accept
-          and register with your link, you will automatically become friends.
-        </p>
         <Form.Field>
           <label>Email</label>
           <Input
