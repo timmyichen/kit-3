@@ -41,3 +41,5 @@ export function createRedisClient() {
     quit: () => client.quit(),
   };
 }
+
+export const daysInSeconds = (days: number) => days * 60 * 60 * 24;

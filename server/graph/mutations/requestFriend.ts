@@ -1,4 +1,3 @@
-import * as express from 'express';
 import { GraphQLNonNull, GraphQLInt } from 'graphql';
 import { AuthenticationError, UserInputError } from 'apollo-server';
 import {
@@ -9,6 +8,9 @@ import {
 } from 'server/models';
 import { db } from 'server/lib/db';
 import userType from '../types/userType';
+import { GraphQLContext } from 'server/routers/graphql';
+import { sendFriendRequestEmail, genRedisKey } from 'server/lib/emails';
+import { daysInSeconds } from 'server/lib/redis';
 
 export default {
   description: 'Request a user to be your friend',
@@ -19,7 +21,7 @@ export default {
   async resolve(
     _: any,
     { targetUserId }: { targetUserId: number },
-    { user }: express.Request,
+    { user, redis }: GraphQLContext,
   ) {
     if (!user) {
       throw new AuthenticationError('Must be logged in');
@@ -111,6 +113,17 @@ export default {
         target_user: targetUserId,
         requested_by: user.id,
       });
+
+      const opts = { requestedUser: targetUser, requestingUser: user };
+
+      const redisKey = genRedisKey.wasAddedAsFriend(opts);
+
+      if (!(await redis.getAsync(redisKey))) {
+        await Promise.all([
+          sendFriendRequestEmail(opts),
+          redis.setAsync(redisKey, '1', 'ex', daysInSeconds(7)),
+        ]);
+      }
     }
 
     return targetUser;

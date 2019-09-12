@@ -5,7 +5,10 @@ import {
   requestFriend,
   blockUser,
 } from 'server/test/util';
-import { Users } from 'server/models';
+import { Users, FriendRequests } from 'server/models';
+import * as emails from 'server/lib/emails';
+
+jest.spyOn(emails, 'sendFriendRequestEmail');
 
 describe('requestFriend', () => {
   const app = new App();
@@ -60,6 +63,10 @@ describe('requestFriend', () => {
     await app.destroy();
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('rejects unauthed users', async () => {
     app.logout();
     const res = await gqlRequest({ targetUserId: stranger.id });
@@ -106,6 +113,8 @@ describe('requestFriend', () => {
       isRequested: true,
       isFriend: false,
     });
+
+    expect(emails.sendFriendRequestEmail).toHaveBeenCalled();
   });
 
   it('becomes friends with someone who has requetsed us', async () => {
@@ -119,5 +128,38 @@ describe('requestFriend', () => {
       isRequested: false,
       isFriend: true,
     });
+  });
+
+  it('only sends the email once', async () => {
+    const [anotherUser, anotherStranger] = await Promise.all([
+      createUser(),
+      createUser(),
+    ]);
+
+    app.login(anotherUser);
+    const res = await gqlRequest({ targetUserId: anotherStranger.id });
+
+    expect(res.body.errors).toBeFalsy();
+
+    expect(res.body.data.requestFriend).toEqual({
+      id: anotherStranger.id,
+      isRequested: true,
+      isFriend: false,
+    });
+
+    expect(emails.sendFriendRequestEmail).toHaveBeenCalledTimes(1);
+
+    await FriendRequests.destroy({
+      where: {
+        target_user: anotherStranger.id,
+        requested_by: anotherUser.id,
+      },
+    });
+
+    const res2 = await gqlRequest({ targetUserId: anotherStranger.id });
+
+    expect(res2.body.errors).toBeFalsy();
+
+    expect(emails.sendFriendRequestEmail).toHaveBeenCalledTimes(1);
   });
 });

@@ -1,6 +1,7 @@
 import * as mailgun from 'mailgun-js';
 import { Users } from 'server/models';
 import { generateEmailHash } from './verifyEmail';
+import { getFullName } from './users';
 
 if (!process.env.MAILGUN_API_KEY) {
   throw new Error('Expected mailgun api key');
@@ -109,6 +110,36 @@ export async function sendInviteEmail({
   });
 }
 
+export async function sendFriendRequestEmail({
+  requestedUser,
+  requestingUser,
+}: {
+  requestedUser: Users;
+  requestingUser: Users;
+}) {
+  const friendsPageUrl = WEB_BASE_URL + '/friends';
+
+  await sendEmail({
+    user: requestedUser,
+    subject: `${requestingUser.given_name} has added you as a friend on Keep In Touch!`,
+    html: [
+      `Hello ${requestedUser.given_name}!`,
+      '',
+      `${getFullName(
+        requestingUser,
+      )} wants to keep in touch with you and has added you`,
+      'as a friend.',
+      '',
+      `Accept the invite on your <a href="${friendsPageUrl}">Friends dashboard</a>.`,
+      '',
+      'Cheers,',
+      'The Keep In Touch team',
+    ].join('\n'),
+  });
+}
+
+export async function sendSummaryEmail() {}
+
 export const genRedisKey = {
   wasNotifiedOfDeetUpdate: ({
     userId,
@@ -126,4 +157,11 @@ export const genRedisKey = {
     deetId: number;
   }) => `email-asked-to-verify-deetId-${deetId}-by-userId-${userId}`,
   wasInvitedToKit: ({ email }: { email: string }) => `email-invited-${email}`,
+  wasAddedAsFriend: ({
+    requestedUser,
+    requestingUser,
+  }: {
+    requestedUser: Users;
+    requestingUser: Users;
+  }) => `email-userId-${requestingUser.id}-added-userId ${requestedUser.id}`,
 };

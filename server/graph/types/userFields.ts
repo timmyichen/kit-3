@@ -15,6 +15,7 @@ import { timestamps } from './common';
 import { AuthenticationError } from 'apollo-server';
 import { ReqWithLoader } from 'server/lib/loader';
 import * as express from 'express';
+import { getFullName } from 'server/lib/users';
 
 export default {
   id: {
@@ -23,10 +24,7 @@ export default {
   },
   fullName: {
     type: new GraphQLNonNull(GraphQLString),
-    resolve: (user: Users) =>
-      user.family_name
-        ? user.given_name + ' ' + user.family_name
-        : user.given_name,
+    resolve: (user: Users) => getFullName(user),
   },
   givenName: {
     type: new GraphQLNonNull(GraphQLString),

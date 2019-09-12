@@ -4,9 +4,16 @@ import schema from 'server/graph';
 import { loader } from 'server/lib/loader';
 import { responseHijack } from 'server/middleware/responseHijack';
 import { graphqlUploadExpress } from 'graphql-upload';
-import { ReqWithRedis } from 'server/lib/redis';
+import { ReqWithRedis, CustomRedisClient } from 'server/lib/redis';
+import { Users } from 'server/models';
 
 const router = express.Router();
+
+export interface GraphQLContext {
+  user: Users | null;
+  loader: typeof loader;
+  redis: CustomRedisClient;
+}
 
 router.get(
   '/graphql',

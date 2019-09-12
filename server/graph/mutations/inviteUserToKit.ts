@@ -3,7 +3,7 @@ import { AuthenticationError, UserInputError } from 'apollo-server';
 import * as validator from 'validator';
 import { genRedisKey, sendInviteEmail } from 'server/lib/emails';
 import { Users } from 'server/models';
-import { ReqWithRedis } from 'server/lib/redis';
+import { GraphQLContext } from 'server/routers/graphql';
 
 interface Args {
   email: string;
@@ -17,7 +17,7 @@ export default {
   args: {
     email: { type: new GraphQLNonNull(GraphQLString) },
   },
-  async resolve(_: any, { email }: Args, { user, redis }: ReqWithRedis) {
+  async resolve(_: any, { email }: Args, { user, redis }: GraphQLContext) {
     if (!user) {
       throw new AuthenticationError('Must be logged in');
     }
