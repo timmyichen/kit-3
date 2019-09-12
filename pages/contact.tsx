@@ -2,9 +2,11 @@ import * as React from 'react';
 import { Icon } from 'semantic-ui-react';
 import colors from 'client/styles/colors';
 import { headerHeight } from 'client/lib/pageMeasurements';
+import Meta from 'client/components/Meta';
 
 export default () => (
   <div className="contact-wrapper">
+    <Meta title="Contact Us" />
     <div className="overlay" />
     <h1>Keep in Touch with us!</h1>
     <h3>

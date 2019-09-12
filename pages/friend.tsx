@@ -8,6 +8,7 @@ import useWindowSize from 'client/hooks/useWindowSize';
 import { isBrowser, splitColumns } from 'client/lib/dom';
 import ProfileImage from 'client/components/ProfileImage';
 import { getDateString, getCurrentTimezoneDate } from 'client/lib/date';
+import Meta from 'client/components/Meta';
 
 const FriendPage = () => {
   const [colCount, setColCount] = React.useState<number>(3);
@@ -40,6 +41,7 @@ const FriendPage = () => {
 
   return (
     <div className="friend-page">
+      <Meta title={`${username}'s Profile`} />
       <div className="profile-info">
         <Header as="h1">{friend.fullName}</Header>
         <Header as="h3" className="username-label">

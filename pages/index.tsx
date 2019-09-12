@@ -2,9 +2,11 @@ import * as React from 'react';
 import { Button } from 'semantic-ui-react';
 import Link from 'next/link';
 import { headerHeight } from 'client/lib/pageMeasurements';
+import Meta from 'client/components/Meta';
 
 export default () => (
   <div className="index">
+    <Meta title="Keep In Touch" />
     <div className="heading">
       <div className="overlay" />
       <div className="title">

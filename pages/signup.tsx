@@ -7,6 +7,7 @@ import { useCtxDispatch } from 'client/components/ContextProvider';
 import colors from 'client/styles/colors';
 import Link from 'next/link';
 import { useRequestFriendMutation } from 'generated/generated-types';
+import Meta from 'client/components/Meta';
 
 export default () => {
   const [givenName, setGivenName] = React.useState<string>('');
@@ -90,6 +91,7 @@ export default () => {
 
   return (
     <div className="signup-wrapper">
+      <Meta title="Sign Up" />
       <Form onSubmit={onSubmit} method="POST">
         <p>
           Have an account?{' '}

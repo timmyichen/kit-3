@@ -3,6 +3,7 @@ import { Menu } from 'semantic-ui-react';
 import DeetDashboard from 'client/deets/DeetDashboard';
 import { useRouter } from 'next/router';
 import SharedDeetsDashboard from 'client/deets/SharedDeetsDashboard';
+import Meta from 'client/components/Meta';
 
 type MenuKey = 'default' | 'shared';
 
@@ -42,6 +43,7 @@ const Deets = () => {
 
   return (
     <div className="deets-page">
+      <Meta title="Deets" />
       <div className="deet-menu-wrapper">
         <Menu pointing secondary>
           {Object.keys(menuItems).map((key: MenuKey) => {

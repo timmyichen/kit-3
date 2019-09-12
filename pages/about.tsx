@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { Header, Image } from 'semantic-ui-react';
 import { headerHeight } from 'client/lib/pageMeasurements';
+import Meta from 'client/components/Meta';
 
 export default () => (
   <div className="about-wrapper">
+    <Meta title="About" />
     <div className="what-is-kit">
       <div className="overlay" />
       <Header as="h1">What is KIT?</Header>

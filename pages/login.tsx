@@ -4,6 +4,7 @@ import fetch from 'isomorphic-fetch';
 import { useCtxDispatch } from 'client/components/ContextProvider';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import Meta from 'client/components/Meta';
 
 function LoginPage() {
   const [email, setEmail] = React.useState<string>('');
@@ -59,6 +60,7 @@ function LoginPage() {
 
   return (
     <div>
+      <Meta title="Log In" />
       <p>
         New to Keep In Touch?{' '}
         <Link href={signupLink}>

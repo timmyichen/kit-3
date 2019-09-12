@@ -4,6 +4,7 @@ import FriendsDashboard from 'client/friends/FriendsDashboard';
 import { Menu } from 'semantic-ui-react';
 import { useRouter } from 'next/router';
 import InviteFriends from 'client/friends/InviteFriends';
+import Meta from 'client/components/Meta';
 
 type MenuKey = 'default' | 'find' | 'invite';
 
@@ -47,6 +48,7 @@ const FriendsPage = () => {
 
   return (
     <div className="friends-page">
+      <Meta title="Friends" />
       <Menu pointing secondary>
         {Object.keys(menuItems).map((key: MenuKey) => {
           const item = menuItems[key];
