@@ -11,7 +11,7 @@
     "dev": "./node_modules/.bin/nodemon --watch 'server/**/*.ts' --exec 'npm run dev:server'",
     "nodemon": "./node_modules/.bin/nodemon",
     "next:build": "next build",
-    "prod:build": "NODE_OPTIONS=--max_old_space_size=1024 next build",
+    "build": "NODE_OPTIONS=--max_old_space_size=512 next build",
     "lint:ts": "./node_modules/.bin/tslint -c tslint.json '**.ts*'",
     "pretty": "prettier --write client/**/*.ts* server/**/*.ts",
     "precommit": "lint-staged",
@@ -148,5 +148,6 @@
   "engines": {
     "node": "10.x",
     "npm": ">= 6.0.0"
-  }
+  },
+  "heroku-run-build-script": true
 }
