@@ -6,6 +6,7 @@ import fetch from 'isomorphic-fetch';
 import { useCtxDispatch } from 'client/components/ContextProvider';
 import colors from 'client/styles/colors';
 import Link from 'next/link';
+import { useRequestFriendMutation } from 'generated/generated-types';
 
 export default () => {
   const [givenName, setGivenName] = React.useState<string>('');
@@ -19,6 +20,15 @@ export default () => {
 
   const router = useRouter();
   const dispatch = useCtxDispatch();
+
+  const referrer =
+    (router.query &&
+      router.query.referrer &&
+      router.query.referrer.toString()) ||
+    '';
+  const addFriend = useRequestFriendMutation({
+    variables: { targetUserId: parseInt(referrer, 10) },
+  });
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -58,6 +68,10 @@ export default () => {
         content: e.message,
       });
       return;
+    }
+
+    if (referrer) {
+      await addFriend();
     }
 
     setLoading(false);

@@ -12,7 +12,7 @@ import UserLoader from 'client/components/UserLoader';
 import fetch from 'isomorphic-fetch';
 import Footer from 'client/components/Footer';
 import MessageRoll from 'client/components/MessageRoll';
-import { footerHeight, headerHeight } from 'client/lib/pageMeasurements';
+import { footerHeight } from 'client/lib/pageMeasurements';
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }: any) {

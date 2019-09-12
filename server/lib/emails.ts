@@ -89,7 +89,7 @@ export async function sendInviteEmail({
 }) {
   // todo: special invite link
 
-  const signupUrl = WEB_BASE_URL + '/signup';
+  const signupUrl = WEB_BASE_URL + '/signup?referrer=' + invitingUser.id;
 
   await sendEmail({
     user: { email },
