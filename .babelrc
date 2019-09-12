@@ -1,22 +1,16 @@
 {
-  "presets": [
-    "next/babel",
-    "@zeit/next-typescript/babel"
-  ],
+  "presets": ["next/babel", "@zeit/next-typescript/babel"],
   "plugins": [
     "import-graphql",
     [
       "module-resolver",
       {
-        "root": [
-          "."
-        ],
+        "root": ["."],
         "alias": {
           "client": "./client",
-          "server": "./server",
           "generated": "./generated-gql"
         }
       }
-    ],
+    ]
   ]
 }
