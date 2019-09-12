@@ -39,8 +39,6 @@ A development environment for this requires some setup, as it uses Google Cloud
 Storage for profile images. Docker will set up a local postgres database to
 use.
 
-Production keys are the same format prefixed with `PROD_`.
-
 Your Google Cloud Storage auth json file should go under `config/gcs-owner.json`.
 
 ```
