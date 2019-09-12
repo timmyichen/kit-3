@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import fetch from 'isomorphic-fetch';
 import { useCtxDispatch } from 'client/components/ContextProvider';
 import colors from 'client/styles/colors';
+import Link from 'next/link';
 
 export default () => {
   const [givenName, setGivenName] = React.useState<string>('');
@@ -61,12 +62,28 @@ export default () => {
 
     setLoading(false);
 
-    router.push('/dashboard');
+    if (router.query && router.query.goto) {
+      window.location.href = String(router.query.goto);
+    } else {
+      router.push('/dashboard');
+    }
   };
+
+  const loginLink =
+    router.query && router.query.goto
+      ? `/login?goto=${router.query.goto}`
+      : '/login';
 
   return (
     <div className="signup-wrapper">
       <Form onSubmit={onSubmit} method="POST">
+        <p>
+          Have an account?{' '}
+          <Link href={loginLink}>
+            <a>Log in</a>
+          </Link>{' '}
+          instead
+        </p>
         <Form.Field>
           <label>First Name (Given Name)</label>
           <input

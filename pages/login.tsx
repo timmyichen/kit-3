@@ -3,8 +3,9 @@ import { Button, Form } from 'semantic-ui-react';
 import fetch from 'isomorphic-fetch';
 import { useCtxDispatch } from 'client/components/ContextProvider';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
-export default () => {
+function LoginPage() {
   const [email, setEmail] = React.useState<string>('');
   const [password, setPassword] = React.useState<string>('');
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -44,11 +45,27 @@ export default () => {
 
     setLoading(false);
 
-    router.push('/dashboard');
+    if (router.query && router.query.goto) {
+      window.location.href = String(router.query.goto);
+    } else {
+      router.push('/dashboard');
+    }
   };
+
+  const signupLink =
+    router.query && router.query.goto
+      ? `/signup?goto=${router.query.goto}`
+      : '/signup';
 
   return (
     <div>
+      <p>
+        New to Keep In Touch?{' '}
+        <Link href={signupLink}>
+          <a>Sign up</a>
+        </Link>{' '}
+        instead.
+      </p>
       <Form onSubmit={onSubmit} method="POST">
         <Form.Field>
           <label>Email</label>
@@ -83,4 +100,6 @@ export default () => {
       `}</style>
     </div>
   );
-};
+}
+
+export default LoginPage;

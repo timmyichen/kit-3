@@ -87,7 +87,7 @@ function Todos() {
               <Link href="/account">
                 <a>Update your account</a>
               </Link>{' '}
-              so friends can send you things!
+              so friends can be notified!
             </Message>
           </div>
         )}

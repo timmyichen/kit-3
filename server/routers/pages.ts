@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as asyncRouter from 'express-router-async';
 import nextjs from 'server/lib/next';
+import { requireUser } from 'server/middleware/auth';
 
 const router = asyncRouter();
 
@@ -17,79 +18,69 @@ pages.forEach(page => {
 });
 
 router.get('/login', (req: express.Request, res: express.Response) => {
-  nextjs.render(req, res, '/login');
+  nextjs.render(req, res, '/login', req.query);
 });
 
 router.getAsync(
   '/dashboard',
+  requireUser,
   async (req: express.Request, res: express.Response) => {
-    if (!req.user) {
-      res.redirect('/login');
-      return;
-    }
-    nextjs.render(req, res, '/dashboard');
+    nextjs.render(req, res, '/dashboard', req.query);
   },
 );
 
 router.getAsync(
   '/account/verify',
+  requireUser,
   async (req: express.Request, res: express.Response) => {
-    if (!req.user) {
-      res.redirect('/login');
-      return;
-    }
     nextjs.render(req, res, '/account/verify', req.query);
   },
 );
 
 router.getAsync(
   '/account',
+  requireUser,
   async (req: express.Request, res: express.Response) => {
-    if (!req.user) {
-      res.redirect('/login');
-      return;
-    }
-    nextjs.render(req, res, '/account');
+    nextjs.render(req, res, '/account', req.query);
   },
 );
 
 router.getAsync(
   ['/friends', '/friends/:slug'],
+  requireUser,
   async (req: express.Request, res: express.Response) => {
-    if (!req.user) {
-      res.redirect('/login');
-      return;
-    }
-    nextjs.render(req, res, '/friends', req.params);
+    nextjs.render(req, res, '/friends', {
+      ...req.params,
+      ...req.query,
+    });
   },
 );
 
 router.getAsync(
   ['/deets', '/deets/:slug'],
+  requireUser,
   async (req: express.Request, res: express.Response) => {
-    if (!req.user) {
-      res.redirect('/login');
-      return;
-    }
-    nextjs.render(req, res, '/deets', req.params);
+    nextjs.render(req, res, '/deets', {
+      ...req.params,
+      ...req.query,
+    });
   },
 );
 
 router.getAsync(
   '/friend/:username',
+  requireUser,
   async (req: express.Request, res: express.Response) => {
-    if (!req.user) {
-      res.redirect('/login');
-      return;
-    }
-
     const { username } = req.params;
 
     if (!username) {
       return res.status(404).send();
     }
 
-    nextjs.render(req, res, '/friend', { username });
+    nextjs.render(req, res, '/friend', {
+      ...req.query,
+      username,
+    });
   },
 );
 

@@ -1,19 +1,16 @@
 import * as React from 'react';
 import { Loader, Message } from 'semantic-ui-react';
-import Router, { WithRouterProps, withRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { useVerifyUserMutation } from 'generated/generated-types';
 import { removeGql } from 'client/hooks/useMessages';
 
-function VerifyPage(props: WithRouterProps) {
+function VerifyPage() {
   let hash = '';
 
-  if (
-    props.router &&
-    props.router &&
-    props.router.query &&
-    props.router.query.token
-  ) {
-    hash = String(props.router.query.token);
+  const router = useRouter();
+
+  if (router.query && router.query.token) {
+    hash = String(router.query.token);
   }
 
   const [verifying, setVerifying] = React.useState(true);
@@ -55,7 +52,7 @@ function VerifyPage(props: WithRouterProps) {
 
       completedVerification();
       setSuccess(true);
-      setTimeout(() => Router.push('/dashboard'), 10000);
+      setTimeout(() => router.push('/dashboard'), 10000);
     };
 
     verify();
@@ -90,4 +87,4 @@ function VerifyPage(props: WithRouterProps) {
   );
 }
 
-export default withRouter(VerifyPage);
+export default VerifyPage;

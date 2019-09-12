@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { WithRouterProps, withRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { useFriendByUsernameQuery } from 'generated/generated-types';
 import Loader from 'client/components/Loader';
 import { Header } from 'semantic-ui-react';
@@ -9,8 +9,10 @@ import { isBrowser, splitColumns } from 'client/lib/dom';
 import ProfileImage from 'client/components/ProfileImage';
 import { getDateString, getCurrentTimezoneDate } from 'client/lib/date';
 
-const FriendPage = (props: WithRouterProps) => {
+const FriendPage = () => {
   const [colCount, setColCount] = React.useState<number>(3);
+
+  const router = useRouter();
 
   if (isBrowser) {
     const size = useWindowSize();
@@ -20,8 +22,7 @@ const FriendPage = (props: WithRouterProps) => {
     }, [size.width]);
   }
 
-  const username =
-    props.router && props.router.query && props.router.query.username;
+  const username = router.query && router.query.username;
 
   if (!username || typeof username !== 'string') {
     throw new Error('Missing or invalid username');
@@ -113,4 +114,4 @@ const FriendPage = (props: WithRouterProps) => {
   );
 };
 
-export default withRouter(FriendPage);
+export default FriendPage;
