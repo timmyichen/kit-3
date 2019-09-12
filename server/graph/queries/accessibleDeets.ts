@@ -10,10 +10,10 @@ import {
   EmailAddresses,
   PhoneNumbers,
 } from 'server/models';
-import { ReqWithLoader } from 'server/lib/loader';
 import paginationType from './lib/paginationType';
 import paginate from './lib/paginate';
 import { Op, Filterable } from 'sequelize';
+import { GraphQLContext } from 'server/routers/graphql';
 
 interface Args {
   type?: DeetTypes;
@@ -31,7 +31,7 @@ export default {
     count: { type: GraphQLInt },
     after: { type: GraphQLString },
   },
-  async resolve(_: any, args: Args, { user, loader }: ReqWithLoader) {
+  async resolve(_: any, args: Args, { user, loader }: GraphQLContext) {
     if (!user) {
       throw new AuthenticationError('Must be logged in');
     }

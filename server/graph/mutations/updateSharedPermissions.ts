@@ -8,7 +8,7 @@ import {
 import { Friendships, Deets, SharedDeets, Users } from 'server/models';
 import { db } from 'server/lib/db';
 import friendType from '../types/friendType';
-import { ReqWithLoader } from 'server/lib/loader';
+import { GraphQLContext } from 'server/routers/graphql';
 
 type Args = {
   deetId: number;
@@ -24,7 +24,7 @@ export default {
     userIdsToAdd: { type: new GraphQLList(GraphQLInt) },
     userIdsToRemove: { type: new GraphQLList(GraphQLInt) },
   },
-  async resolve(_: any, args: Args, { user, loader }: ReqWithLoader) {
+  async resolve(_: any, args: Args, { user, loader }: GraphQLContext) {
     if (!user) {
       throw new AuthenticationError('Must be logged in');
     }

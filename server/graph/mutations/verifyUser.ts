@@ -1,9 +1,9 @@
-import * as express from 'express';
 import { GraphQLNonNull, GraphQLString } from 'graphql';
 import { AuthenticationError, UserInputError } from 'apollo-server';
 import userType from '../types/userType';
 import { doesEmailMatchHash } from 'server/lib/verifyEmail';
 import { Users } from 'server/models';
+import { GraphQLContext } from 'server/routers/graphql';
 
 interface Args {
   hash: string;
@@ -15,7 +15,7 @@ export default {
   args: {
     hash: { type: new GraphQLNonNull(GraphQLString) },
   },
-  async resolve(_: any, { hash }: Args, { user }: express.Request) {
+  async resolve(_: any, { hash }: Args, { user }: GraphQLContext) {
     if (!user) {
       throw new AuthenticationError('Must be logged in');
     }

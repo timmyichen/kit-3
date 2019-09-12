@@ -1,8 +1,8 @@
-import * as express from 'express';
 import { GraphQLString, GraphQLNonNull } from 'graphql';
 import { AuthenticationError, UserInputError } from 'apollo-server';
 import { Users, Friendships } from 'server/models';
 import friendType from 'server/graph/types/friendType';
+import { GraphQLContext } from 'server/routers/graphql';
 
 interface Args {
   username: string;
@@ -14,7 +14,7 @@ export default {
   args: {
     username: { type: new GraphQLNonNull(GraphQLString) },
   },
-  async resolve(_: any, { username }: Args, { user }: express.Request) {
+  async resolve(_: any, { username }: Args, { user }: GraphQLContext) {
     if (!user) {
       throw new AuthenticationError('Must be logged in');
     }

@@ -8,7 +8,7 @@ import { AuthenticationError } from 'apollo-server';
 import { Op } from 'sequelize';
 import { Users } from 'server/models';
 import userType from 'server/graph/types/userType';
-import { ReqWithLoader } from 'server/lib/loader';
+import { GraphQLContext } from 'server/routers/graphql';
 
 interface Args {
   searchQuery: string;
@@ -22,7 +22,7 @@ export default {
     searchQuery: { type: new GraphQLNonNull(GraphQLString) },
     count: { type: GraphQLInt },
   },
-  async resolve(_: any, args: Args, { user }: ReqWithLoader) {
+  async resolve(_: any, args: Args, { user }: GraphQLContext) {
     if (!user) {
       throw new AuthenticationError('Must be logged in');
     }

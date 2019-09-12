@@ -2,15 +2,6 @@ import * as express from 'express';
 import { Op } from 'sequelize';
 const DataLoader = require('dataloader');
 
-export type ReqWithLoader = express.Request & {
-  loader(
-    m: any,
-  ): {
-    loadBy(key: string, value: any, scope?: Scope): typeof DataLoader;
-    loadManyBy(key: string, value: any, scope?: Scope): typeof DataLoader;
-  };
-};
-
 interface Scope {
   [s: string]: any;
 }

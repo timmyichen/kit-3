@@ -1,9 +1,9 @@
-import * as express from 'express';
 import { GraphQLList, GraphQLInt, GraphQLNonNull } from 'graphql';
 import { AuthenticationError } from 'apollo-server';
 import { Op } from 'sequelize';
 import { Users, FriendRequests } from 'server/models';
 import userType from 'server/graph/types/userType';
+import { GraphQLContext } from 'server/routers/graphql';
 
 interface Args {
   count?: number;
@@ -15,7 +15,7 @@ export default {
   args: {
     count: { type: GraphQLInt },
   },
-  async resolve(_: any, args: Args, { user }: express.Request) {
+  async resolve(_: any, args: Args, { user }: GraphQLContext) {
     if (!user) {
       throw new AuthenticationError('Must be logged in');
     }

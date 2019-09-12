@@ -1,4 +1,3 @@
-import * as express from 'express';
 import { GraphQLNonNull } from 'graphql';
 import {
   AuthenticationError,
@@ -9,6 +8,7 @@ import userType from '../types/userType';
 import { Users } from 'server/models';
 import { uploadImage } from 'server/lib/storage';
 import { Upload } from 'graphql-upload';
+import { GraphQLContext } from 'server/routers/graphql';
 
 interface Args {
   file: Upload;
@@ -20,7 +20,7 @@ export default {
   args: {
     file: { type: GraphQLUpload },
   },
-  async resolve(_: any, { file }: Args, req: express.Request) {
+  async resolve(_: any, { file }: Args, req: GraphQLContext) {
     if (!req.user) {
       throw new AuthenticationError('Must be logged in');
     }

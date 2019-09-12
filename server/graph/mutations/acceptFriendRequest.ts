@@ -1,9 +1,9 @@
-import * as express from 'express';
 import { GraphQLNonNull, GraphQLInt } from 'graphql';
 import { AuthenticationError, UserInputError } from 'apollo-server';
 import { FriendRequests, Friendships, Users } from 'server/models';
 import { db } from 'server/lib/db';
 import userType from '../types/userType';
+import { GraphQLContext } from 'server/routers/graphql';
 
 export default {
   description: 'Accept a friend request',
@@ -14,7 +14,7 @@ export default {
   async resolve(
     _: any,
     { targetUserId }: { targetUserId: number },
-    { user }: express.Request,
+    { user }: GraphQLContext,
   ) {
     if (!user) {
       throw new AuthenticationError('Must be logged in');

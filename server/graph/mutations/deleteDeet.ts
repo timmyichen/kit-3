@@ -1,4 +1,3 @@
-import * as express from 'express';
 import { GraphQLNonNull, GraphQLInt } from 'graphql';
 import { AuthenticationError, UserInputError } from 'apollo-server';
 import { Deets, SharedDeets } from 'server/models';
@@ -6,6 +5,7 @@ import deetType from '../types/deetType';
 import { db } from 'server/lib/db';
 import { getPlainDeetObject } from 'server/lib/model';
 import { DeetType, Deet } from 'server/models/types';
+import { GraphQLContext } from 'server/routers/graphql';
 
 interface Args {
   deetId: number;
@@ -17,7 +17,7 @@ export default {
   args: {
     deetId: { type: new GraphQLNonNull(GraphQLInt) },
   },
-  async resolve(_: any, { deetId }: Args, { user }: express.Request) {
+  async resolve(_: any, { deetId }: Args, { user }: GraphQLContext) {
     if (!user) {
       throw new AuthenticationError('Must be logged in');
     }

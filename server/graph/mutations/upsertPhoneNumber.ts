@@ -1,4 +1,3 @@
-import * as express from 'express';
 import {
   GraphQLNonNull,
   GraphQLInt,
@@ -15,6 +14,7 @@ import phoneNumberType from '../types/phoneNumberType';
 import { db } from 'server/lib/db';
 import { getPlainDeetObject } from 'server/lib/model';
 import { DeetType, Deet } from 'server/models/types';
+import { GraphQLContext } from 'server/routers/graphql';
 
 interface Args {
   deetId?: number;
@@ -36,7 +36,7 @@ export default {
     countryCode: { type: new GraphQLNonNull(GraphQLString) },
     isPrimary: { type: new GraphQLNonNull(GraphQLBoolean) },
   },
-  async resolve(_: any, args: Args, { user }: express.Request) {
+  async resolve(_: any, args: Args, { user }: GraphQLContext) {
     if (!user) {
       throw new AuthenticationError('Must be logged in');
     }

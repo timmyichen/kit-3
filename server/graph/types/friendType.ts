@@ -17,8 +17,8 @@ import {
   EmailAddresses,
   PhoneNumbers,
 } from 'server/models';
-import { ReqWithLoader } from 'server/lib/loader';
 import deetType from './deetType';
+import { GraphQLContext } from 'server/routers/graphql';
 
 const friendType: GraphQLObjectType = new GraphQLObjectType({
   name: 'Friend',
@@ -52,7 +52,7 @@ const friendType: GraphQLObjectType = new GraphQLObjectType({
       async resolve(
         u: Users,
         { deetId }: { deetId: number },
-        { user, loader }: ReqWithLoader,
+        { user, loader }: GraphQLContext,
       ) {
         if (!deetId) {
           throw new UserInputError('Missing id');
@@ -71,7 +71,7 @@ const friendType: GraphQLObjectType = new GraphQLObjectType({
     },
     viewableDeets: {
       type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(deetType))),
-      async resolve(u: Users, _: any, { user, loader }: ReqWithLoader) {
+      async resolve(u: Users, _: any, { user, loader }: GraphQLContext) {
         const sharedDeets = await loader(SharedDeets).loadManyBy(
           'shared_with',
           u.id,
@@ -96,7 +96,7 @@ const friendType: GraphQLObjectType = new GraphQLObjectType({
     },
     sharedDeets: {
       type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(deetType))),
-      async resolve(u: Users, _: any, { user, loader }: ReqWithLoader) {
+      async resolve(u: Users, _: any, { user, loader }: GraphQLContext) {
         const sharedDeets = await loader(SharedDeets).loadManyBy(
           'shared_with',
           user.id,

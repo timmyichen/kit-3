@@ -1,9 +1,9 @@
-import * as express from 'express';
 import { GraphQLList, GraphQLNonNull, GraphQLInt } from 'graphql';
 import { Friendships, Users } from 'server/models';
 import { AuthenticationError } from 'apollo-server';
 import { Op } from 'sequelize';
 import friendType from '../types/friendType';
+import { GraphQLContext } from 'server/routers/graphql';
 
 const pad = (num: number) => (num < 10 ? '0' + num : '' + num);
 
@@ -60,7 +60,7 @@ export default {
   async resolve(
     _1: any,
     { days }: { days?: number },
-    { user }: express.Request,
+    { user }: GraphQLContext,
   ) {
     if (!user) {
       throw new AuthenticationError('Must be logged in');

@@ -1,10 +1,10 @@
-import * as express from 'express';
 import * as bluebird from 'bluebird';
 import validator from 'validator';
 import { GraphQLNonNull, GraphQLString } from 'graphql';
 import { AuthenticationError, UserInputError } from 'apollo-server';
 import { Users } from 'server/models';
 import userType from '../types/userType';
+import { GraphQLContext } from 'server/routers/graphql';
 const bcrypt = bluebird.promisifyAll(require('bcrypt-nodejs'));
 
 interface Args {
@@ -25,7 +25,7 @@ export default {
     familyName: { type: new GraphQLNonNull(GraphQLString) },
     birthday: { type: GraphQLString },
   },
-  async resolve(_: any, args: Args, req: express.Request) {
+  async resolve(_: any, args: Args, req: GraphQLContext) {
     if (!req.user) {
       throw new AuthenticationError('Must be logged in');
     }

@@ -9,9 +9,9 @@ import { Users } from 'server/models';
 
 const router = express.Router();
 
-export interface GraphQLContext {
+export interface GraphQLContext extends express.Request {
   user: Users | null;
-  loader: typeof loader;
+  loader: ReturnType<typeof loader>;
   redis: CustomRedisClient;
 }
 
@@ -27,12 +27,11 @@ router.post(
   '/graphql',
   responseHijack,
   graphqlUploadExpress({ maxFileSize: 1 * 1024 * 1024, maxFiles: 1 }),
-  graphqlHTTP(({ user, redis }: ReqWithRedis) => ({
+  graphqlHTTP((req: ReqWithRedis) => ({
     schema,
     context: {
-      user,
+      ...req,
       loader: loader(),
-      redis,
     },
     graphiql: false,
   })),

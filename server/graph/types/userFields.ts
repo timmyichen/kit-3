@@ -13,9 +13,8 @@ import {
 } from 'server/models';
 import { timestamps } from './common';
 import { AuthenticationError } from 'apollo-server';
-import { ReqWithLoader } from 'server/lib/loader';
-import * as express from 'express';
 import { getFullName } from 'server/lib/users';
+import { GraphQLContext } from 'server/routers/graphql';
 
 export default {
   id: {
@@ -36,7 +35,7 @@ export default {
   },
   email: {
     type: new GraphQLNonNull(GraphQLString),
-    resolve: (user: Users, _: any, req: express.Request) => {
+    resolve: (user: Users, _: any, req: GraphQLContext) => {
       if (req.user && user.id === req.user.id) {
         return user.email;
       }
@@ -46,7 +45,7 @@ export default {
   },
   birthdayDate: {
     type: GraphQLString,
-    resolve: (user: Users, _: any, req: express.Request) => {
+    resolve: (user: Users, _: any, req: GraphQLContext) => {
       if (req.user && user.id === req.user.id) {
         return user.birthday_date;
       }
@@ -56,7 +55,7 @@ export default {
   },
   birthdayYear: {
     type: GraphQLString,
-    resolve: (user: Users, _: any, req: express.Request) => {
+    resolve: (user: Users, _: any, req: GraphQLContext) => {
       if (req.user && user.id === req.user.id) {
         return user.birthday_year;
       }
@@ -66,7 +65,7 @@ export default {
   },
   profilePicture: {
     type: GraphQLString,
-    resolve: async (user: Users, _: any, { loader }: ReqWithLoader) => {
+    resolve: async (user: Users, _: any, { loader }: GraphQLContext) => {
       if (!user.profile_picture_id) {
         return null;
       }
@@ -90,7 +89,7 @@ export default {
   },
   isFriend: {
     type: new GraphQLNonNull(GraphQLBoolean),
-    async resolve(u: Users, _: any, { user, loader }: ReqWithLoader) {
+    async resolve(u: Users, _: any, { user, loader }: GraphQLContext) {
       if (!user) {
         return false;
       }
@@ -102,7 +101,7 @@ export default {
   },
   isRequested: {
     type: new GraphQLNonNull(GraphQLBoolean),
-    async resolve(u: Users, _: any, { user, loader }: ReqWithLoader) {
+    async resolve(u: Users, _: any, { user, loader }: GraphQLContext) {
       if (!user) {
         return false;
       }
@@ -114,7 +113,7 @@ export default {
   },
   hasRequestedUser: {
     type: new GraphQLNonNull(GraphQLBoolean),
-    async resolve(u: Users, _: any, { user, loader }: ReqWithLoader) {
+    async resolve(u: Users, _: any, { user, loader }: GraphQLContext) {
       if (!user) {
         return false;
       }
@@ -126,7 +125,7 @@ export default {
   },
   isBlocked: {
     type: new GraphQLNonNull(GraphQLBoolean),
-    async resolve(u: Users, _: any, { user, loader }: ReqWithLoader) {
+    async resolve(u: Users, _: any, { user, loader }: GraphQLContext) {
       if (!user) {
         return false;
       }

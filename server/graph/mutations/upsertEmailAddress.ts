@@ -1,4 +1,3 @@
-import * as express from 'express';
 import {
   GraphQLNonNull,
   GraphQLInt,
@@ -15,6 +14,7 @@ import emailAddressType from '../types/emailAddressType';
 import { db } from 'server/lib/db';
 import { DeetType, Deet } from 'server/models/types';
 import { getPlainDeetObject } from 'server/lib/model';
+import { GraphQLContext } from 'server/routers/graphql';
 
 interface Args {
   deetId?: number;
@@ -34,7 +34,7 @@ export default {
     emailAddress: { type: new GraphQLNonNull(GraphQLString) },
     isPrimary: { type: new GraphQLNonNull(GraphQLBoolean) },
   },
-  async resolve(_: any, args: Args, { user }: express.Request) {
+  async resolve(_: any, args: Args, { user }: GraphQLContext) {
     if (!user) {
       throw new AuthenticationError('Must be logged in');
     }

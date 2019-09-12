@@ -1,4 +1,3 @@
-import * as express from 'express';
 import { GraphQLNonNull, GraphQLInt } from 'graphql';
 import { Op } from 'sequelize';
 import {
@@ -9,6 +8,7 @@ import {
 import { Friendships, Users, SharedDeets, Deets } from 'server/models';
 import { db } from 'server/lib/db';
 import userType from '../types/userType';
+import { GraphQLContext } from 'server/routers/graphql';
 
 export default {
   description: 'Remove a friend',
@@ -19,7 +19,7 @@ export default {
   async resolve(
     _: any,
     { targetUserId }: { targetUserId: number },
-    { user }: express.Request,
+    { user }: GraphQLContext,
   ) {
     if (!user) {
       throw new AuthenticationError('Must be logged in');

@@ -1,8 +1,8 @@
-import * as express from 'express';
 import * as bluebird from 'bluebird';
 import { GraphQLNonNull, GraphQLString, GraphQLBoolean } from 'graphql';
 import { AuthenticationError, UserInputError } from 'apollo-server';
 import { Users } from 'server/models';
+import { GraphQLContext } from 'server/routers/graphql';
 const bcrypt = bluebird.promisifyAll(require('bcrypt-nodejs'));
 
 interface Args {
@@ -17,7 +17,7 @@ export default {
     passwordVerification: { type: new GraphQLNonNull(GraphQLString) },
     newPassword: { type: new GraphQLNonNull(GraphQLString) },
   },
-  async resolve(_: any, args: Args, req: express.Request) {
+  async resolve(_: any, args: Args, req: GraphQLContext) {
     if (!req.user) {
       throw new AuthenticationError('Must be logged in');
     }

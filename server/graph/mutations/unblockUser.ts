@@ -1,8 +1,8 @@
-import * as express from 'express';
 import { GraphQLNonNull, GraphQLInt } from 'graphql';
 import { AuthenticationError, UserInputError } from 'apollo-server';
 import { BlockedUsers, Users } from 'server/models';
 import userType from '../types/userType';
+import { GraphQLContext } from 'server/routers/graphql';
 
 export default {
   description: 'Unblock a user',
@@ -13,7 +13,7 @@ export default {
   async resolve(
     _: any,
     { targetUserId }: { targetUserId: number },
-    { user }: express.Request,
+    { user }: GraphQLContext,
   ) {
     if (!user) {
       throw new AuthenticationError('Must be logged in');

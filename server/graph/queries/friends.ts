@@ -1,4 +1,3 @@
-import * as express from 'express';
 import { GraphQLString, GraphQLInt, GraphQLNonNull } from 'graphql';
 import { AuthenticationError } from 'apollo-server';
 import { Op } from 'sequelize';
@@ -6,6 +5,7 @@ import { Users, Friendships } from 'server/models';
 import friendType from 'server/graph/types/friendType';
 import paginationType from './lib/paginationType';
 import paginate from './lib/paginate';
+import { GraphQLContext } from 'server/routers/graphql';
 
 interface Args {
   after?: string;
@@ -23,7 +23,7 @@ export default {
     searchQuery: { type: GraphQLString },
     count: { type: GraphQLInt },
   },
-  async resolve(_: any, args: Args, { user }: express.Request) {
+  async resolve(_: any, args: Args, { user }: GraphQLContext) {
     if (!user) {
       throw new AuthenticationError('Must be logged in');
     }
