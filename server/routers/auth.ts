@@ -9,6 +9,10 @@ import { Users } from 'server/models';
 import { sendWelcomeEmail } from 'server/lib/emails';
 const bcrypt = bluebird.promisifyAll(require('bcrypt-nodejs'));
 
+export interface ReqWithUser extends express.Request {
+  user?: Users;
+}
+
 function init() {
   const LocalStrategy = passportLocal.Strategy;
 
@@ -210,12 +214,13 @@ function init() {
     res.json({ success: true });
   });
 
-  router.get(
-    '/data/user_info',
-    (req: express.Request, res: express.Response) => {
-      res.json(camelize(req.user) || { error: 'not logged in' });
-    },
-  );
+  router.get('/data/user_info', (req: ReqWithUser, res: express.Response) => {
+    if (!req.user) {
+      return res.json({ error: 'not logged in' });
+    }
+
+    res.json(camelize(req.user));
+  });
 
   return router;
 }
