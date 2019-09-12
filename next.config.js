@@ -4,9 +4,16 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = withTs({
   webpack(config, options) {
-    config.resolve.alias.client = './client';
-    config.resolve.alias.generated = './generated-gql';
-    config.plugins.push(new ForkTsCheckerWebpackPlugin());
+    if (options.dev) {
+      config.plugins.push(new ForkTsCheckerWebpackPlugin());
+    }
+
+    if (options.isServer) {
+      config.resolve.alias.client = './client';
+      config.resolve.alias.generated = './generated-gql';
+    } else {
+      config.resolve.alias.server = './server';
+    }
     // config.plugins.push(new BundleAnalyzerPlugin({ analyzerMode: 'static' }));
     return config;
   },
