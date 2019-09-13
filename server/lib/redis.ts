@@ -71,7 +71,7 @@ export const genRedisKey = {
   }: {
     requestedUserId: number;
     requestingUserId: number;
-  }) => `email-userId-${requestingUserId}-added-userId ${requestedUserId}`,
+  }) => `email-userId-${requestingUserId}-added-userId-${requestedUserId}`,
   hasRequestedPasswordReset: ({ email }: { email: string }) =>
     `email-${email}-reset-password`,
   passwordResetToken: ({ userId }: { userId: number }) =>
