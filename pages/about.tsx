@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Header, Image } from 'semantic-ui-react';
-import { headerHeight } from 'client/lib/pageMeasurements';
+import { headerHeight, footerHeight } from 'client/lib/pageMeasurements';
 import Meta from 'client/components/Meta';
 
 export default () => (
@@ -42,8 +42,7 @@ export default () => (
           information online. Rest assured that we will never sell your data and
           have no interest in doing so, and we never store your data longer than
           you want us to. Once you delete something from our servers, it's gone
-          for good; we don't soft-delete anything except for your user accounts
-          (those get perma-deleted 15 days after deletion).
+          for good.
         </p>
       </div>
     </div>
@@ -73,6 +72,10 @@ export default () => (
         font-size: 20px;
         z-index: 1;
         padding: 20px 40px;
+        max-width: 600px;
+      }
+      .text-content p {
+        line-height: 1.5em;
       }
       .what-is-kit {
         background: url('/images/marketing/foreign-letters.jpg') no-repeat
@@ -87,7 +90,7 @@ export default () => (
       .team {
         background: url('/images/marketing/pencils.jpg') no-repeat center center
           fixed;
-        min-height: 100vh;
+        min-height: calc(100vh - ${footerHeight}px);
       }
       .what-is-kit,
       .privacy,
