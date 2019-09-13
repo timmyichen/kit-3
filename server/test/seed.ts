@@ -13,12 +13,32 @@ import {
 } from './util';
 import * as faker from 'faker';
 import { execSync } from 'child_process';
+import { question } from 'readline-sync';
 
 dotenv.config();
 
 if (process.env.NODE_ENV === 'production') {
   throw new Error('u wot m8');
 }
+
+const answer = question(
+  'This will clear out any existing dev databases, are you sure you want to do this? [Y|n]: ',
+);
+
+if (answer && answer.trim().toLowerCase() === 'n') {
+  process.exit(0);
+}
+
+try {
+  execSync('dropdb -h db -U postgres postgres');
+  console.log('Destroyed existing dev database');
+} catch (e) {
+  console.log('Couldnt delete database, maybe it didnt exist? Error below');
+  console.log(e.message);
+}
+
+execSync('createdb -h db -U postgres postgres');
+console.log('Created new dev database');
 
 console.log('Running migrations...');
 execSync('./node_modules/.bin/sequelize db:migrate', { stdio: 'inherit' });

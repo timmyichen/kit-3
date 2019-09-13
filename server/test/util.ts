@@ -49,9 +49,9 @@ export async function createUser(
 
   const birthday = opts.birthday || new Date();
 
+  const birthdayYear = birthday.getFullYear();
   const birthdayDate = birthday;
   birthdayDate.setFullYear(1234);
-  const birthdayYear = birthday.getFullYear();
 
   return Users.create({
     username: opts.username || randomUsername(),
@@ -131,7 +131,7 @@ export async function createPhoneNumber(opts: {
 
   const phoneNumber = await PhoneNumbers.create({
     deet_id: deet.id,
-    country_code: opts.countryCode || '+1',
+    country_code: opts.countryCode || '1',
     phone_number: opts.phoneNumber || faker.phone.phoneNumber(),
   });
 
