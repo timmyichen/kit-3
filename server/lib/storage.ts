@@ -8,8 +8,8 @@ if (!process.env.GCLOUD_STORAGE_BUCKET) {
 }
 
 const storage = new Storage({
-  projectId: 'kit-prod',
-  keyFilename: './config/gcs-owner.json',
+  projectId: 'kit-dev',
+  keyFilename: './config/gcs-creds.json',
 });
 const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET);
 

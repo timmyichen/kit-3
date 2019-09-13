@@ -5,4 +5,4 @@ package-lock.json
 .vscode/
 app.yaml
 public/report.html
-config/gcs-owner.json
+config/gcs-creds.json

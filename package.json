@@ -25,7 +25,8 @@
     "jest": "NODE_ENV=test npm run jest:setup && ./node_modules/.bin/jest",
     "jest:watch": "NODE_ENV=test npm run jest:setup && ./node_modules/.bin/jest --watch",
     "test": "npm run lint:ts && npm run jest",
-    "dev:seed": "NODE_ENV=development ts-node --files ./server/test/seed.ts"
+    "dev:seed": "NODE_ENV=development ts-node --files ./server/test/seed.ts",
+    "preinstall": "node ./scripts/createGcsConfig.js"
   },
   "author": "",
   "license": "ISC",

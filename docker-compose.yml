@@ -11,7 +11,7 @@ services:
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - GCLOUD_STORAGE_BUCKET=kit-images-prod
+      - GCLOUD_STORAGE_BUCKET=kit-prod-images
       - SESSION_SECRET=sgdfgjkhsdfg
       - DB_USER=postgres
       - DB_DATABASE=postgres
