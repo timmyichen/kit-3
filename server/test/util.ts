@@ -22,6 +22,7 @@ export const randomEmail = faker.internet.email;
 export const randomUsername = () =>
   faker.name
     .findName()
+    .toLowerCase()
     .replace(/ /gi, '')
     .slice(0, 24);
 
