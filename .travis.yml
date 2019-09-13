@@ -5,6 +5,7 @@ env:
   global:
     - DOCKER_COMPOSE_VERSION: 1.24.0
     - GCLOUD_STORAGE_BUCKET: kit-dev-images
+    - GCS_CONFIG_JSON: '{}'
     - SESSION_SECRET: sgdfgjkhsdfg
     - DB_USER: postgres
     - DB_DATABASE: postgres
