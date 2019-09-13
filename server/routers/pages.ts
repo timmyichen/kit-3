@@ -18,7 +18,19 @@ pages.forEach(page => {
 });
 
 router.get('/login', (req: express.Request, res: express.Response) => {
+  if (req.user) {
+    return res.redirect('/dashboard');
+  }
+
   nextjs.render(req, res, '/login', req.query);
+});
+
+router.get('/signup', (req: express.Request, res: express.Response) => {
+  if (req.user) {
+    return res.redirect('/dashboard');
+  }
+
+  nextjs.render(req, res, '/signup', req.query);
 });
 
 router.getAsync(

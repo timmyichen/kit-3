@@ -480,6 +480,14 @@ export type DeleteDeetMutation = { __typename?: 'RootMutation' } & {
   deleteDeet: EmailAddressFragment | AddressFragment | PhoneNumberFragment;
 };
 
+export type DoesUsernameExistQueryVariables = {
+  username: Scalars['String'];
+};
+
+export type DoesUsernameExistQuery = { __typename?: 'RootQuery' } & {
+  userByUsername: Maybe<{ __typename?: 'User' } & Pick<User, 'id'>>;
+};
+
 export type EmailAddressFragment = { __typename: 'EmailAddressDeet' } & Pick<
   EmailAddressDeet,
   | 'id'
@@ -1440,6 +1448,69 @@ export function useDeleteDeetMutation(
 }
 export type DeleteDeetMutationHookResult = ReturnType<
   typeof useDeleteDeetMutation
+>;
+export const DoesUsernameExistDocument = gql`
+  query DoesUsernameExist($username: String!) {
+    userByUsername(username: $username) {
+      id
+    }
+  }
+`;
+export type DoesUsernameExistComponentProps = Omit<
+  ReactApollo.QueryProps<
+    DoesUsernameExistQuery,
+    DoesUsernameExistQueryVariables
+  >,
+  'query'
+> &
+  (
+    | { variables: DoesUsernameExistQueryVariables; skip?: false }
+    | { skip: true });
+
+export const DoesUsernameExistComponent = (
+  props: DoesUsernameExistComponentProps,
+) => (
+  <ReactApollo.Query<DoesUsernameExistQuery, DoesUsernameExistQueryVariables>
+    query={DoesUsernameExistDocument}
+    {...props}
+  />
+);
+
+export type DoesUsernameExistProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<DoesUsernameExistQuery, DoesUsernameExistQueryVariables>
+> &
+  TChildProps;
+export function withDoesUsernameExist<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    DoesUsernameExistQuery,
+    DoesUsernameExistQueryVariables,
+    DoesUsernameExistProps<TChildProps>
+  >,
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    DoesUsernameExistQuery,
+    DoesUsernameExistQueryVariables,
+    DoesUsernameExistProps<TChildProps>
+  >(DoesUsernameExistDocument, {
+    alias: 'withDoesUsernameExist',
+    ...operationOptions,
+  });
+}
+
+export function useDoesUsernameExistQuery(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<
+    DoesUsernameExistQueryVariables
+  >,
+) {
+  return ReactApolloHooks.useQuery<
+    DoesUsernameExistQuery,
+    DoesUsernameExistQueryVariables
+  >(DoesUsernameExistDocument, baseOptions);
+}
+export type DoesUsernameExistQueryHookResult = ReturnType<
+  typeof useDoesUsernameExistQuery
 >;
 export const FriendByUsernameDocument = gql`
   query friendByUsername($username: String!) {

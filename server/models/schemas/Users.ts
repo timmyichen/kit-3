@@ -46,13 +46,18 @@ export default class Users extends Model<Users> {
     ...requiredString({
       validate: {
         len: [4, 24],
+        is: /^[a-z0-9]{4,24}$/g,
       },
     }),
   })
   username: string;
 
   @Column({
-    ...requiredString(),
+    ...requiredString({
+      validate: {
+        len: [8, 100],
+      },
+    }),
   })
   password: string;
 

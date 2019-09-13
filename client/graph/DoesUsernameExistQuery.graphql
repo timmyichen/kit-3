@@ -1,0 +1,5 @@
+query DoesUsernameExist($username: String!) {
+  userByUsername(username: $username) {
+    id
+  }
+}

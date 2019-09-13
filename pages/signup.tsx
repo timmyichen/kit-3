@@ -1,23 +1,51 @@
 import * as React from 'react';
 import classnames from 'classnames';
-import { Button, Checkbox, Form } from 'semantic-ui-react';
+import {
+  Button,
+  Checkbox,
+  Form,
+  Message,
+  Input,
+  Icon,
+} from 'semantic-ui-react';
 import { useRouter } from 'next/router';
 import fetch from 'isomorphic-fetch';
 import { useCtxDispatch } from 'client/components/ContextProvider';
 import colors from 'client/styles/colors';
 import Link from 'next/link';
-import { useRequestFriendMutation } from 'generated/generated-types';
+import {
+  useRequestFriendMutation,
+  DoesUsernameExistDocument,
+  DoesUsernameExistQuery,
+} from 'generated/generated-types';
 import Meta from 'client/components/Meta';
+import { isEmail } from 'validator';
+import debounce from 'lodash/debounce';
+import { withApollo, WithApolloClient } from 'react-apollo';
 
-export default () => {
-  const [givenName, setGivenName] = React.useState<string>('');
-  const [familyName, setFamilyName] = React.useState<string>('');
-  const [username, setUsername] = React.useState<string>('');
-  const [email, setEmail] = React.useState<string>('');
-  const [password, setPassword] = React.useState<string>('');
-  const [loading, setLoading] = React.useState<boolean>(false);
-  const [termsAgreement, setTermsAgreement] = React.useState<boolean>(false);
-  const [highlightTerms, setHighlightTerms] = React.useState<boolean>(false);
+interface Errors {
+  email?: string;
+  givenName?: string;
+  username?: string;
+  password?: string;
+}
+
+const usernameRegex = /^[a-z0-9]{4,24}$/g;
+const isValidUsername = (username: string) =>
+  username && username.match(usernameRegex);
+
+function SignupPage({ client }: WithApolloClient<{}>) {
+  const [givenName, setGivenName] = React.useState('');
+  const [familyName, setFamilyName] = React.useState('');
+  const [username, setUsername] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
+  const [termsAgreement, setTermsAgreement] = React.useState(false);
+  const [highlightTerms, setHighlightTerms] = React.useState(false);
+  const [errors, setErrors] = React.useState<Errors>({});
+  const [searchingUsername, setSearchingUsername] = React.useState(false);
+  console.log(searchingUsername);
 
   const router = useRouter();
   const dispatch = useCtxDispatch();
@@ -31,10 +59,69 @@ export default () => {
     variables: { targetUserId: parseInt(referrer, 10) },
   });
 
+  const searchUsername = React.useRef(
+    debounce(async (newUsername: string) => {
+      if (!isValidUsername(newUsername)) {
+        setErrors({
+          ...errors,
+          username:
+            'Username must be between 4 and 24 characters and only have lowercase alphanumeric characters',
+        });
+        setSearchingUsername(false);
+        return;
+      }
+
+      const { data } = await client.query<DoesUsernameExistQuery>({
+        query: DoesUsernameExistDocument,
+        variables: { username: newUsername },
+      });
+      setSearchingUsername(false);
+
+      if (data && data.userByUsername) {
+        setErrors({
+          ...errors,
+          username: 'That username is taken',
+        });
+      }
+    }, 500),
+  );
+
+  React.useEffect(() => {
+    if (!username) {
+      return;
+    }
+
+    searchUsername.current(username);
+  }, [username]);
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!termsAgreement) {
       setHighlightTerms(true);
+      return;
+    }
+
+    const newErrors: Errors = {};
+
+    if (!email || !isEmail(email)) {
+      newErrors.email = 'Invalid email';
+    }
+
+    if (!isValidUsername(username) || errors.username) {
+      newErrors.username =
+        'Username must be between 4 and 24 characters and only have lowercase alphanumeric characters';
+    }
+
+    if (!givenName || !givenName.trim()) {
+      newErrors.givenName = 'First name is required';
+    }
+
+    if (!password || password.length < 8) {
+      newErrors.password = 'Your password must be at least 8 characters';
+    }
+
+    if (Object.keys(newErrors).length) {
+      setErrors(newErrors);
       return;
     }
 
@@ -89,6 +176,20 @@ export default () => {
       ? `/login?goto=${router.query.goto}`
       : '/login';
 
+  let icon: {
+    name?: 'check circle outline' | 'times circle outline' | undefined;
+    color?: 'red' | 'green' | undefined;
+  } = {};
+  if (errors.username) {
+    icon.name = 'times circle outline';
+    icon.color = 'red';
+  } else if (username) {
+    icon.name = 'check circle outline';
+    icon.color = 'green';
+  } else {
+    icon = {};
+  }
+
   return (
     <div className="signup-wrapper">
       <Meta title="Sign Up" />
@@ -102,18 +203,25 @@ export default () => {
         </p>
         <Form.Field>
           <label>First Name (Given Name)</label>
-          <input
+          <Input
             required
             value={givenName}
             name="givenName"
             placeholder="First Name"
-            onChange={e => setGivenName(e.currentTarget.value)}
+            onChange={e => {
+              setErrors({ ...errors, givenName: undefined });
+              setGivenName(e.currentTarget.value);
+            }}
           />
+          {errors.givenName && (
+            <Message size="tiny" negative>
+              {errors.givenName}
+            </Message>
+          )}
         </Form.Field>
         <Form.Field>
           <label>Last Name (Family Name)</label>
-          <input
-            required
+          <Input
             value={familyName}
             name="familyName"
             placeholder="Last Name"
@@ -122,34 +230,67 @@ export default () => {
         </Form.Field>
         <Form.Field>
           <label>Username</label>
-          <input
+          <Input
             required
+            loading={searchingUsername}
             value={username}
             name="username"
             placeholder="Username"
-            onChange={e => setUsername(e.currentTarget.value)}
+            onChange={e => {
+              setErrors({ ...errors, username: undefined });
+              setSearchingUsername(true);
+              setUsername(e.currentTarget.value);
+            }}
+            icon={
+              icon.name ? (
+                <Icon name={icon.name} color={icon.color} />
+              ) : (
+                undefined
+              )
+            }
           />
+          {errors.username && (
+            <Message size="tiny" negative>
+              {errors.username}
+            </Message>
+          )}
         </Form.Field>
         <Form.Field>
           <label>Email</label>
-          <input
+          <Input
             required
             value={email}
             name="email"
             placeholder="Email"
-            onChange={e => setEmail(e.currentTarget.value)}
+            onChange={e => {
+              setErrors({ ...errors, email: undefined });
+              setEmail(e.currentTarget.value);
+            }}
           />
+          {errors.email && (
+            <Message size="tiny" negative>
+              {errors.email}
+            </Message>
+          )}
         </Form.Field>
         <Form.Field>
           <label>Password</label>
-          <input
+          <Input
             required
             type="password"
             value={password}
             name="password"
             placeholder="Password"
-            onChange={e => setPassword(e.currentTarget.value)}
+            onChange={e => {
+              setErrors({ ...errors, password: undefined });
+              setPassword(e.currentTarget.value);
+            }}
           />
+          {errors.password && (
+            <Message size="tiny" negative>
+              {errors.password}
+            </Message>
+          )}
         </Form.Field>
         <Form.Field>
           <Checkbox
@@ -181,4 +322,6 @@ export default () => {
       `}</style>
     </div>
   );
-};
+}
+
+export default withApollo(SignupPage);

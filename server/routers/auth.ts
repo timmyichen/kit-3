@@ -74,7 +74,13 @@ function init() {
       ) => {
         const { givenName, familyName, username } = req.body;
 
-        if (!email || !password || !username || !givenName) {
+        if (
+          !email ||
+          !password ||
+          !username ||
+          !givenName ||
+          !givenName.trim()
+        ) {
           return done(null, false, { message: 'missing required field' });
         }
 
