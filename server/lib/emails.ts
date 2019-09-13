@@ -65,7 +65,7 @@ export async function sendWelcomeEmail({ user }: { user: Users }) {
       'Welcome to <a href="https://kit-with.me">Keep In Touch</a>!',
       '<br/><br/>',
       `Click <a href="${verifyUrl}">here</a> to verify your email.`,
-    ].join('\n'),
+    ].join('\n<br/>'),
   });
 }
 
@@ -106,7 +106,7 @@ export async function sendInviteEmail({
       '',
       'Cheers,',
       'The Keep In Touch team',
-    ].join('\n'),
+    ].join('\n<br/>'),
   });
 }
 
@@ -134,7 +134,7 @@ export async function sendFriendRequestEmail({
       '',
       'Cheers,',
       'The Keep In Touch team',
-    ].join('\n'),
+    ].join('\n<br/>'),
   });
 }
 
@@ -161,7 +161,7 @@ export async function sendPasswordResetEmail({
       '',
       'Best,',
       'The KIT Team',
-    ].join('\n'),
+    ].join('\n<br/>'),
   });
 }
 
