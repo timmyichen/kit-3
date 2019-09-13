@@ -17,6 +17,8 @@ import verifyDeet from './verifyDeet';
 import verifyUser from './verifyUser';
 import requestVerificationEmail from './requestVerificationEmail';
 import inviteUserToKit from './inviteUserToKit';
+import requestPasswordReset from './requestPasswordReset';
+import setForgottenPassword from './setForgottenPassword';
 
 export default new GraphQLObjectType({
   name: 'RootMutation',
@@ -40,5 +42,7 @@ export default new GraphQLObjectType({
     verifyUser,
     requestVerificationEmail,
     inviteUserToKit,
+    requestPasswordReset,
+    setForgottenPassword,
   }),
 });

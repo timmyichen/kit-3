@@ -39,8 +39,8 @@ export default {
       throw new UserInputError('Password verification failed');
     }
 
-    if (args.newPassword.trim().length === 0) {
-      throw new UserInputError('Password cannot be empty');
+    if (args.newPassword.length < 8) {
+      throw new UserInputError('Password must be at least 8 characters');
     }
 
     const salt = await bcrypt.genSaltAsync(10);

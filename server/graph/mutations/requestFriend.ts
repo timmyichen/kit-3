@@ -9,8 +9,8 @@ import {
 import { db } from 'server/lib/db';
 import userType from '../types/userType';
 import { GraphQLContext } from 'server/routers/graphql';
-import { sendFriendRequestEmail, genRedisKey } from 'server/lib/emails';
-import { daysInSeconds } from 'server/lib/redis';
+import { sendFriendRequestEmail } from 'server/lib/emails';
+import { daysInSeconds, genRedisKey } from 'server/lib/redis';
 
 export default {
   description: 'Request a user to be your friend',
@@ -114,13 +114,17 @@ export default {
         requested_by: user.id,
       });
 
-      const opts = { requestedUser: targetUser, requestingUser: user };
-
-      const redisKey = genRedisKey.wasAddedAsFriend(opts);
+      const redisKey = genRedisKey.wasAddedAsFriend({
+        requestedUserId: targetUser.id,
+        requestingUserId: user.id,
+      });
 
       if (!(await redis.getAsync(redisKey))) {
         await Promise.all([
-          sendFriendRequestEmail(opts),
+          sendFriendRequestEmail({
+            requestedUser: targetUser,
+            requestingUser: user,
+          }),
           redis.setAsync(redisKey, '1', 'ex', daysInSeconds(7)),
         ]);
       }

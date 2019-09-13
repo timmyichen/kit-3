@@ -8,7 +8,7 @@ if (!process.env.MAILGUN_API_KEY) {
 }
 
 const DOMAIN = 'mail.kit-with.me';
-const WEB_BASE_URL = 'https://dev.kit-with.me';
+const WEB_BASE_URL = 'https://kit-with.me';
 
 let mg: mailgun.Mailgun | null = null;
 
@@ -138,30 +138,31 @@ export async function sendFriendRequestEmail({
   });
 }
 
-export async function sendSummaryEmail() {}
+export async function sendPasswordResetEmail({
+  user,
+  newPasswordToken,
+}: {
+  user: Users;
+  newPasswordToken: string;
+}) {
+  const resetLink =
+    WEB_BASE_URL + `/set-password?token=${user.id}:${newPasswordToken}`;
 
-export const genRedisKey = {
-  wasNotifiedOfDeetUpdate: ({
-    userId,
-    deetId,
-  }: {
-    userId: number;
-    deetId: number;
-  }) => `email-notified-userId-${userId}-of-deetId-${deetId}-updated`,
-  // wasNotifiedOfBirthday: () => '', TODO later when workers
-  wasAskedToVerifyDeet: ({
-    userId,
-    deetId,
-  }: {
-    userId: number;
-    deetId: number;
-  }) => `email-asked-to-verify-deetId-${deetId}-by-userId-${userId}`,
-  wasInvitedToKit: ({ email }: { email: string }) => `email-invited-${email}`,
-  wasAddedAsFriend: ({
-    requestedUser,
-    requestingUser,
-  }: {
-    requestedUser: Users;
-    requestingUser: Users;
-  }) => `email-userId-${requestingUser.id}-added-userId ${requestedUser.id}`,
-};
+  await sendEmail({
+    user,
+    subject: 'Keep In Touch Password Reset',
+    html: [
+      `Hello ${user.given_name},`,
+      '',
+      "You've requested a password reset. You can reset your password",
+      `<a href="${resetLink}">here</a>. The link will work for 24 hours.`,
+      '',
+      'If you did not request a password reset, please notify us immediately.',
+      '',
+      'Best,',
+      'The KIT Team',
+    ].join('\n'),
+  });
+}
+
+export async function sendSummaryEmail() {}

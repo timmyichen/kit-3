@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as asyncRouter from 'express-router-async';
 import nextjs from 'server/lib/next';
-import { requireUser } from 'server/middleware/auth';
+import { requireUser, requireGuest } from 'server/middleware/auth';
 
 const router = asyncRouter();
 
@@ -17,21 +17,37 @@ pages.forEach(page => {
   });
 });
 
-router.get('/login', (req: express.Request, res: express.Response) => {
-  if (req.user) {
-    return res.redirect('/dashboard');
-  }
+router.get(
+  '/login',
+  requireGuest,
+  (req: express.Request, res: express.Response) => {
+    nextjs.render(req, res, '/login', req.query);
+  },
+);
 
-  nextjs.render(req, res, '/login', req.query);
-});
+router.get(
+  '/signup',
+  requireGuest,
+  (req: express.Request, res: express.Response) => {
+    nextjs.render(req, res, '/signup', req.query);
+  },
+);
 
-router.get('/signup', (req: express.Request, res: express.Response) => {
-  if (req.user) {
-    return res.redirect('/dashboard');
-  }
+router.get(
+  '/forgot-password',
+  requireGuest,
+  (req: express.Request, res: express.Response) => {
+    nextjs.render(req, res, '/forgotPassword', req.query);
+  },
+);
 
-  nextjs.render(req, res, '/signup', req.query);
-});
+router.get(
+  '/set-password',
+  requireGuest,
+  (req: express.Request, res: express.Response) => {
+    nextjs.render(req, res, '/setPassword', req.query);
+  },
+);
 
 router.getAsync(
   '/dashboard',

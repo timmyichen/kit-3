@@ -23,7 +23,7 @@ export const randomUsername = () =>
   faker.name
     .findName()
     .toLowerCase()
-    .replace(/ /gi, '')
+    .replace(/[^a-z0-9]/g, '')
     .slice(0, 24);
 
 export const randomInt = (min: number, max: number) =>

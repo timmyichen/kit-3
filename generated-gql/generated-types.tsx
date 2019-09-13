@@ -155,6 +155,10 @@ export type RootMutation = {
   requestVerificationEmail: Scalars['Boolean'];
   /** Invites a user to KIT */
   inviteUserToKit: Scalars['Boolean'];
+  /** Upsert a phone number record */
+  requestPasswordReset: Scalars['Boolean'];
+  /** Update the users password from a reset */
+  setForgottenPassword: Scalars['Boolean'];
 };
 
 export type RootMutationRequestFriendArgs = {
@@ -248,6 +252,15 @@ export type RootMutationVerifyUserArgs = {
 
 export type RootMutationInviteUserToKitArgs = {
   email: Scalars['String'];
+};
+
+export type RootMutationRequestPasswordResetArgs = {
+  email: Scalars['String'];
+};
+
+export type RootMutationSetForgottenPasswordArgs = {
+  token: Scalars['String'];
+  newPassword: Scalars['String'];
 };
 
 export type RootQuery = {
@@ -626,6 +639,14 @@ export type RequestFriendMutation = { __typename?: 'RootMutation' } & {
   requestFriend: { __typename?: 'User' } & OtherUserFragment;
 };
 
+export type RequestPasswordResetMutationVariables = {
+  email: Scalars['String'];
+};
+
+export type RequestPasswordResetMutation = {
+  __typename?: 'RootMutation';
+} & Pick<RootMutation, 'requestPasswordReset'>;
+
 export type RequestVerificationEmailMutationVariables = {};
 
 export type RequestVerificationEmailMutation = {
@@ -648,6 +669,15 @@ export type SearchUsersQueryVariables = {
 export type SearchUsersQuery = { __typename?: 'RootQuery' } & {
   searchUsers: Array<{ __typename?: 'User' } & OtherUserFragment>;
 };
+
+export type SetForgottenPasswordMutationVariables = {
+  token: Scalars['String'];
+  newPassword: Scalars['String'];
+};
+
+export type SetForgottenPasswordMutation = {
+  __typename?: 'RootMutation';
+} & Pick<RootMutation, 'setForgottenPassword'>;
 
 export type UnblockUserMutationVariables = {
   targetUserId: Scalars['Int'];
@@ -1950,6 +1980,75 @@ export function useRequestFriendMutation(
 export type RequestFriendMutationHookResult = ReturnType<
   typeof useRequestFriendMutation
 >;
+export const RequestPasswordResetDocument = gql`
+  mutation requestPasswordReset($email: String!) {
+    requestPasswordReset(email: $email)
+  }
+`;
+export type RequestPasswordResetMutationFn = ReactApollo.MutationFn<
+  RequestPasswordResetMutation,
+  RequestPasswordResetMutationVariables
+>;
+export type RequestPasswordResetComponentProps = Omit<
+  ReactApollo.MutationProps<
+    RequestPasswordResetMutation,
+    RequestPasswordResetMutationVariables
+  >,
+  'mutation'
+>;
+
+export const RequestPasswordResetComponent = (
+  props: RequestPasswordResetComponentProps,
+) => (
+  <ReactApollo.Mutation<
+    RequestPasswordResetMutation,
+    RequestPasswordResetMutationVariables
+  >
+    mutation={RequestPasswordResetDocument}
+    {...props}
+  />
+);
+
+export type RequestPasswordResetProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<
+    RequestPasswordResetMutation,
+    RequestPasswordResetMutationVariables
+  >
+> &
+  TChildProps;
+export function withRequestPasswordReset<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    RequestPasswordResetMutation,
+    RequestPasswordResetMutationVariables,
+    RequestPasswordResetProps<TChildProps>
+  >,
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    RequestPasswordResetMutation,
+    RequestPasswordResetMutationVariables,
+    RequestPasswordResetProps<TChildProps>
+  >(RequestPasswordResetDocument, {
+    alias: 'withRequestPasswordReset',
+    ...operationOptions,
+  });
+}
+
+export function useRequestPasswordResetMutation(
+  baseOptions?: ReactApolloHooks.MutationHookOptions<
+    RequestPasswordResetMutation,
+    RequestPasswordResetMutationVariables
+  >,
+) {
+  return ReactApolloHooks.useMutation<
+    RequestPasswordResetMutation,
+    RequestPasswordResetMutationVariables
+  >(RequestPasswordResetDocument, baseOptions);
+}
+export type RequestPasswordResetMutationHookResult = ReturnType<
+  typeof useRequestPasswordResetMutation
+>;
 export const RequestVerificationEmailDocument = gql`
   mutation requestVerificationEmail {
     requestVerificationEmail
@@ -2144,6 +2243,75 @@ export function useSearchUsersQuery(
   );
 }
 export type SearchUsersQueryHookResult = ReturnType<typeof useSearchUsersQuery>;
+export const SetForgottenPasswordDocument = gql`
+  mutation setForgottenPassword($token: String!, $newPassword: String!) {
+    setForgottenPassword(token: $token, newPassword: $newPassword)
+  }
+`;
+export type SetForgottenPasswordMutationFn = ReactApollo.MutationFn<
+  SetForgottenPasswordMutation,
+  SetForgottenPasswordMutationVariables
+>;
+export type SetForgottenPasswordComponentProps = Omit<
+  ReactApollo.MutationProps<
+    SetForgottenPasswordMutation,
+    SetForgottenPasswordMutationVariables
+  >,
+  'mutation'
+>;
+
+export const SetForgottenPasswordComponent = (
+  props: SetForgottenPasswordComponentProps,
+) => (
+  <ReactApollo.Mutation<
+    SetForgottenPasswordMutation,
+    SetForgottenPasswordMutationVariables
+  >
+    mutation={SetForgottenPasswordDocument}
+    {...props}
+  />
+);
+
+export type SetForgottenPasswordProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<
+    SetForgottenPasswordMutation,
+    SetForgottenPasswordMutationVariables
+  >
+> &
+  TChildProps;
+export function withSetForgottenPassword<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    SetForgottenPasswordMutation,
+    SetForgottenPasswordMutationVariables,
+    SetForgottenPasswordProps<TChildProps>
+  >,
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    SetForgottenPasswordMutation,
+    SetForgottenPasswordMutationVariables,
+    SetForgottenPasswordProps<TChildProps>
+  >(SetForgottenPasswordDocument, {
+    alias: 'withSetForgottenPassword',
+    ...operationOptions,
+  });
+}
+
+export function useSetForgottenPasswordMutation(
+  baseOptions?: ReactApolloHooks.MutationHookOptions<
+    SetForgottenPasswordMutation,
+    SetForgottenPasswordMutationVariables
+  >,
+) {
+  return ReactApolloHooks.useMutation<
+    SetForgottenPasswordMutation,
+    SetForgottenPasswordMutationVariables
+  >(SetForgottenPasswordDocument, baseOptions);
+}
+export type SetForgottenPasswordMutationHookResult = ReturnType<
+  typeof useSetForgottenPasswordMutation
+>;
 export const UnblockUserDocument = gql`
   mutation unblockUser($targetUserId: Int!) {
     unblockUser(targetUserId: $targetUserId) {

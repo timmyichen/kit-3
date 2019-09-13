@@ -34,7 +34,7 @@ describe('updatePassword', () => {
   it('rejects unauthed users', async () => {
     app.logout();
     const res = await gqlRequest({
-      newPassword: 'newpass',
+      newPassword: 'newpassword',
       passwordVerification: 'password',
     });
 
@@ -44,7 +44,7 @@ describe('updatePassword', () => {
   it('errors on failed password verification', async () => {
     app.login(user);
     const res = await gqlRequest({
-      newPassword: 'newpass',
+      newPassword: 'newpassword',
       passwordVerification: 'password1',
     });
 
@@ -67,7 +67,7 @@ describe('updatePassword', () => {
     const passwordHash = user.password;
 
     const res = await gqlRequest({
-      newPassword: 'newpass',
+      newPassword: 'newpassword',
       passwordVerification: 'password',
     });
 

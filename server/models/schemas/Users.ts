@@ -45,8 +45,7 @@ export default class Users extends Model<Users> {
   @Column({
     ...requiredString({
       validate: {
-        len: [4, 24],
-        is: /^[a-z0-9]{4,24}$/g,
+        is: /^[a-z0-9]{4,24}$/,
       },
     }),
   })

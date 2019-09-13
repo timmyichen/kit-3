@@ -1,9 +1,10 @@
 import { GraphQLNonNull, GraphQLString, GraphQLBoolean } from 'graphql';
 import { AuthenticationError, UserInputError } from 'apollo-server';
 import * as validator from 'validator';
-import { genRedisKey, sendInviteEmail } from 'server/lib/emails';
+import { sendInviteEmail } from 'server/lib/emails';
 import { Users } from 'server/models';
 import { GraphQLContext } from 'server/routers/graphql';
+import { genRedisKey } from 'server/lib/redis';
 
 interface Args {
   email: string;

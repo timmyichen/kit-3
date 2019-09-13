@@ -2,6 +2,8 @@
 
 Keep in Touch is a simple social network for sharing contact information.
 
+Live site is [here](https://kit-with.me).
+
 # Motivation
 
 My college friends and I enjoyed writing each other letters and sending each
@@ -63,7 +65,13 @@ You can also connect to the local database by running:
 docker-compose exec db psql -U postgres -d postgres
 ```
 
-Both of the previous commands require that `docker-compose up` be running.
+Connect to local redis with:
+
+```
+docker-compose exec app redis-cli -h redis
+```
+
+The `docker-compose exec app` commands require that `docker-compose up` be running first.
 
 To generate graphql mutation/query hooks, run `npm run gql:gen`. No need to run within docker.
 
@@ -85,11 +93,7 @@ To turn watchmode off, just remove `:watch`
 
 # Deployment
 
-Assuming you're already set up with Google Apps Engine, deploying is as simple as:
-
-`npm run prod:db:migrate` to run migrations on the production server
-`npm run next:build` to build a production next app
-`gcloud app deploy` to deploy to GAE.
+Deployment is all done through heroku now.
 
 # Misc Notes
 
