@@ -94,10 +94,19 @@ function LoginPage() {
           Log in
         </Button>
       </Form>
+      <p>
+        Forgot your password?{' '}
+        <Link href="/forgotPassword" as="/forgot-password">
+          <a>Reset it.</a>
+        </Link>
+      </p>
       <style jsx>{`
         div {
           max-width: 400px;
           margin: 50px auto;
+        }
+        p {
+          margin-top: 20px;
         }
       `}</style>
     </div>

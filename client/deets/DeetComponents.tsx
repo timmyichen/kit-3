@@ -7,6 +7,8 @@ import {
 } from 'client/types';
 import ta from 'time-ago';
 import { OwnedDeetCardActions } from './OwnedDeetCardActions';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const deetMap = {
   email_address: {
@@ -39,6 +41,10 @@ export const DeetCardType = ({
   deet: Deet;
   isOwner: boolean;
 }) => {
+  const router = useRouter();
+
+  const includeLink = !isOwner && router.pathname !== '/friend';
+
   if (!isOwner && !deet.owner) {
     throw new Error('Expected owner for non-owned deets');
   }
@@ -49,7 +55,25 @@ export const DeetCardType = ({
     <Card.Meta>{text}</Card.Meta>
   ) : (
     <Card.Meta>
-      <span title={deet.owner!.username}>{deet.owner!.fullName}</span>'s {text}
+      {includeLink ? (
+        <Link
+          href={{
+            pathname: '/friend',
+            query: { username: deet.owner!.username },
+          }}
+          as={`/friend/${deet.owner!.username}`}
+        >
+          <a title={deet.owner!.username}>{deet.owner!.fullName}</a>
+        </Link>
+      ) : (
+        <span title={deet.owner!.username}>{deet.owner!.fullName}</span>
+      )}
+      's {text}
+      <style jsx>{`
+        a {
+          text-decoration: underline;
+        }
+      `}</style>
     </Card.Meta>
   );
 };

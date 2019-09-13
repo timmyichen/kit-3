@@ -8,6 +8,7 @@ import {
   getUpcomingAge,
 } from 'client/lib/date';
 import ProfileImage from 'client/components/ProfileImage';
+import Link from 'next/link';
 
 const BIRTHDAY_RANGE_DAYS = 60;
 
@@ -48,12 +49,22 @@ function UpcomingBirthdays() {
               key={`friend-birthday-${friend.username}`}
               className="list-item-wrapper"
             >
-              <ProfileImage
-                profileImageUrl={friend.profilePicture}
-                width={30}
-                height={30}
-                style={{ marginRight: '10px' }}
-              />
+              <Link
+                href={{
+                  pathname: '/friend',
+                  query: { username: friend.username },
+                }}
+                as={`/friend/${friend.username}`}
+              >
+                <a>
+                  <ProfileImage
+                    profileImageUrl={friend.profilePicture}
+                    width={30}
+                    height={30}
+                    style={{ marginRight: '10px' }}
+                  />
+                </a>
+              </Link>
               <List.Content>
                 <List.Header>
                   {friend.fullName}'s turning {age}
@@ -73,6 +84,9 @@ function UpcomingBirthdays() {
         .upcoming-birthday-wrapper :global(.list-item-wrapper) {
           display: flex;
           align-items: center;
+        }
+        .upcoming-birthday-wrapper a {
+          color: inherit;
         }
       `}</style>
     </div>
