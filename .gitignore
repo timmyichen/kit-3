@@ -6,3 +6,4 @@ package-lock.json
 app.yaml
 public/report.html
 config/gcs-creds.json
+coverage/

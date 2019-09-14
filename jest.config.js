@@ -14,4 +14,6 @@ module.exports = {
       diagnostics: false,
     },
   },
+  coverageReporters: ['text'],
+  // collectCoverage: true,
 };

@@ -14,6 +14,9 @@ if (process.env.NODE_ENV === 'test') {
   console.log('Running migrations...');
   execSync('./node_modules/.bin/sequelize db:migrate', { stdio: 'inherit' });
   console.log('Migrations completed');
+
+  execSync('redis-cli -h redis flushall', { stdio: 'inherit' });
+  console.log('Cleared redis');
 } else {
   throw new Error(`node env was '${process.env.NODE_ENV}', expected 'test'`);
 }
