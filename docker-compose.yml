@@ -22,13 +22,26 @@ services:
     depends_on:
       - db
       - redis
+    networks:
+      - no-internet
+      - internet
   db:
     image: postgres:11
     environment:
       - POSTGRES_USER=postgres
     ports:
       - '5433:5432'
+    networks:
+      - no-internet
   redis:
     image: redis
     ports:
       - '6379:6379'
+    networks:
+      - no-internet
+networks:
+  no-internet:
+    driver: bridge
+    internal: true
+  internet:
+    driver: bridge
