@@ -310,7 +310,8 @@ function SignupPage({ client }: WithApolloClient<{}>) {
       <style jsx>{`
         .signup-wrapper :global(.ui.form) {
           max-width: 400px;
-          margin: 50px auto;
+          padding: 50px;
+          margin: 0px auto;
         }
         .signup-wrapper :global(.checkbox) {
           border: 1px solid transparent;

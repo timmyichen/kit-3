@@ -103,7 +103,8 @@ function LoginPage() {
       <style jsx>{`
         div {
           max-width: 400px;
-          margin: 50px auto;
+          padding: 50px;
+          margin: 0px auto;
         }
         p {
           margin-top: 20px;
