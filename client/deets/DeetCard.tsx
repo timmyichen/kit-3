@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { Card } from 'semantic-ui-react';
 import {
-  DeetCardType,
-  DeetCardIcon,
-  DeetCardDescription,
-  DeetCardFooter,
+  DeetType,
+  DeetIcon,
+  DeetDescription,
+  DeetFooter,
 } from './DeetComponents';
 import { Deet } from 'client/types';
+import DeetExpandIcon from './DeetExpandIcon';
 
 interface Props {
   deet: Deet;
@@ -32,21 +33,34 @@ export function DeetCard({ deet, isOwner }: Props) {
   return (
     <div className="deet-item">
       <Card className="deet-card-content" color={color}>
+        <DeetExpandIcon deet={deet} isOwner={isOwner} />
         <Card.Content>
-          <DeetCardIcon deet={deet} />
           <Card.Header>{deet.label}</Card.Header>
-          <DeetCardType deet={deet} isOwner={isOwner} />
+          <Card.Meta>
+            <DeetType deet={deet} isOwner={isOwner} />
+          </Card.Meta>
         </Card.Content>
-        <Card.Content>
-          <DeetCardDescription deet={deet} />
+        <Card.Content style={{ position: 'relative' }}>
+          <DeetIcon deet={deet} />
+          <Card.Description>
+            <DeetDescription deet={deet} />
+          </Card.Description>
         </Card.Content>
-        <DeetCardFooter deet={deet} isOwner={isOwner} />
+        <Card.Content extra>
+          <DeetFooter deet={deet} isOwner={isOwner} />
+        </Card.Content>
       </Card>
       <style jsx>{`
         .deet-item {
           position: relative;
         }
-        .deet-item :global(.header-icon) {
+        .deet-item :global(.expand-icon) {
+          position: absolute;
+          top: 10px;
+          right: 5px;
+          cursor: pointer;
+        }
+        .deet-item :global(.deet-icon) {
           position: absolute;
           top: 5px;
           right: 0px;

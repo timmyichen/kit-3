@@ -22,7 +22,7 @@ export function OwnedDeetCardActions({ deet }: Props) {
   };
 
   return (
-    <div className="address-card-wrapper">
+    <div className="owned-deet-actions">
       <Dropdown
         text="Actions"
         icon="unordered list"
@@ -55,13 +55,8 @@ export function OwnedDeetCardActions({ deet }: Props) {
         </Dropdown.Menu>
       </Dropdown>
       <style jsx>{`
-        .address-card-wrapper :global(.deet-card-content) {
+        .owned-deet-actions :global(.deet-card-content) {
           position: relative;
-        }
-        .address-card-wrapper :global(.header-icon) {
-          position: absolute;
-          top: 5px;
-          right: 5px;
         }
       `}</style>
     </div>

@@ -1,4 +1,4 @@
-import { Icon, Card } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 import {
   Deet,
   AddressDeet,
@@ -10,7 +10,7 @@ import { OwnedDeetCardActions } from './OwnedDeetCardActions';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-const deetMap = {
+export const deetMap = {
   email_address: {
     icon: 'desktop',
     text: 'Email Address',
@@ -25,16 +25,16 @@ const deetMap = {
   },
 };
 
-export const DeetCardIcon = ({ deet }: { deet: Deet }) => (
+export const DeetIcon = ({ deet }: { deet: Deet }) => (
   <Icon
     size="large"
-    className="header-icon"
+    className="deet-icon"
     floated="right"
     name={deetMap[deet.type].icon as any}
   />
 );
 
-export const DeetCardType = ({
+export const DeetType = ({
   deet,
   isOwner,
 }: {
@@ -52,9 +52,9 @@ export const DeetCardType = ({
   const text = (deet.isPrimary ? 'Primary ' : '') + deetMap[deet.type].text;
 
   return isOwner ? (
-    <Card.Meta>{text}</Card.Meta>
+    <div>{text}</div>
   ) : (
-    <Card.Meta>
+    <>
       {includeLink ? (
         <Link
           href={{
@@ -74,16 +74,16 @@ export const DeetCardType = ({
           text-decoration: underline;
         }
       `}</style>
-    </Card.Meta>
+    </>
   );
 };
 
-export const DeetCardDescription = ({ deet }: { deet: Deet }) => {
+export const DeetDescription = ({ deet }: { deet: Deet }) => {
   switch (deet.type) {
     case 'address':
       const address = deet as AddressDeet;
       return (
-        <Card.Description>
+        <>
           <div>{address.addressLine1}</div>
           {address.addressLine2 && <div>{address.addressLine2}</div>}
           <div>
@@ -91,7 +91,7 @@ export const DeetCardDescription = ({ deet }: { deet: Deet }) => {
           </div>
           {address.country && <div>{address.country}</div>}
           <Notes notes={address.notes} />
-        </Card.Description>
+        </>
       );
     case 'phone_number':
       const phoneNumber = deet as PhoneNumberDeet;
@@ -107,24 +107,24 @@ export const DeetCardDescription = ({ deet }: { deet: Deet }) => {
     case 'email_address':
       const email = deet as EmailAddressDeet;
       return (
-        <Card.Description>
+        <>
           <div>{email.emailAddress}</div>
           <Notes notes={email.notes} />
-        </Card.Description>
+        </>
       );
     default:
       return null;
   }
 };
 
-export const DeetCardFooter = ({
+export const DeetFooter = ({
   deet,
   isOwner,
 }: {
   deet: Deet;
   isOwner: boolean;
 }) => (
-  <Card.Content extra>
+  <>
     <div className="extra-wrapper">
       <div>
         <div className="last-updated-label">Last verified</div>
@@ -149,7 +149,7 @@ export const DeetCardFooter = ({
         color: rgba(0, 0, 0, 0.68);
       }
     `}</style>
-  </Card.Content>
+  </>
 );
 
 const Notes = ({ notes }: { notes?: string }) => {
