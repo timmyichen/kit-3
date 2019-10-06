@@ -13,6 +13,7 @@ import fetch from 'isomorphic-fetch';
 import Footer from 'client/components/Footer';
 import MessageRoll from 'client/components/MessageRoll';
 import { footerHeight } from 'client/lib/pageMeasurements';
+import colors from 'client/styles/colors';
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }: any) {
@@ -70,6 +71,7 @@ class MyApp extends App {
                     padding-bottom: ${footerHeight}px;
                     min-height: 100vh;
                     height: 100%;
+                    background-color: ${colors.backgroundBlue};
                   }
                   .root-wrapper {
                     position: relative;
