@@ -62,7 +62,7 @@
     "mailgun-js": "^0.22.0",
     "module-alias": "^2.2.0",
     "morgan": "^1.9.1",
-    "next": "^8.1.0",
+    "next": "^9.3.3",
     "nodemon": "^1.18.11",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
